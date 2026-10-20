@@ -5,10 +5,9 @@
 .DESCRIPTION
   claude.ai expects ONE skill per zip, with the skill folder at the root of the archive:
       my-skill.zip -> my-skill/SKILL.md
-  A SKILL.md sitting at the zip root is NOT recognised, so this script always zips from the
-  parent of the skill folder. It also warns when a description is longer than 200 characters,
-  because the claude.ai upload UI has been documented with a 200-character limit even though the
-  Agent Skills spec allows 1024.
+  A SKILL.md sitting at the zip root is NOT recognised, so entries are always prefixed with the
+  folder name. Entries are written with forward slashes: Windows PowerShell 5.1's Compress-Archive
+  writes backslashes, which zip readers on Linux servers can treat as part of the file name.
 
 .EXAMPLE
   .\scripts\package-skills.ps1              # package all skills
@@ -19,6 +18,9 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+Add-Type -AssemblyName System.IO.Compression
+Add-Type -AssemblyName System.IO.Compression.FileSystem
+
 $root = Split-Path -Parent $PSScriptRoot
 $skillsDir = Join-Path $root "skills"
 $dist = Join-Path $root "dist"
@@ -35,19 +37,24 @@ foreach ($f in $folders) {
     $name = $Matches[1].Trim().Trim('"').Trim("'")
     if ($name -ne $f.Name) { Write-Warning "$($f.Name): frontmatter name '$name' does not match folder name" }
   }
-  if ($text -match '(?ms)^description:\s*(.+?)(?=^\w[\w-]*:|^---)') {
-    $desc = ($Matches[1] -replace '\s+', ' ').Trim().Trim('"').Trim("'")
-    if ($desc.Length -gt 200) {
-      Write-Host "  note: $($f.Name) description is $($desc.Length) chars; if claude.ai rejects the upload, shorten it to <= 200." -ForegroundColor Yellow
-    }
-  }
 
-  $zip = Join-Path $dist ($f.Name + ".zip")
-  if (Test-Path $zip) { Remove-Item $zip -Force }
-  # Compress from the parent so the archive contains <name>/SKILL.md
-  Compress-Archive -Path $f.FullName -DestinationPath $zip -CompressionLevel Optimal
-  Write-Host "packaged $zip"
+  $zipPath = Join-Path $dist ($f.Name + ".zip")
+  if (Test-Path $zipPath) { Remove-Item $zipPath -Force }
+
+  $zip = [System.IO.Compression.ZipFile]::Open($zipPath, [System.IO.Compression.ZipArchiveMode]::Create)
+  try {
+    Get-ChildItem $f.FullName -Recurse -File |
+      Where-Object { $_.Name -notin @('.DS_Store', 'Thumbs.db') -and $_.FullName -notmatch '\\__pycache__\\' } |
+      ForEach-Object {
+        $rel = $_.FullName.Substring($f.FullName.Length).TrimStart('\', '/') -replace '\\', '/'
+        $entry = "$($f.Name)/$rel"
+        [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip, $_.FullName, $entry, [System.IO.Compression.CompressionLevel]::Optimal) | Out-Null
+      }
+  } finally {
+    $zip.Dispose()
+  }
+  Write-Host "packaged $zipPath"
 }
 
 Write-Host ""
-Write-Host "Upload in Claude Desktop / claude.ai: sidebar > Customize > Skills > + > Create skill > Upload a skill."
+Write-Host "Upload in Claude Desktop / claude.ai: sidebar > Customize > Skills > + Add > Upload a skill."
