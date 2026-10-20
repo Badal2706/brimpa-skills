@@ -1,0 +1,16 @@
+# packaged zips for Claude Desktop upload
+dist/
+*.zip
+*.skill
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
+
+# local-only
+node_modules/
+__pycache__/
+*-workspace/

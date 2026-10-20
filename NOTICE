@@ -1,0 +1,38 @@
+badal-skills
+Copyright (c) 2026 Badal Patel
+
+This product includes material adapted from the following projects:
+
+Apache License 2.0
+  - anthropics/skills (frontend-design, skill-creator, brand-guidelines)
+    https://github.com/anthropics/skills
+  - pbakaus/impeccable  https://github.com/pbakaus/impeccable
+    (its ios.md / android.md references derive from ehmo/platform-design-skills, MIT)
+  - usestrix/strix  https://github.com/usestrix/strix
+
+MIT License
+  - Leonxlnx/taste-skill  https://github.com/Leonxlnx/taste-skill
+  - nextlevelbuilder/ui-ux-pro-max-skill  https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
+  - cloudflare/security-audit-skill  https://github.com/cloudflare/security-audit-skill
+  - AgriciDaniel/claude-seo  https://github.com/AgriciDaniel/claude-seo
+    (FLOW prompt templates in that repo are CC BY 4.0)
+  - Varnan-Tech/opendirectory  https://github.com/Varnan-Tech/opendirectory
+  - morluto/rea  https://github.com/morluto/rea
+
+BSD 3-Clause License
+  - D4Vinci/Scrapling  https://github.com/D4Vinci/Scrapling
+
+Articles and public documentation (summarized and cited, not reproduced)
+  - mavek.ai, "AI recommendation poisoning"  https://mavek.ai/blog/ai-recommendation-poisoning/
+  - Microsoft Defender research on AI recommendation poisoning (Feb 2026)
+  - OWASP Top 10:2025, OWASP Top 10 for LLM Applications 2025, OWASP Top 10
+    for Agentic Applications 2026, OWASP API Security Top 10 2023
+  - Google Search Central documentation; web.dev; MeitY DPDP Act 2023 and Rules 2025
+  - agentskills.io specification; Anthropic Claude documentation
+
+Privately held guides summarized or adapted (no wholesale reproduction)
+  - "DPDP Founder Guide" (ReelBlink, Sept 2026)
+  - "Launch Film With Claude" and "Make Your Own Mascot" (Saksham Gupta, Oct 2026)
+  - "Local SEO Guide for Clinics" (HealersHype)
+  - "12 Landing Page Animations Guide" (MadeToScale)
+  - Assorted short checklists shared on social media, rewritten as checklists.

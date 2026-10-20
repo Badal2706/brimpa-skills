@@ -1,0 +1,12 @@
+{
+  "name": "badal-skills",
+  "displayName": "Badal Skills",
+  "version": "1.0.0",
+  "description": "Reusable skills for shipping websites and software: pre-launch security review, LLM/agent app security, India DPDP + legal compliance, UI/UX for web and apps, distinctive web design, SEO + AI-search audit, launch marketing copy, brand identity, launch videos, authorized web scraping, evidence-based reverse engineering.",
+  "author": {
+    "name": "Badal Patel"
+  },
+  "repository": "https://github.com/Badal2706/badal-skills",
+  "license": "MIT",
+  "keywords": ["skills", "security", "ui-ux", "web-design", "seo", "geo", "dpdp", "marketing", "brand", "scraping"]
+}
