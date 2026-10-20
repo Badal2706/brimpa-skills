@@ -3,7 +3,7 @@ name: llm-app-security
 description: Security review and secure-design guidance for anything that embeds an LLM or agent - chatbots, RAG / "chat with your docs", tool-using agents, function calling, MCP servers and clients, "Summarize with AI" or share-to-ChatGPT buttons, AI features inside a SaaS or clinic app, and brands whose pages are read by ChatGPT, Claude, Gemini or Perplexity (AI recommendation poisoning). Use whenever the user is building, reviewing or about to ship a feature that calls a model API, wires up tools, adds memory or a vector index, writes an MCP server, generates prompt-prefill links, or asks "is our AI feature safe", "prompt injection", "can the bot leak data", "AI SEO", "get recommended by ChatGPT", even if they never say "security". Defensive only - what to verify, how to design, how to test, how to monitor. Hands non-AI findings to security-review.
 license: MIT
 metadata:
-  author: Badal Patel
+  author: Brimpa
   version: "1.0"
   updated: "2026-10-20"
 ---

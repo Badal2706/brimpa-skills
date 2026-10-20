@@ -3,7 +3,7 @@ name: dpdp-legal-compliance
 description: Audit and implement privacy and legal compliance for apps and websites under India's DPDP Act 2023 and DPDP Rules 2025, plus the generic pre-launch legal checklist (privacy policy, terms, refund and cookie policies, consent banner, data deletion, unsubscribe, dark patterns, accessibility basics, business details, licensed assets). Use whenever the user mentions DPDP, privacy policy, cookie banner, consent, PII or personal data, data deletion or "right to be forgotten", grievance officer, breach notification, children's data, trackers or analytics SDKs, "is this legal", or is about to launch, ship or deploy a site or app that collects names, phone numbers, emails, health, payment or location data, even if they never say "legal" or "compliance". Also use when asked for a privacy notice, terms clause, breach runbook or consent-record design. Produces a codebase audit, implementation tasks on a compliance branch, DPDP_PROGRESS.md, and document templates marked "for lawyer review". Not legal advice.
 license: MIT
 metadata:
-  author: Badal Patel
+  author: Brimpa
   version: "1.0"
   updated: "2026-10-20"
 ---

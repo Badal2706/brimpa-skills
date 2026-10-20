@@ -3,7 +3,7 @@ name: security-review
 description: Pre-production / pre-launch application security review for web apps, APIs, mobile backends, SaaS and the cloud/CI around them. Use whenever the user asks for a security review, security audit, pentest-style check, hardening pass, OWASP Top 10 check, "is my app safe to launch", or is about to ship, deploy, go live or onboard real users (even if they never say "security"); also when they mention rate limiting, IDOR, auth bugs, leaked API keys or secrets, dependency vulnerabilities, file uploads, CORS, security headers, JWT, Supabase/Postgres RLS, webhooks, or a vibe-coded app going to production. Two modes - QUICK (30-60 min, ten pasteable prompts) and FULL (category-by-category review with evidence, severity calibration, counter-evidence checks and a written report). Defensive, audit-check level only. For LLM or agent features use llm-app-security; for privacy law and consent use dpdp-legal-compliance.
 license: MIT
 metadata:
-  author: Badal Patel
+  author: Brimpa
   version: "1.0"
   updated: "2026-10-20"
 ---

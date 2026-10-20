@@ -1,8 +1,8 @@
 {
-  "name": "badal-skills",
-  "description": "Badal Patel's reusable Agent Skills: security review, LLM app security, DPDP legal compliance, UI/UX, web design, SEO/GEO audit, launch marketing, brand identity, launch video, web scraping, reverse engineering.",
+  "name": "brimpa",
+  "description": "Brimpa's reusable Agent Skills: security review, LLM app security, DPDP legal compliance, UI/UX, web design, SEO/GEO audit, launch marketing, brand identity, launch video, web scraping, reverse engineering.",
   "owner": {
-    "name": "Badal Patel",
+    "name": "Brimpa",
     "url": "https://github.com/Badal2706"
   },
   "metadata": {
@@ -10,9 +10,9 @@
   },
   "plugins": [
     {
-      "name": "badal-skills",
+      "name": "brimpa-skills",
       "source": "./",
-      "description": "All eleven skills in one plugin. Install this unless you want to cherry-pick with `npx skills add`.",
+      "description": "All eleven Brimpa skills in one plugin. Install this unless you want to cherry-pick with `npx skills add`.",
       "version": "1.0.0",
       "category": "productivity",
       "tags": ["security", "ui-ux", "design", "seo", "marketing", "compliance", "scraping"]

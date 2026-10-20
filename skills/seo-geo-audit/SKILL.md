@@ -3,7 +3,7 @@ name: seo-geo-audit
 description: "Audit and improve a website for Google Search, local/Maps visibility and AI search (AI Overviews, AI Mode, ChatGPT, Perplexity, Claude): technical SEO, on-page, structured data/JSON-LD, Google Business Profile, NAP, reviews, Core Web Vitals, E-E-A-T, GEO/AEO, robots.txt and AI crawlers, sitemaps, launch checklist, scored report. Use whenever the user asks for an SEO audit, 'why am I not ranking', 'get found on Google/Maps', schema markup, rich results, local SEO for a clinic, shop or service business, service or location pages, GBP setup, llms.txt, 'show up in ChatGPT/AI Overviews', Search Console errors, indexing problems, slow pages, or is about to launch, redesign or migrate a site, even if they never say 'SEO'. Audits first (KEEP / MODIFY / REMOVE / DO NOT TOUCH) and edits only after sign-off."
 license: MIT
 metadata:
-  author: Badal Patel
+  author: Brimpa
   version: "1.0"
   updated: "2026-10-20"
 ---

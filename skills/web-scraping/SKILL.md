@@ -3,7 +3,7 @@ name: web-scraping
 description: Plan and run authorized web scraping, crawling and data extraction with Scrapling (Python) as the default library, plus alternatives (Crawl4AI, Maxun, Browser Use, Firecrawl, PaddleOCR). Use whenever the user wants to scrape, crawl, extract, harvest, monitor or mirror data from websites, build a dataset or RAG corpus from web pages, capture the API behind a page, pull product listings, prices, reviews, job posts, directories or competitor pages, convert sites to Markdown for an LLM, or asks about robots.txt, rate limits, anti-bot, Cloudflare, headless browsers, Playwright or "is scraping this legal". Also use when the user is about to feed scraped HTML into a prompt (prompt-injection hygiene), even if they never say "scraping". Starts with an authorization and ethics gate; hands personal-data questions to dpdp-legal-compliance.
 license: MIT
 metadata:
-  author: Badal Patel
+  author: Brimpa
   version: "1.0"
   updated: "2026-10-20"
 ---

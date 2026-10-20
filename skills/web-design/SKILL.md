@@ -3,7 +3,7 @@ name: web-design
 description: Visual design and page composition for websites that must not look like AI templates. Use whenever the user asks to design, build, redesign, restyle or "make it look good/premium/modern" for a landing page, marketing site, homepage, portfolio, clinic or local-business site, SaaS marketing page, e-commerce storefront, event page, newsletter or editorial site, in any stack (HTML/CSS, Tailwind, React, Next.js, Astro, Vue, Svelte, WordPress, Webflow, Framer). Also when they say a page looks generic, templated, "AI-made", boring, or "like every other site"; when they ask for a hero, sections, colour palette, fonts, dark mode, scroll animations or a style direction; and when a new client brief arrives even if nobody says "design". Infers a direction from the brief, offers 16 distinct directions with tokens, writes the section plan and copy, adds one orchestrated motion moment, and ends with a hard pre-flight. For app screens, dashboards, forms and usability use the ui-ux skill.
 license: MIT
 metadata:
-  author: Badal Patel
+  author: Brimpa
   version: "1.0"
   updated: "2026-10-20"
 ---

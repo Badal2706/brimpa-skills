@@ -3,7 +3,7 @@ name: brand-identity
 description: Create or document a brand kit, brand guidelines, style guide or visual identity for a product, client or side project, and export it as design tokens (BRAND.md or DESIGN.md plus tokens.css and tokens.json) that web-design and ui-ux consume. Covers logo direction brief, colour palette with roles and contrast checks, type system, brand voice and tone summary, asset organisation, a consistency checklist, and an optional animated website mascot. Use whenever the user asks for a brand, logo direction, colour palette, "which fonts should we use", design tokens, brand voice or tone of voice, a mascot or character for a site, or starts a new product or client website with no agreed look yet, even if they never say "brand". Also use when a redesign needs the existing brand captured first, or when two surfaces of one product look inconsistent. Positioning and naming go to launch-marketing; page layout and visual page design go to web-design; usability of app screens goes to ui-ux.
 license: MIT
 metadata:
-  author: Badal Patel
+  author: Brimpa
   version: "1.0"
   updated: "2026-10-20"
 ---

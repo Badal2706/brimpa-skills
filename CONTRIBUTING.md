@@ -10,7 +10,7 @@ name: <skill-name>            # equals the folder name; a-z 0-9 and single hyphe
 description: <text>           # 1-1024 chars; strongest trigger words in the first 200 (claude.ai UI cap)
 license: MIT
 metadata:
-  author: Badal Patel
+  author: Brimpa
   version: "1.x"
   updated: "YYYY-MM-DD"
 ---

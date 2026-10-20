@@ -3,7 +3,7 @@ name: launch-video
 description: Produce a 40-60 second product launch film, feature demo or social clip entirely in code, from screenshots and a brief - beat sheet -> deterministic HTML render(t) animation -> Playwright frame capture -> ffmpeg MP4 with synthesized Web Audio sound effects and an optional TTS voiceover (ElevenLabs or open-source Kokoro) -> 1080x1920 vertical cut. Use whenever the user wants a launch video, promo video, demo video, teaser, trailer, explainer, Reel/Short/TikTok of their app, an animated walkthrough of screens, "a video for the landing page", a Product Hunt or app-store preview, a kinetic-type intro, logo reveal or end card, or says "turn these screenshots into a video", "animate my UI", "make a trailer for my SaaS", "something moving for the launch post" - even if they never say "video". Also use for frame-exact rendering of any HTML or canvas animation to MP4, adding synced sound effects to a motion piece, mixing a voiceover under music to -14 LUFS, or re-cutting an existing film to vertical.
 license: MIT
 metadata:
-  author: Badal Patel
+  author: Brimpa
   version: "1.0"
   updated: "2026-10-20"
 ---

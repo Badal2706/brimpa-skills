@@ -1,6 +1,6 @@
 # Sources and attribution
 
-This skill is released under MIT as part of the badal-skills collection. It adapts material from
+This skill is released under MIT as part of the brimpa-skills collection. It adapts material from
 the sources below; nothing is reproduced wholesale, and promotional content from the originals
 has been removed.
 

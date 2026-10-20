@@ -1,12 +1,13 @@
 {
-  "name": "badal-skills",
-  "displayName": "Badal Skills",
+  "name": "brimpa-skills",
+  "displayName": "Brimpa Skills",
   "version": "1.0.0",
   "description": "Reusable skills for shipping websites and software: pre-launch security review, LLM/agent app security, India DPDP + legal compliance, UI/UX for web and apps, distinctive web design, SEO + AI-search audit, launch marketing copy, brand identity, launch videos, authorized web scraping, evidence-based reverse engineering.",
   "author": {
-    "name": "Badal Patel"
+    "name": "Brimpa",
+    "url": "https://github.com/Badal2706"
   },
-  "repository": "https://github.com/Badal2706/badal-skills",
+  "repository": "https://github.com/Badal2706/brimpa-skills",
   "license": "MIT",
-  "keywords": ["skills", "security", "ui-ux", "web-design", "seo", "geo", "dpdp", "marketing", "brand", "scraping"]
+  "keywords": ["brimpa", "skills", "security", "ui-ux", "web-design", "seo", "geo", "dpdp", "marketing", "brand", "scraping"]
 }

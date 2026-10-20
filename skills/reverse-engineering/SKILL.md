@@ -3,7 +3,7 @@ name: reverse-engineering
 description: Understand how a shipped binary, app, APK or other artifact works (your own builds, software you are authorized to analyse, interoperability or security research) with REA (Reverse Engineer Anything) as the MCP/CLI tool and an evidence-first workflow. Use whenever the user asks how an app, binary, APK, Electron app, .NET assembly, firmware image, WASM module, browser page or network capture (HAR/pcap) works under the hood, wants to "see how they built that feature", decompile, disassemble, trace IPC or network calls, inspect an installed program, debug a release build without source, verify what a vendor binary really does, or do interoperability work. Also use when someone asks to crack, bypass, patch a licence check, DRM, anti-cheat or login, so the legal gate can answer them. Not for code you already have the source for.
 license: MIT
 metadata:
-  author: Badal Patel
+  author: Brimpa
   version: "1.0"
   updated: "2026-10-20"
 ---

@@ -1,4 +1,6 @@
-# badal-skills
+# Brimpa Skills
+
+_By Brimpa. Previously published as `badal-skills`; this repo replaces it._
 
 Reusable [Agent Skills](https://agentskills.io/specification) for shipping websites and software, distilled from a year of collected security checklists, design systems, SEO playbooks, compliance guides and launch prompts, then re-verified against primary sources as of **October 2026**.
 
@@ -29,25 +31,25 @@ Each skill folder has a `SKILL.md` (the instructions Claude loads), `references/
 Option A — as a plugin (recommended, one command, easy updates):
 
 ```
-/plugin marketplace add Badal2706/badal-skills
-/plugin install badal-skills@badal-skills
+/plugin marketplace add Badal2706/brimpa-skills
+/plugin install brimpa-skills@brimpa
 ```
 
 Option B — copy skills into your personal skills folder (works offline, no plugin system):
 
 ```bash
-git clone https://github.com/Badal2706/badal-skills.git
+git clone https://github.com/Badal2706/brimpa-skills.git
 # all skills, for every project:
-cp -r badal-skills/skills/* ~/.claude/skills/
+cp -r brimpa-skills/skills/* ~/.claude/skills/
 # or just one skill into the current project:
-cp -r badal-skills/skills/security-review .claude/skills/
+cp -r brimpa-skills/skills/security-review .claude/skills/
 ```
 
 Option C — the cross-agent installer (Codex, Cursor, Gemini CLI, OpenCode, 70+ agents):
 
 ```bash
-npx skills add Badal2706/badal-skills            # pick skills interactively
-npx skills add Badal2706/badal-skills --skill ui-ux -g   # one skill, user-wide
+npx skills add Badal2706/brimpa-skills            # pick skills interactively
+npx skills add Badal2706/brimpa-skills --skill ui-ux -g   # one skill, user-wide
 ```
 
 Then just describe the task ("review this API before launch", "make this clinic site look premium", "audit SEO for example.com"); Claude picks the skill from its description. You can also type `/security-review` etc.
@@ -61,7 +63,7 @@ Skills here are attached to your Claude account, not to a folder on disk.
 3. In the app: left sidebar → **Customize → Skills → + → Create skill → Upload a skill** → choose a zip. Repeat per skill.
 4. Toggle each skill on under **Your skills**. Use it by describing the task, or type `/` in the message box and pick it.
 
-Alternative for Cowork users: **Customize → Plugins → Add → Add marketplace**, enter `Badal2706/badal-skills`, then install the `badal-skills` plugin. Account-installed plugins also show up in Claude Code as `badal-skills@synced`.
+Alternative for Cowork users: **Customize → Plugins → Add → Add marketplace**, enter `Badal2706/brimpa-skills`, then install the `brimpa-skills` plugin. Account-installed plugins also show up in Claude Code as `brimpa-skills@synced`.
 
 Notes:
 - If an upload is rejected for the description, shorten the `description:` line to 200 characters (the claude.ai UI has been documented with a 200-character cap; the spec allows 1024). The packaging script prints which skills exceed 200.
@@ -70,18 +72,18 @@ Notes:
 
 ### Update
 
-Plugin install: `/plugin update badal-skills@badal-skills`. Copied folders: `git pull` and copy again. Desktop uploads: delete the old skill and upload the new zip.
+Plugin install: `/plugin update brimpa-skills@brimpa`. Copied folders: `git pull` and copy again. Desktop uploads: delete the old skill and upload the new zip.
 
 ## Publish your own copy on GitHub
 
 ```bash
-cd "badal-skills"
+cd "brimpa-skills"
 git init -b main
 git add .
 git commit -m "feat: initial skills collection"
-gh repo create badal-skills --public --source=. --remote=origin --push
+gh repo create brimpa-skills --public --source=. --remote=origin --push
 # or create the repo in the GitHub UI, then:
-# git remote add origin https://github.com/Badal2706/badal-skills.git && git push -u origin main
+# git remote add origin https://github.com/Badal2706/brimpa-skills.git && git push -u origin main
 ```
 
 Before every push:
@@ -96,9 +98,9 @@ Then edit the two placeholders: the `owner.url` in `.claude-plugin/marketplace.j
 The repo layout is the one Claude Code, Claude Desktop/Cowork ("Add marketplace") and `npx skills add` all understand:
 
 ```
-badal-skills/
+brimpa-skills/
 ├── .claude-plugin/
-│   ├── marketplace.json   # lets people `/plugin marketplace add you/badal-skills`
+│   ├── marketplace.json   # lets people `/plugin marketplace add you/brimpa-skills`
 │   └── plugin.json        # the single plugin that contains ./skills/*
 ├── skills/<skill-name>/SKILL.md (+ references/)
 ├── scripts/               # package + validate helpers

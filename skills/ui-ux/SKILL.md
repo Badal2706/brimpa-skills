@@ -3,7 +3,7 @@ name: ui-ux
 description: Usability and interaction design for any screen - web apps, dashboards, admin panels, SaaS products, internal tools, mobile and desktop apps, and website pages. Covers hierarchy, navigation, forms, tables and data display, loading/empty/error states, accessibility (WCAG AA), responsive and adaptive layout, UX copy, design tokens and dark mode, and structured UX critique (Nielsen heuristics scored 0-4, P0-P3 issues). Use whenever the user builds or reviews a UI, asks "is this usable", "improve the UX", "review my dashboard / form / settings page / checkout", wants a design system, tokens, dark mode, a mobile layout, skeleton loaders, empty states, better error messages or onboarding, or says a screen feels cluttered, confusing, dense, or "off" - even if they never say "UX". Also use before shipping any app screen. For the visual direction and aesthetics of marketing websites, hand off to web-design.
 license: MIT
 metadata:
-  author: Badal Patel
+  author: Brimpa
   version: "1.0"
   updated: "2026-10-20"
 ---

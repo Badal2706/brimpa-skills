@@ -3,7 +3,7 @@ name: launch-marketing
 description: Positioning, messaging and launch copy for products and client websites. Writes and reviews landing-page and hero copy, taglines, value propositions, pricing pages, Product Hunt, Show HN, Reddit, LinkedIn and X launch posts, newsletters, onboarding and outreach emails, changelogs, app-store listings and product names, and strips AI-sounding "slop" from existing copy. Use whenever the user asks to write, rewrite, shorten, punch up or review any marketing or website text (headline, hero, about page, service page for a clinic or small business, product description, announcement, cold email, email sequence, release notes), asks "does this sound like AI?" or "make this sound human", wants to launch, announce or ship something publicly, needs a name or tagline, or is building a site for a client and needs the words, even if they never say "marketing" or "copy". Pure guidance; no external APIs needed.
 license: MIT
 metadata:
-  author: Badal Patel
+  author: Brimpa
   version: "1.0"
   updated: "2026-10-20"
 ---
