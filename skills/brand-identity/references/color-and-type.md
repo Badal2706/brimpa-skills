@@ -19,6 +19,7 @@ Contents
 12. Type scale, roles and floors
 13. Font loading and licences
 14. Hand-off to tokens
+15. Tone table: what colour and type say before a word is read
 
 ---
 
@@ -47,7 +48,8 @@ components always reference the semantic layer.
 - Do not start from the category table (blue = trust, green = eco). Colour psychology tables are
   weak heuristics and every competitor already followed them, which is exactly why a different hue
   reads as a brand. The table in `logo-and-visual-identity.md` is there to know what the neighbours
-  did, not to copy it.
+  did, not to copy it. Section 15 below shows what a hue or typeface family tends to signal, so a
+  chosen hue is checked for tone after it is chosen for meaning, not picked from the table.
 - Test the candidate at three chroma levels (muted, mid, saturated) on the chosen canvas before
   committing. Many hues only work muted on light canvases and only work saturated on dark ones.
 - If the owner already has a colour they will not give up, keep its hue and tune lightness and
@@ -173,6 +175,8 @@ soften this: cream plus serif for a book subject is the default wearing the subj
   and a fixed role scale; the brand shows through in the display face, the accent and the copy.
 - Test candidates with the brand's real words at the real sizes: the name at 16 px in the header,
   a 40-character headline, a paragraph at 16 px/1.6, a table of numbers, a form label at 14 px.
+- Check the tone the family signals against the price and craft the brand claims (section 15); a
+  face that reads cheaper than the work keeps prices low.
 
 ## 11. Overused faces (as of Oct 2026)
 
@@ -237,3 +241,46 @@ Paragraph spacing or first-line indent, not both.
 Every value decided here lands in three places: the BRAND.md tables (with the reason), `tokens.css`
 (semantic custom properties, light and dark), and `tokens.json`. Contrast results go in the
 BRAND.md table. See `brand-md-template.md` for the exact blocks.
+
+## 15. Tone table: what colour and type say before a word is read
+
+Visitors read the palette and the type before the headline, and the tone they infer sets the price
+they expect. Use this table as a check after choosing (does the chosen hue and face match the
+register and price the brand claims?), never as a selection rule: section 2 and section 9 explain
+why starting from "blue = trust" produces the category default and the AI clusters.
+
+Caveats, both load-bearing: colour meanings are cultural (white is bridal in one market and
+mourning in another; red is luck in one and danger in another; check the audience's own
+associations, especially for Indian and other multilingual audiences), and they are
+category-relative (green reads as "safe" in therapy and as "cheap organic" on a supermarket shelf
+already full of it). The typeface readings below are about families and treatments, not single
+fonts; the overused list in section 11 still applies to any named face.
+
+| Family or treatment | Typical tone read | Typical price read | Watch out |
+|---|---|---|---|
+| Blue (muted, mid) | trust, stability, calm | neutral to professional | the most crowded hue; a brand, not a category, needs a reason beyond "trust" |
+| Green (muted) | growth, safety, health | neutral | mint green is a tech default; saturated green reads as discount or eco-cliche |
+| Deep reds, maroon, burgundy | craft, heritage, seriousness | higher | bright red flips to urgency and sale |
+| Warm neutrals with one accent | considered, calm, established | higher | cream + serif + terracotta is an AI cluster; tint from the brand hue instead |
+| Black or near-black with one metal or one muted accent | authority, sophistication | high | reflexive `#111` and neon-on-black read as a template, not luxury |
+| Saturated multi-colour, high chroma | playful, youthful, energetic | lower unless the whole world is built that way on purpose | works for loud challenger brands; fails for high-stakes services |
+| Thin, all-caps sans over busy imagery | generic, hurried | lower | the combination, not the sans, is the problem: caps plus thin weight plus clutter |
+| Rounded sans (soft terminals, open shapes) | warm, casual, approachable | neutral to lower | friendly brands, kids, community; not for wealth or surgery |
+| Tall, condensed or angular sans | bold, assertive, athletic | neutral | one weight too many turns it into shouting |
+| Humanist sans with real weights | clear, steady, modern | neutral to higher | the safe default for product UI; let colour and copy carry the voice |
+| Elegant serif (moderate contrast, generous size) | craft, expertise, patience | higher | high-contrast display serifs are on the overused list; pick by register, not by name |
+| Monospace as display | technical costume | neutral | a tell when the subject is not actually code |
+| Script or display face | personality, occasion | varies | one role only (display); never body or UI |
+
+Case (adapted from a practitioner talk; see `sources.md`): a boutique clarinet repair and sales
+shop set its site in thin all-caps sans over a cluttered workbench photo. It read as a cheap repair
+counter, and the owner kept prices low to match. An elegant serif on a clean background with a
+deep maroon accent matched the craftsmanship the shop actually delivered and gave the owner the
+confidence to raise prices. Nothing about the service changed; the tone the type and colour
+announced did.
+
+How to use it: pick the hue from meaning and place (section 2) and the face from the subject's
+world (section 10), then read this table once to confirm the tone and price they announce match
+the brand's positioning (for premium or luxury positioning work, the `luxury-web-design` skill owns
+that). If they do not, adjust lightness, chroma, weight or treatment first; change the hue or
+family only when the mismatch is in kind, not degree.

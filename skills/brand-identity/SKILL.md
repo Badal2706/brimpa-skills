@@ -4,8 +4,8 @@ description: Create or document a brand kit, brand guidelines, style guide or vi
 license: MIT
 metadata:
   author: Brimpa
-  version: "1.0"
-  updated: "2026-10-20"
+  version: "1.1"
+  updated: "2026-10-22"
 ---
 
 # Brand identity
@@ -23,6 +23,13 @@ Scope boundaries, so the skills do not overlap:
 - Page design (hero, sections, layout, motion): `web-design`. This skill supplies the tokens it builds with.
 - Usability of screens, forms, dashboards: `ui-ux`.
 - Launch or explainer videos that must stay on-brand: `launch-video`.
+- Premium or luxury positioning (identity signalling, world-building, counterposition, exclusivity
+  narratives): load the `luxury-web-design` skill. This skill only makes sure the tokens and voice
+  can carry the price once that positioning is decided.
+
+A brand becomes recognisable through consistency held over years (the same accent, face, imagery
+treatment and voice on every surface), not through a launch; every rule below exists to make that
+repetition possible.
 
 ## How to run this
 
@@ -75,7 +82,9 @@ Scope boundaries, so the skills do not overlap:
 - **One accent.** Pick the hue from what the product means or where it lives (the clinic's
   teal-green tiles, the farm's soil) rather than from the category table ("healthcare = blue").
   A second brand colour needs a named job the first cannot do. Two to three colours plus
-  neutrals, not five to seven.
+  neutrals, not five to seven. After choosing, check the tone and price the hue announces against
+  the tone table in `references/color-and-type.md` section 15 (colour meanings are cultural and
+  category-relative; the table is a check, not a picker).
 - **Strategy decides dosage.** Restrained: tinted neutrals plus one accent (most product UI and
   reading surfaces). Committed: one saturated colour carries 30-60% of the surface. Full palette:
   three or four named roles. Drenched: the surface is the colour. Colour commits at page scale
@@ -110,7 +119,10 @@ Scope boundaries, so the skills do not overlap:
 - **Choose the face like an object from the subject's world**, in the register of the surface:
   marketing pages may let display type carry the voice; product UI wants stability and
   scanability. Naming any face on the overused list below needs a reason no other face satisfies,
-  and "the subject is books so a serif" is not that reason.
+  and "the subject is books so a serif" is not that reason. Type sets the price before a word is
+  read (thin all-caps sans over a busy photo reads as a cheap counter; a calm serif on a clean
+  ground reads as craft): confirm the family's tone against the tone table in
+  `references/color-and-type.md` section 15.
 - **Overused list (as of Oct 2026):** Inter (as display; Inter as a quiet UI body face is
   acceptable), Roboto, Arial and bare system stacks as the brand face, Geist, Plus Jakarta Sans,
   Space Grotesk, Space Mono, Fraunces, Playfair Display, Cormorant, Lora, Crimson, Newsreader,
@@ -149,6 +161,9 @@ Scope boundaries, so the skills do not overlap:
   photography without a contrast plate, or recreate the wordmark in a system font.
 - **Icons** that accompany the brand share one style (outlined 2 px, filled, or duotone), a 24 px
   grid, `currentColor`, rounded caps and joins for outlined styles, and are tested at 16 and 48 px.
+- **Imagery: real beats perfect.** Slightly imperfect photos of the actual business, people and
+  product are the strongest trust signal a surface has; stock and generated people say the brand
+  is interchangeable, and a brand that looks like a commodity gets priced like one.
 - Full detail, the logo brief template, colour-psychology table and co-branding rules are in
   `references/logo-and-visual-identity.md`.
 
@@ -164,7 +179,9 @@ Scope boundaries, so the skills do not overlap:
   empower, supercharge, world-class, enterprise-grade, next-generation, cutting-edge,
   revolutionary, best-in-class, seamless, synergy, leverage) and add the client's own.
 - **Four tests for any sentence:** Does it sound like us? Could a competitor say it word for
-  word? Does the audience care? Is it consistent with the last thing we published?
+  word? Does the audience care? Is it consistent with the last thing we published? And for any
+  storytelling section ("founded in 19XX", milestones, board messages), the ego test: is this here
+  for the buyer, or for me? Keep the fact only where it answers a buyer's question.
 - **Messaging summary only:** one-line value proposition, three key messages each with a proof
   point, one 10-second pitch. Deeper positioning and naming belong to `launch-marketing`.
 - Templates and sample rewrites: `references/voice-and-messaging.md`.
@@ -255,6 +272,9 @@ produces the integration plan with the trigger map and reduced-motion fallback.
 - Do not list tokens without contrast results; a palette that fails AA on body text is not done.
 - Do not write BRAND.md as a wall of rules without the "why"; each section carries its reason in a
   clause so the next person (or model) can extend it correctly.
+- Do not let the brand's rules permit brand-eroding tactics: no standing deep-discount blasts (a
+  permanent 40-60% off teaches buyers the full price was a bluff), no fake scarcity (resetting
+  countdowns, invented "only 3 left"). Write the refusal, with its reason, into BRAND.md.
 
 ## When the user pushes back
 
@@ -276,11 +296,12 @@ produces the integration plan with the trigger map and reduced-motion fallback.
   template, the `tokens.css` block (light and dark), the `tokens.json` shape and the DESIGN.md
   frontmatter variant.
 - `references/color-and-type.md`: read when defining the palette or type system; OKLCH ramps,
-  contrast method, dark-mode derivation, the overused-font list and pairing rules.
+  contrast method, dark-mode derivation, the overused-font list, pairing rules, and the tone
+  table (what colour and type families signal before a word is read, with the clarinet-shop case).
 - `references/logo-and-visual-identity.md`: read when writing a logo brief, choosing a mark type,
-  setting usage rules, icon style or imagery direction.
-- `references/voice-and-messaging.md`: read when writing the voice chart, tone table,
-  prohibited terms or the messaging summary.
+  setting usage rules, icon style or imagery direction (including the real-photos-over-stock rule).
+- `references/voice-and-messaging.md`: read when writing the voice chart, tone-by-context table,
+  prohibited terms, the ego test for storytelling sections, or the messaging summary.
 - `references/consistency-checklist.md`: read at the QA step and before any brand asset ships.
 - `references/mascot.md`: read only if the user wants an animated character on the site.
 - `references/sources.md`: upstream material and licences this skill was adapted from.

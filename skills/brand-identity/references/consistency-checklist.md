@@ -75,7 +75,7 @@ Contents
 - [ ] One icon style (stroke, grid, caps) throughout; icons use `currentColor`; titled or hidden
       from assistive tech appropriately.
 - [ ] Photography follows the written direction (light, subjects, treatment); no stock clichés
-      where the brief says real premises and people.
+      where the brief says real premises and people; no generated people standing in for staff.
 - [ ] Illustration either in the committed style or absent; no shape-assembled SVG people, doodle
       outlines or grain blobs by default.
 - [ ] Radius scale, border tint and the single shadow recipe applied; no colour glows; no cards
@@ -94,6 +94,9 @@ Contents
 - [ ] Key messages present on the main surfaces and consistent with the messaging summary; no
       invented proof, testimonials or numbers.
 - [ ] Regulated-field wording respected (clinic, finance, legal cautions from BRAND.md).
+- [ ] Storytelling sections pass the ego test (for the buyer, not the owner); no fake scarcity
+      (resetting timers, invented "only 3 left"); no standing deep-discount banner that contradicts
+      the brand's price position.
 
 ## 7. Accessibility
 

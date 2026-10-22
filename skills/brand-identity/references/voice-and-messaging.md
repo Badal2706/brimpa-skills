@@ -102,6 +102,14 @@ Start the list with the words that generated drafts reach for, then add the clie
 Four tests for any sentence: Does it sound like us? Could a competitor say it word for word? Does
 the audience care about this sentence? Is it consistent with the last thing we published?
 
+A fifth test for any section of brand storytelling, the ego test: "Is this here for the buyer, or
+for me?" "Founded in 19XX", milestone timelines, board messages, award shelves and founder
+biographies flatter the owner and rarely answer a buyer's question. Keep the fact when it answers a
+real risk question (will you still be here, have you done this before), move it to where that
+question arises, and say it in one line; cut it when it only leads the page because the owner is
+proud of it. Apply this hardest to the About page, which is usually written as a resume and should
+read as the customer's transformation.
+
 Sample rewrites (keep two or three real ones in BRAND.md; they teach faster than rules):
 
 | Before | After | Why |

@@ -4,8 +4,8 @@ description: Positioning, messaging and launch copy for products and client webs
 license: MIT
 metadata:
   author: Brimpa
-  version: "1.0"
-  updated: "2026-10-20"
+  version: "1.1"
+  updated: "2026-10-22"
 ---
 
 # Launch marketing: positioning, messaging and launch copy
@@ -14,19 +14,19 @@ Copy that works is specific, written to one person, and traceable to something t
 
 Reference files (open only the one you need):
 - `references/human-tone.md`: read when rewriting or auditing copy that sounds generic or AI-written; holds all 18 slop patterns with before/after, the full banned-word list and the audit process.
-- `references/positioning-and-naming.md`: read when the user has no positioning yet, says "people don't get what we do", or needs a product/brand name.
-- `references/landing-and-pricing-copy.md`: read when writing or reviewing a homepage, landing page, service page or pricing page; PAS, LIFT, section-by-section copy, the 12 pricing-psychology principles.
+- `references/positioning-and-naming.md`: read when the user has no positioning yet, says "people don't get what we do", or needs a product/brand name; also the three-question homepage test, "repel the wrong customers" and the About-page rule.
+- `references/landing-and-pricing-copy.md`: read when writing or reviewing a homepage, landing page, service page or pricing page; PAS, LIFT, section-by-section copy, readability check, the five awareness levels, the 12 pricing-psychology principles plus anchoring, price endings and discount rules.
 - `references/launch-channels.md`: read when preparing Product Hunt, Show HN, Reddit, LinkedIn, X, a carousel, a changelog or an app-store listing; limits, timelines and benchmarks per channel.
 - `references/email-and-outreach.md`: read when writing a newsletter, launch email, onboarding sequence or cold outreach; subject-line formulas, HTML email rendering rules, the 7 outreach signals, cadence and breakup.
 - `references/sources.md`: attribution for everything above.
 
 ## How to run this
 
-1. **Intake in one message.** Ask for everything missing at once, then proceed with what you get. Minimum: (a) what it is and how it works, in plain nouns; (b) who feels the pain most; (c) what they use today instead (competitor, spreadsheet, a cousin who "does websites", nothing); (d) the brand vibe as 3-4 voice attributes; (e) proof that actually exists: numbers, named customers, quotes with permission, credentials; (f) price and what is free; (g) which assets are needed and the launch date. If `docs/icp.md` or a positioning doc exists in the project, load it and skip the questions it already answers.
-2. **Positioning before words.** Work Dunford's five components in order: competitive alternatives, unique provable attributes, value (feature to benefit to value), target customer triggers, market category. Output the positioning doc (template below). For a local-business client this takes ten minutes and still matters: the alternative is usually "the clinic down the road" or "putting it off".
+1. **Intake in one message.** Ask for everything missing at once, then proceed with what you get. Minimum: (a) what it is and how it works, in plain nouns; (b) who feels the pain most; (c) what they use today instead (competitor, spreadsheet, a cousin who "does websites", nothing); (d) the brand vibe as 3-4 voice attributes; (e) proof that actually exists: numbers, named customers, quotes with permission, credentials; (f) price and what is free; (g) which assets are needed and the launch date; (h) how aware the reader is on arrival: do they know the problem has a name, know solutions exist, know this product? (Five levels and what each needs: `references/landing-and-pricing-copy.md`.) If `docs/icp.md` or a positioning doc exists in the project, load it and skip the questions it already answers.
+2. **Positioning before words.** Work Dunford's five components in order: competitive alternatives, unique provable attributes, value (feature to benefit to value), target customer triggers, market category. Output the positioning doc (template below). For a local-business client this takes ten minutes and still matters: the alternative is usually "the clinic down the road" or "putting it off". Then run the three-question homepage test (who is the ideal client, what is their most pressing problem, how do you solve it) and check the positioning repels the wrong customer as deliberately as it attracts the right one; see `references/positioning-and-naming.md`.
 3. **Messaging hierarchy.** Write the four levels: one-liner (7-12 words, names the outcome), elevator pitch (3-4 sentences; this becomes the homepage headline and subhead), proof narrative, deep dive. Define voice as IS / IS NOT pairs.
-4. **Page copy.** Hero by PAS (headline says what it is and who it is for; subhead agitates one specific pain; CTA says what happens next). Then sections, proof, pricing, FAQ. Use `references/landing-and-pricing-copy.md`.
-5. **De-slop pass.** Run every asset through the 18 patterns and the banned-word list in `references/human-tone.md`. Replace every vague claim with a specific or a `[fill in: ...]` placeholder. Count characters and words where a channel has limits.
+4. **Page copy.** Hero by PAS (headline says what it is and who it is for; subhead agitates one specific pain; CTA says what happens next). Then sections, proof, pricing, FAQ. Pricing: show prices or "starting at", anchor with a real tier or reference price, pick 9-endings or round numbers by the market you want to be read as, and avoid dead points like $69/$79. Use `references/landing-and-pricing-copy.md`.
+5. **De-slop pass.** Run every asset through the 18 patterns and the banned-word list in `references/human-tone.md`. Replace every vague claim with a specific or a `[fill in: ...]` placeholder. Check readability (grade 5-8 on Hemingway or a Flesch-Kincaid check) unless the audience reads jargon for a living. Count characters and words where a channel has limits.
 6. **Channel assets.** One asset per channel, each native to that channel's norms (a Show HN body is not a LinkedIn post). Use `references/launch-channels.md` and `references/email-and-outreach.md`.
 7. **Launch calendar.** Lay the assets on a 30-day plan (teaser, assets, final prep, launch day, day 2). Stagger channels; Hacker News and Reddit penalise vote rings and same-day cross-posting.
 8. **Post-launch loop.** Changelog entry and "what shipped" pack after each release; results post on day 2; outreach triggered by real buying signals; revise the hero after reading what real users said in comments and support tickets.
@@ -169,6 +169,7 @@ Post-launch: changelog pack, outreach angle blocks for 2-3 signals      [ ]
 - Refuse to write fake reviews, fake testimonials, invented user counts, fake "as seen in" logos, countdown timers that reset, or "only 3 spots left" when it is not true. Offer the honest version: real early-user quotes, "launched in October 2026", a real deadline.
 - Refuse to name competitors negatively in Product Hunt listings or app-store metadata, or to claim a competitor's flaw as your strength without a shipped feature behind it. Contrast the experience, not the brand ("all-inclusive, no hidden fees").
 - Refuse vote rings and upvote asks on HN and PH; they get listings buried and accounts flagged.
+- Refuse constant 40-60% discount blasts or a permanent "sale" as the launch or retention plan; they reprice the product in the buyer's head. Offer a bounded launch price with a real end date instead.
 - Do not pad to a word count. A 9-word hero and a 60-word HN body that say something beat long drafts that say nothing.
 - Do not promise "SEO" from copy alone; hand measurable search work to seo-geo-audit.
 - Do not emit HTML emails into chat; save to a file and summarise.

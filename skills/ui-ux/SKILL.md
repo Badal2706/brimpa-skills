@@ -4,8 +4,8 @@ description: Usability and interaction design for any screen - web apps, dashboa
 license: MIT
 metadata:
   author: Brimpa
-  version: "1.0"
-  updated: "2026-10-20"
+  version: "1.1"
+  updated: "2026-10-22"
 ---
 
 # UI/UX: usability, interaction and states for apps and pages
@@ -75,7 +75,7 @@ Drawn from measured product screens (a 2026 study of 23 real desktop product scr
 ## Eight rules for pages (Persuade / Read)
 
 1. A stranger can say in 5 seconds what this is, who it is for and what to do next, from the first screen, with the title in the one `h1`.
-2. One primary action as a real button on the first screen, named for what it does ("Book a consultation", not "Submit" or "Learn more"); a second action is a text link.
+2. One primary action as a real button on the first screen, named for what it does ("Book a consultation", not "Submit" or "Learn more"); a second action is a text link. One or two actions per screen or section in total: five equal calls to action freeze the visitor (decision fatigue) and the page converts to nothing. The flow's last step (the booking form, the pay button) defines the memory of the visit; test it first, on a phone, and make its confirmation a deliberate peak.
 3. Every headline fits two lines at every width (about 32 characters survives a phone at a confident size); the detail goes to a one-sentence supporting line of at most about 22 words.
 4. Reading column 45-75ch at >= 16px, left-aligned by default, running text in full ink (soft grey body reads unfinished); centre at most one moment.
 5. Equal outer margins at every width; no blank stretch taller than about half a screen; no section huddled in one half with the other half empty.
@@ -87,7 +87,7 @@ Drawn from measured product screens (a 2026 study of 23 real desktop product scr
 
 | State | Must show | Must not |
 |---|---|---|
-| Loading | Final layout as skeleton at real sizes; label the operation; determinate progress when known; keep old values on refresh | Spinner mid-content; shimmer that shifts layout; invented progress |
+| Loading | Final layout as skeleton at real sizes; label the operation; determinate progress when known; when work is long, the real named steps as they run ("Comparing 212 fares..."); keep old values on refresh | Spinner mid-content; shimmer that shifts layout; invented progress, steps or pauses |
 | Empty, first use | What will be here, why it matters, the first action, optional template | Illustration with "No data yet" and no action |
 | Empty, user cleared / no results | Light touch; "No results for X", suggest a different query, clear filters | Treating it as first use |
 | No permission | Why, and how to get access | A blank screen or a 403 code |
@@ -147,7 +147,7 @@ Three layers: primitives (`--color-blue-600`, `--space-4`) -> semantic (`--color
 
 ## UX laws (quick index)
 
-Hick (fewer, grouped choices), Fitts (big, close targets; edges and corners), Miller/Cowan (<= 4 items per chunk in working memory), Jakob (users expect your app to work like the ones they already use), Tesler (complexity moves to the system, not the user), Doherty (respond within 400ms or show progress), Peak-end (design the peak and the ending), Zeigarnik (unfinished steps nag: show progress), Von Restorff (one thing stands out only if everything else does not), Aesthetic-usability (polish buys patience, not forgiveness for broken flows), Figure-ground (dim what's behind the focus, about 70% backdrop), Banner blindness (don't make important things look like ads), Parkinson (fill in what you already know), Choice overload (fewer options up front). Each with a rule and an example in `references/ux-laws.md`.
+Hick (fewer, grouped choices), Fitts (big, close targets; edges and corners), Miller/Cowan (<= 4 items per chunk in working memory), Jakob (users expect your app to work like the ones they already use; convention beats ergonomics for where the menu lives), Tesler (complexity moves to the system, not the user), Doherty (respond within 400ms or show progress), Peak-end (design the peak and the ending), Zeigarnik (unfinished steps nag: show progress), Von Restorff (one thing stands out only if everything else does not), Aesthetic-usability (polish buys patience, not forgiveness for broken flows), Figure-ground (dim what's behind the focus, about 70% backdrop), Banner blindness (don't make important things look like ads), Parkinson (fill in what you already know), Choice overload (fewer options up front), Labor illusion (name the real steps of a long wait, never invented ones). Each with a rule and an example in `references/ux-laws.md`.
 
 ## Report / output format
 

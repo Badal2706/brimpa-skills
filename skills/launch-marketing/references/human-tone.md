@@ -91,6 +91,8 @@ Replace: "Learn more" with what they will learn; "Get started today" with what g
 ### 11. AI vocabulary
 Cut: actually, additionally, align with, comprehensive, crucial, cutting-edge, delve, elevate, empower, enhance, ensure, foster, garner, groundbreaking, highlight, holistic, innovative, intricate, journey, key (as adjective), landscape (abstract), leverage, paradigm, pivotal, robust, seamless, showcase, solution (for product), streamline, synergy, tapestry, testament, transformative, underscore, unlock, utilize, valuable, vibrant. If it is on every SaaS homepage, cut it.
 
+A random "actually" dropped mid-sentence ("it actually works", "which actually matters") is one of the strongest single-word tells; keep it only when it contrasts with an expectation you have just stated.
+
 ### 12. Copula avoidance
 Watch: serves as, stands as, functions as, operates as, acts as, represents, boasts, features, offers. Say what it is.
 - Before: "The dashboard serves as a central hub for your operations, offering real-time insights and featuring advanced filtering capabilities."
@@ -117,9 +119,13 @@ AI forces benefits, bullets and clauses into threes.
 - Before: "The future is bright for teams that embrace this approach. Together, we can build a better ecosystem for developers everywhere."
 - After: "That's what we're building. If it sounds like something you'd use, try it."
 
-### 18. Passive voice hiding the product
+### 18. Passive voice and abstract agents hiding the product
 - Before: "Workflows are automated. Errors are caught before they reach production. Teams are empowered to ship with confidence."
 - After: "It catches errors before they hit production. Your team ships without running through a manual checklist first."
+
+The active-voice version of the same hiding is an abstract noun given agency: "this approach unlocks potential", "our methodology drives results", "the platform fosters collaboration". Something that is neither a person nor the product does the verb, and the reader learns nothing. Name who does what to whom.
+- Before: "This approach unlocks potential across your organization and drives meaningful outcomes."
+- After: "Your ops lead gets the weekly report on Monday morning instead of building it on Friday afternoon."
 
 ## Extra scrub lists for social and community copy
 

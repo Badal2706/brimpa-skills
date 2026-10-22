@@ -2,7 +2,7 @@
 
 _By Brimpa. Previously published as `badal-skills`; this repo replaces it._
 
-Reusable [Agent Skills](https://agentskills.io/specification) for shipping websites and software, distilled from a year of collected security checklists, design systems, SEO playbooks, compliance guides and launch prompts, then re-verified against primary sources as of **October 2026**.
+Twelve reusable [Agent Skills](https://agentskills.io/specification) for shipping websites and software, distilled from a year of collected security checklists, design systems, SEO playbooks, compliance guides and launch prompts, then re-verified against primary sources as of **October 2026**.
 
 Works with Claude Code, Claude Desktop / claude.ai (including Cowork), and any agent that reads `SKILL.md` files (Codex, Cursor, Gemini CLI, OpenCode and others via `npx skills add`).
 
@@ -15,12 +15,15 @@ Works with Claude Code, Claude Desktop / claude.ai (including Cowork), and any a
 | [dpdp-legal-compliance](skills/dpdp-legal-compliance/) | handle personal data of Indian users, need consent/notice/breach/rights flows, or a pre-launch legal checklist | DPDP founder guide, DPDP Rules 2025 (verified), DPDP audit prompt, 20-item legal launch list |
 | [ui-ux](skills/ui-ux/) | design or review any screen: web apps, dashboards, admin panels, mobile, desktop, forms, tables, onboarding, accessibility | impeccable (modes, craft floor, critique rubric), taste-skill app rules, ui-ux-pro-max UX guidelines and tokens, UX laws |
 | [web-design](skills/web-design/) | build a marketing site, landing page, portfolio, clinic or local-business site and want it to look like *this* client, not like every AI site | Anthropic frontend-design, impeccable, taste-skill directions, ui-ux-pro-max style catalog, 12 landing-page animation recipes |
+| [luxury-web-design](skills/luxury-web-design/) | build or audit a high-budget, premium-to-luxury site or an attention-grabbing launch page: ultra-minimal, high-ticket, "make it feel expensive"; works alone or on top of web-design | 19 web-psychology videos (transcribed), first-impression and luxury-strategy research with evidence grades, Kapferer & Bastien anti-laws, product-page and proof architecture |
 | [seo-geo-audit](skills/seo-geo-audit/) | audit or launch a site for Google, Maps and AI search (AI Overviews, ChatGPT, Perplexity, Claude) | my old local-seo-audit v1, claude-seo, position-me, clinic local-SEO playbook, verified Google changes through Oct 2026 |
 | [launch-marketing](skills/launch-marketing/) | write positioning, landing copy, pricing pages, Product Hunt / Show HN / LinkedIn posts, newsletters, outreach; de-slop AI copy | opendirectory (human-tone, brand-alchemy, position-me, launch kits, email) |
 | [brand-identity](skills/brand-identity/) | define a palette, type system, logo rules, voice and brand tokens; add an animated mascot | ui-ux-pro-max brand + design references, taste brandkit, Anthropic brand-guidelines pattern, mascot guide |
 | [launch-video](skills/launch-video/) | make a 40–60 s product launch film or demo clip from screenshots with a deterministic HTML render pipeline | "Launch Film With Claude" method |
 | [web-scraping](skills/web-scraping/) | collect web data you are authorized to collect; choose fetchers, spiders, sanitize for LLMs | Scrapling official skill (linked, not vendored) + alternatives |
 | [reverse-engineering](skills/reverse-engineering/) | understand how a shipped artifact works, with evidence, within legal limits | REA (linked, not vendored) |
+
+`web-design` and `luxury-web-design` are a pair: the first builds normal-to-premium sites and carries the cheap, always-on conversion basics; the second adds the premium-to-luxury strategy, attention psychology, proof and pricing rules for high-budget work. Load both for a luxury build; either works alone.
 
 Each skill folder has a `SKILL.md` (the instructions Claude loads), `references/` (long checklists and templates loaded on demand) and `references/sources.md` (what came from where, with licenses).
 

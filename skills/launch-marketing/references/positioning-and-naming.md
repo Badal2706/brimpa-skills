@@ -55,6 +55,19 @@ Voice is the consistent personality; tone adapts to context (a pricing page and 
 
 Insight -> Alternatives (old way vs new way, with trade-offs) -> Perfect world (criteria an ideal solution would meet, chosen to match your strengths) -> Introduction (you, as the answer to those criteria) -> Differentiated value (2-3 pillars with the features that enable each) -> Proof -> Objections (price, implementation effort, the elephant in the room) -> The ask (one specific, low-friction next step).
 
+### Homepage clarity tests
+
+Positioning fails on the page in two ways: vague words that could belong to any competitor, and clever words that make the reader work out what you do. Run these before the hero is written.
+- **Three-question test (StoryBrand, Donald Miller).** From the hero and first section alone, a visitor must be able to answer: who is the ideal client, what is their most pressing problem, how do you solve it. Case: Erica J., a voiceover artist, rewrote her homepage to call out marketing professionals anxious about generic-sounding voices and tight same-day turnarounds, then backed it with credits (Disney, Mailchimp, Microsoft). The three answers became headline, subhead and proof line.
+- **Specific over vague.** Case: a Kansas City limo company replaced "We have Kansas City covered" with positioning around luxury wedding transportation, limousines and party buses, with a location subtext; the owner raised rates by 30% or more (as claimed in the source video) because the site now spoke to the buyer who pays most. Vague copy attracts price shoppers.
+- **Clear over clever.** Case: coach Katie Pulsifer replaced "Let's build that life you've been dreaming about" with a plain statement of who she helps and what problem she solves. Allow cleverness only after the plain version exists, and only in a subhead, never in the H1 or the navigation ("Blog", not "Learn").
+
+### Repel the wrong customers, sell the result, fix the About page
+
+- **Repel on purpose.** Positioning that attracts everyone attracts price shoppers and bad-fit clients. State who it is not for ("not for teams under five", "minimum engagement three months"). It costs a few enquiries you would have declined anyway and raises the close rate on the rest.
+- **Sell the result, not the feature.** Every feature line gets a "so that" until it names something the reader would pay for; only the last clause goes in the headline (see the value column of the positioning doc).
+- **The About page is for the customer.** Often the second most visited page (as claimed in the source video) and the most wasted: a founder resume, a founding year, a mission paragraph. Rewrite it as the customer's transformation (who arrives in what state, what changes), hard metrics that exist (patients seen, projects shipped, years in the area), and real faces with real names (no stock, no AI portraits). Founder history stays only where it is proof. Ask of every paragraph: is this here for the buyer, or for us?
+
 ## 4. Grounding positioning in the market's own words
 
 Before writing headlines, collect verbatim language:

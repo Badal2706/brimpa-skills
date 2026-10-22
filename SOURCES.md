@@ -55,3 +55,10 @@ Dropped as irrelevant: Kangen water reel, DoctorC order confirmation, DigitalOce
 ## What was already in the folder
 
 `local-seo-audit-v1/` (my earlier plugin) is superseded by `seo-geo-audit`. Its audit-first discipline, anti-patterns, YMYL rules and launch checklist were carried over; its mid-2026 facts were re-verified and several corrected (see the "What changed" box in that skill).
+
+## Added 2026-10-22: website psychology videos and research
+
+| Source | Treatment | Lands in |
+|---|---|---|
+| 19 YouTube videos on website, landing-page, product-page, pricing and premium-brand psychology (Sam Crawford x4, Self-Made Web Designer, Code Munchies, Jennie Lakenan, Carson Scott, Dylan Bindrup, Matt Gray, orenmeetsworld, Omar Eddaoudi, Ryan Mathews, Flux Academy, ThrillX x2, BitBranding, Anton Zalis, Honest HVAC Marketing) | **Summarised** (Gemini summaries supplied by Badal, plus 15 auto-caption transcripts pulled with yt-dlp); cases and rules adapted, no transcript text reproduced, creator promos and sponsors dropped; video statistics labelled "as claimed in the source video" | luxury-web-design (bulk); the cheap always-on basics only in web-design, ui-ux, launch-marketing, brand-identity (each v1.1) |
+| Academic and industry research on first impressions, aesthetics, luxury strategy, attention and persuasion (Lindgaard 2006/2011, Tuch 2012, Reinecke 2013, Tractinsky 2000, Fogg 2003, Moshagen & Thielsch VisAWI, NN/g, Baymard, web.dev case studies, Kapferer & Bastien, Kluge 2013, Hagtvedt & Patrick 2008, Pracejus 2006, Rao & Monroe 1989, Han/Nunes/Dreze 2010, Lynn 1991, Tuncer 2023, Mathur 2019, FTC 2022, Buell & Norton 2011, Loewenstein 1994, Iyengar & Lepper 2000 with Scheibehenne 2010, Bain/Altagamma 2025, McKinsey 2026) | **Cited** with evidence grades (strong / moderate / weak); a myths list records popular figures that do not trace to a source (the 50 ms misreading, "60,000x faster", 92%/88% review stats, Zeigarnik, "+80% video") | luxury-web-design references/evidence.md |

@@ -215,6 +215,12 @@ stops looking like one company.
 - Diagrams and data: palette's data roles, labels on the data, colour never the only code.
 - Prove, do not decorate: a picture of the product doing its job beats an abstract blob behind a
   headline.
+- Real beats perfect: slightly imperfect photos of the actual business, its people, premises and
+  product are the strongest trust signal a site has, and they beat sterile stock and generated
+  images every time. Stock and AI imagery say the brand is interchangeable, and a brand that looks
+  like a commodity gets priced like one. Show a distinct human point of view (who took it, where
+  they stood, what they noticed) rather than a generic polish. Write "real photos only; no stock
+  people, no generated people" into BRAND.md when the brief allows a photo shoot at all.
 
 ## 13. Shape language and the "brand kit board"
 

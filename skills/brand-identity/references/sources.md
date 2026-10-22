@@ -18,3 +18,18 @@ has been removed.
 Standard figures not tied to a single source: favicon/touch-icon/manifest icon sizes (16, 32, 180,
 192, 512), Open Graph 1200x630, 44x44 touch targets, 4 px spacing base, 16 px iOS Safari input
 zoom threshold. These are well-known platform conventions as of Oct 2026.
+
+## Video sources (added v1.1, Oct 2026)
+
+Practitioner talks on YouTube, summarised from viewing notes rather than transcribed; nothing is
+quoted at length, client names in the cases are kept as the speakers gave them, and any revenue or
+price figures are as stated in the source video, not independently verified. Sponsor segments and
+course promotions were dropped.
+
+| Channel | Title | URL | What was taken |
+|---|---|---|---|
+| Sam Crawford | The Psychology Behind Boring Premium Websites | http://www.youtube.com/watch?v=LaWwS32y6n8 | Summarized; cases adapted. The ego test ("is this here for the buyer, or for me?") applied to founded-in dates, milestones and board messages; the effort heuristic (bespoke photography over stock, tinted neutrals with one confident accent instead of flat black and white). |
+| Jennie Lakenan | Psychology of Premium Websites That Get Clients | http://www.youtube.com/watch?v=_YQ99YO2XEQ | Summarized; cases adapted. Fonts and colours set tone before a word is read (blue trust, green growth, rounded sans warm, tall angular bold); the boutique clarinet-shop case (thin all-caps sans over a cluttered photo read as cheap; elegant serif, clean background and deep maroon accent matched the craftsmanship and justified higher prices). Recast as a check-after-choosing tone table with cultural and category caveats. |
+| Matt Gray | the psychology of building a brand everyone loves | http://www.youtube.com/watch?v=6V4y0AX69h4 | Summarized. One idea only: ruthless consistency held over years is what makes a brand recognisable. Founder-mindset and motivational content not carried over. |
+| Omar Eddaoudi | The Psychology of Premium Branding | http://www.youtube.com/watch?v=1kcxUhjuW_0 | Summarized. One rule only: a brand's rules forbid brand-eroding tactics such as constant deep discounts (40-60% off as a standing offer). The exclusivity / identification / storytelling pillars are left to the luxury-web-design skill. |
+| Sam Crawford | Brutally Honest Advice About Web Design in 9 mins | http://www.youtube.com/watch?v=DuowDNn3TNc | Summarized. Real, slightly imperfect photos beat sterile stock and AI images as a trust signal; "look like a commodity, get priced like one"; show a distinct human point of view; About pages written as a resume should read as the customer's transformation. |

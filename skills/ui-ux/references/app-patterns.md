@@ -185,6 +185,7 @@ No zebra. Either no row dividers (rely on pitch or 2-8px gaps between filled row
 - Only when steps are genuinely sequential or long; otherwise one page with sections.
 - "Step 2 of 4" with step names; Back never loses input; the context chosen earlier stays visible; a review step before anything irreversible; save-and-exit for long flows; the primary button names the next step ("Next: payment") and the last names the outcome ("Place order").
 - Each step one decision or one group of related fields; progress at its true ratio.
+- The last step is the memory (peak-end): the final form, the pay button and the confirmation decide how the whole flow is remembered. Test the final step first on a phone and on desktop; its confirmation names what was received and what happens next and when ("Order 1042 confirmed. Ships Tuesday; tracking by email.").
 
 ### 8.3 Settings
 
@@ -195,6 +196,17 @@ No zebra. Either no row dividers (rely on pitch or 2-8px gaps between filled row
 - Show what the setting produces beside it (the invite email, the notification as it arrives, the next invoice).
 - Destructive actions last, in their own section, as text or outlined button in the negative colour, consequence in words, confirmation naming the object.
 - Plan-gated features: readable panel plus a 48px strip with the upgrade action; the control never silently missing.
+
+### 8.4 Pricing table and plan picker
+
+Applies to the public pricing page (Persuade) and to the plan picker in Billing settings (Operate); the rules are the same.
+- Three tiers, four at most; more is a comparison task nobody finishes (Hick). Order them by price so the first number anchors the rest; the recommended tier is the one most buyers should choose, usually the middle.
+- One recommended tier stands out (Von Restorff): a "Most popular" or "Recommended" label and a filled border or tinted ground; the others plain. Never highlight two.
+- Show the price, or "Starting at" with what moves it (seats, volume), the billing period beside it, and an annual/monthly switch that recomputes every figure. "Contact us" only on a tier that genuinely needs a conversation, never on all of them; a hidden price reads as a trap and loses the qualified buyer with the unqualified one.
+- Features chunked, not listed (Miller/Cowan): group under 3-4 category headings; each tier shows only what it adds ("Everything in Basic, plus..."), never the full list again; the full matrix lives below or behind "Compare all features". The first line of each tier says who it is for ("For one clinic", "For groups of 2-10").
+- One button per tier, named for what happens next ("Start free trial", "Upgrade to Pro", "Talk to sales"), the same height in every column; the current plan says "Current plan" and is not a button.
+- The guarantee or cancellation terms in one line under the buttons; never invented proof.
+- Phone: tiers stack with the recommended one first, each collapsed to name, price, who it is for and its button, with "What's included" as an accordion.
 
 ## 9. Dashboards: composition and density
 
@@ -230,7 +242,7 @@ Offer a density toggle (comfortable/compact) on list-heavy tools. Placed space r
 - Counts follow the view and so does the frame: a filtered block shrinks to its rows with its row-mate top-aligned, or keeps a fixed number of rows with one empty-state sentence.
 - An empty section keeps its frame and header, adds one sentence spanning the block (`grid-column: 1 / -1`) in a 1px dashed box about 38px tall, or a bordered box with an add link. An empty side card fills with reference data. An empty chart is drawn (zero line, missing bars).
 - First run (whole screen empty): keep the frame and title; put the first action where the data will appear; a setup checklist at its true percentage.
-- Loading (house rule): the final layout with each value replaced by a flat grey bar at its real size (a 24px value gets a 24px bar; rows keep their pitch), labels and headers shown at once, no shimmer gradient, no layout shift when data lands; `aria-busy="true"` on the region and one polite announcement. A refresh keeps old values and updates the freshness stamp. Tools such as Boneyard (open source) generate skeletons from the rendered UI so the skeleton matches the real layout instead of being hand-measured.
+- Loading (house rule): the final layout with each value replaced by a flat grey bar at its real size (a 24px value gets a 24px bar; rows keep their pitch), labels and headers shown at once, no shimmer gradient, no layout shift when data lands; `aria-busy="true"` on the region and one polite announcement. A refresh keeps old values and updates the freshness stamp. When the wait is real and long (more than about a second: a search across sources, a report, an import, a payment authorisation), name the step actually running ("Reading 3 sources... Comparing 212 fares... Rendering") and show determinate progress when the total is known; visible real work is trusted more than a blank wait, and more than an instant result the user cannot quite believe (labor illusion, Buell & Norton 2011). Never fabricate steps, pauses or progress: the steps named are the ones running, the bar lands when the data does, and a fast result is shown at once. Tools such as Boneyard (open source) generate skeletons from the rendered UI so the skeleton matches the real layout instead of being hand-measured.
 - Error (house rule): inside the block that failed, never a full-screen banner; one sentence with what failed and when the data was last good ("Couldn't load deployments. Last updated 09:14.") and a Retry text button; the negative colour only on a small icon or in the pill pair.
 - Stale or static: a freshness stamp with refresh; a snapshot that cannot refresh says so in one quiet notice (#fffbeb, 1px #fde68a border, 12px #92400e text); a notice tint is never a ground.
 - Limits and usage: a bar at the true ratio with both ends labelled ("12.7k of 20.0k").

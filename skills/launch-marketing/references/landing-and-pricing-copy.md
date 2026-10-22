@@ -39,6 +39,22 @@ Delete it if (a) it could run unchanged on a competitor's site, (b) it contains 
 ### Copy tells of AI-generated pages
 Buzzword headlines; "X. No Y." or "Not a feature. A platform." cadence repeated three or more times; eight or more em dashes on a page; "theater" framing ("Welcome to the future of..."); numbered section labels (01/02/03) with no real sequence; an eyebrow label over every heading; the hero-metric block (big number, small label, three supporting stats) with illustrative numbers. Remove or replace with real content.
 
+### Readability check
+Ogilvy's rule: short words, short sentences, short paragraphs. Run body copy through a readability tool (Hemingway Editor or any Flesch-Kincaid checker) and aim for grade 5 to grade 8; go higher only for an audience that reads that way at work (lawyers, researchers). A reader who has to work to understand the sentence assumes the product is equally hard to use.
+
+### Awareness levels: which copy the reader needs first
+Copy cannot create desire, only channel the desire the reader already has (Eugene Schwartz). Ask at intake which level the reader arrives at; the traffic source usually tells you (branded search is "most aware", a cold social ad is "unaware").
+
+| Level | Reader's state | What the copy must do first |
+|---|---|---|
+| Most aware | Knows you and the product; wants the deal | Offer, price, terms, CTA; remove friction |
+| Product aware | Knows your product; not convinced it is the right choice | Prove the differentiator: comparison, proof, guarantee, objections |
+| Solution aware | Knows products like yours exist; not yours | Name the result they want, then the mechanism, then proof it works for people like them |
+| Problem aware | Feels the pain; does not know a solution exists | Name the problem in their words, state the consequence, then introduce the solution and you |
+| Unaware | Does not know they have the problem | Name the hidden problem before anything else; usually a content job, not a landing page |
+
+Case: an archery coach's page named a problem most readers had never heard labelled ("target panic"), then validated it with endorsements; only after that did the course make sense. Most SaaS and local-business pages serve solution-aware and problem-aware visitors: say the problem, say the result, prove it.
+
 ## 3. Writing for answer engines (GEO) without breaking the copy
 
 Marketing fluff is stripped before an LLM quotes a page, so the parts you want cited must be dense and factual: precise definitions, specific statements ("Opens 8 am to 9 pm Monday to Saturday"; "Supports Postgres 13+ and MySQL 8"), a short neutral "what is X" paragraph, and an FAQ whose questions match how users prompt. Keep it in its own sections so the persuasive copy stays persuasive. Technical plumbing (llms.txt, sitemap, JSON-LD for Organization/LocalBusiness, FAQPage, Product/SoftwareApplication, Article, BreadcrumbList) belongs to the seo-geo-audit skill; this skill supplies the text.
@@ -56,9 +72,15 @@ Score each Pass / Needs work / Missing when auditing; apply when writing. Each p
 7. **Plan naming.** Aspirational names that mirror the customer's stage (Starter / Growth / Scale, or Solo / Clinic / Group) over Basic / Pro / Enterprise.
 8. **CTA copy per tier.** Action plus outcome ("Start growing, free") not "Sign up"; the same verb across tiers unless the tier genuinely differs ("Talk to us" for enterprise).
 9. **Trial vs freemium framing.** State clearly which it is, what the limit is, what happens at the end. Confusion here costs more than any discount.
-10. **Price endings.** 9-endings (Rs 499, $49) read as value; round numbers (Rs 5,000, $100) read as premium. Choose on purpose and be consistent.
+10. **Price endings.** 9-endings (Rs 499, $49) read as value and drive volume in mass markets; round numbers (Rs 5,000, $100) read as premium and candid ("we are not trying to trick you"). Choose by the market you want to be read as, and be consistent.
 11. **Visual hierarchy of tiers.** The recommended plan is highlighted (badge, border, size) and labelled why ("Most clinics pick this").
 12. **Guarantee and trust signals.** Money-back guarantee, "No credit card required", security or payment badges next to the CTA.
+
+Four additions that fall outside the 12 but come up in every audit:
+- **Show prices, or at least "starting at".** Hiding them does not stop comparison, it removes you from it; a visible floor filters out people who would never have bought.
+- **Anchor with something real.** Honest forms: a High / Mid / Low set where the top tier exists partly to make the middle look reasonable, retail's Good / Better / Best, a deliberately expensive item beside the one you want sold, a "typical retail price" comparison you can defend. A crossed-out price nobody ever paid is a consumer-protection problem, not a tactic.
+- **Lost price points.** Buyers gravitate to $49, $59 and $99 and skip $69 and $79; move to the adjacent familiar point before inventing an in-between one.
+- **No perpetual discounts.** Constant 40-60% discount blasts train the list to wait and reprice the product in the buyer's head. Permitted: a launch offer with a real end date, a loyalty price for existing customers, a clearly bounded seasonal sale.
 
 ### Audit report format
 

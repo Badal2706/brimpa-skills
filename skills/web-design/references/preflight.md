@@ -64,7 +64,9 @@ Calibration question: could someone guess this aesthetic from the category alone
 - No invented proof: customers, quotes, logos, user counts, ratings, sale pings, benchmarks, certifications, "as seen in". Any placeholder testimonial section is plainly fictional, has no real names, and is flagged in the report.
 - Every claim and configuration comes from supplied truth; illustrative values are labelled; no invented prices, endpoints or capabilities.
 - Numbers carry units and periods; dates and currency are locale-correct.
-- The first screen says what this is and offers the action; a stranger could say both in five seconds.
+- The first screen says what this is and offers the action. Five-second stranger test: show the first screen to someone who has not seen the brief for five seconds, then ask what the business does and where they would click; two wrong answers fail the hero.
+- Skim test: read only the headings from top to bottom; they alone must say what this is, for whom, and what to do next. No text block runs over about 75 words.
+- A testimonial or trust mark sits beside the primary action and beside the price; the page's depth matches the buyer's stakes named at step 2 (minimal for low stakes, thorough above the fold for high stakes).
 - Every section the visitor came for has a heading naming it and a place in the navigation.
 - Loaded symbols stay out of decoration.
 - Copy reads in the product's own language; controls name their action; errors name the problem and the recovery.
@@ -106,6 +108,7 @@ Targets are Core Web Vitals "good" thresholds; measure with Lighthouse and the P
 
 - Every picture is one of: the client's own; generated for this brief; found in an open collection under CC0, public domain, CC BY or CC BY-SA; drawn in code for this subject. Non-commercial (NC) and no-derivatives (ND) licences are out for client work; CC BY-SA alterations must be shared alike.
 - Found pictures show the subject's world (city, street, material, trade, history) and never pass as the client's own product, room, dish, person, team or customers.
+- The real shop, team and product are photographed, even imperfectly on a phone, rather than stood in for by stock or AI imagery; visitors read the fake as "they did not care enough to photograph their own shop".
 - Every found picture is downloaded into the project (never hotlinked), credited on the page (title, creator, link to source, link to licence, small, usually in the footer) and listed in the report with file, title, creator, licence and source page. Public-domain pictures get a credit anyway.
 - Stock placeholders (Picsum ids, Unsplash) are listed in the report as stand-ins to replace; no watermarks, burned-in text, scanner edges or recognisable people who could be taken for staff or customers.
 - One treatment for the whole set (untouched, all greyscale, multiply on a field, darkened for dark); two or three crop ratios; square corners or one radius; no device frames or browser chrome around pictures; no colour washes, duotones, vignettes or grain overlays.
@@ -116,7 +119,7 @@ Targets are Core Web Vitals "good" thresholds; measure with Lighthouse and the P
 
 - Every link resolves (no `#` placeholders left except a documented `#checkout`); external links open sensibly; `mailto:`/`tel:`/`wa.me` links carry the real address and number.
 - Primary action works end to end or is wired to a real destination; no fake payment, booking or sign-up success; success animations await the real request; errors restore the form with input preserved.
-- States present where relevant: hover, focus, active, disabled, loading, error, empty, success; the booking or contact form has been submitted once in testing.
+- States present where relevant: hover, focus, active, disabled, loading, error, empty, success; the booking or contact form has been submitted once in testing, on a phone, as the first thing checked (it is the end of the visit and what is remembered), and the confirmation says what happens next and when.
 - Opening hours, prices, addresses and names match the client's listing exactly (NAP consistency: see seo-geo-audit).
 - Dark mode (if shipped) checked in every state and overlay; theme does not flash on load; `theme-color` set per scheme.
 - Legal and privacy links exist where personal data is collected (dpdp-legal-compliance for Indian audiences); the security-review skill has been run on anything with a form or a backend before launch.

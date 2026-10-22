@@ -5,8 +5,8 @@ Use these to explain a recommendation, not to decorate a report. Each entry: the
 ## Hick's law
 
 Decision time grows with the number and complexity of choices.
-Rule: fewer, grouped choices at each decision point; <= 4 visible sibling options, the rest behind "More"; one recommended option highlighted.
-Example: a pricing page with three plans and a "Most popular" badge converts better than seven columns; a toolbar with 1 primary and 2 secondary buttons plus an overflow menu beats 9 equal buttons.
+Rule: fewer, grouped choices at each decision point; <= 4 visible sibling options, the rest behind "More"; one recommended option highlighted. On a page, one or two primary actions in view at a time: five equal calls to action freeze the visitor (decision fatigue) and the page converts to nothing.
+Example: a pricing page with three plans and a "Most popular" badge converts better than seven columns; a toolbar with 1 primary and 2 secondary buttons plus an overflow menu beats 9 equal buttons; a homepage with "Book", "Call", "Chat", "Download the brochure" and "Subscribe" all as filled buttons gets fewer of each than one "Book a consultation" with "or call us" as a link.
 
 ## Fitts's law
 
@@ -17,14 +17,14 @@ Example: on a phone, put the primary action in the bottom third; on desktop, a f
 ## Miller's law and Cowan's revision
 
 Short-term memory holds about 7 (plus or minus 2) chunks; later research (Cowan 2001) puts the comfortable working limit at about 4.
-Rule: chunk everything: <= 4 items per visual group, <= 5 top-level navigation items, phone numbers and codes in groups, no screen that requires remembering a value from the previous screen.
-Example: a 16-digit card number shown as four groups of four; a wizard that keeps the chosen plan visible on the payment step instead of making the user remember it.
+Rule: chunk everything: <= 4 items per visual group, <= 5 top-level navigation items, phone numbers and codes in groups, no screen that requires remembering a value from the previous screen. Long feature lists are the common failure: by the bottom of a 20-line list the reader has lost the top. Group features under 3-4 category headings and, on tiered plans, show only what each tier adds ("Everything in Basic, plus...") instead of repeating the full list in every column.
+Example: a 16-digit card number shown as four groups of four; a wizard that keeps the chosen plan visible on the payment step instead of making the user remember it; a pricing table whose Pro column lists five additions under "Everything in Basic, plus" rather than 22 ticks.
 
 ## Jakob's law
 
-Users spend most of their time on other products, so they expect yours to work the same way.
-Rule: use the platform's conventions and the category's established patterns for navigation, controls and gestures; spend novelty on the product's unique mechanism, not on how a dropdown works.
-Example: a cart icon top right, a search box top centre, swipe-back on iOS, system Back on Android; a "reinvented" date picker costs more than it earns.
+Users spend most of their time on other products, so they expect yours to work the same way; an unfamiliar structure (logo not top left, navigation not where it always is, no footer) registers as unsafe before anything else registers at all.
+Rule: use the platform's conventions and the category's established patterns for navigation, controls and gestures; spend novelty on the product's unique mechanism, not on where the menu lives or how a dropdown works (MAYA, "most advanced yet acceptable": keep the macro layout predictable and vary only small details inside it).
+Example: a cart icon top right, a search box top centre, swipe-back on iOS, system Back on Android; a "reinvented" date picker costs more than it earns. The Gaming Bible case (as told in a web-design video, see sources): the site moved its mobile menu button to the bottom corner, nearer the thumb, which Fitts's law favours; visitors could not find it and the menu went back to the top. Convention beat ergonomics because the search for the menu cost more than the reach ever saved. Put the primary action in the thumb zone (that is where people expect it); leave the menu where people look for it. A bottom tab bar of destinations is itself a convention; a lone menu button in an unexpected corner is not.
 
 ## Tesler's law (conservation of complexity)
 
@@ -53,8 +53,8 @@ Example: a button goes to its pressed state immediately, shows a spinner in plac
 ## Peak-end rule
 
 People judge an experience by its most intense moment and its end, not the average.
-Rule: design the peak (the first real success, the moment the data appears) and the ending (the confirmation, the receipt, the "what next"); remove emotional valleys at high-stakes moments with reassurance.
-Example: a checkout that ends with a clear confirmation, order number, and "what happens next" is remembered as good even if the form was long; a flow that ends on a spinner is remembered as broken.
+Rule: design the peak (the first real success, the moment the data appears) and the ending (the confirmation, the receipt, the "what next"); remove emotional valleys at high-stakes moments with reassurance. The end of almost every flow is a form or a button (booking form, quote request, checkout, Save), so that last step defines the memory of the whole visit: a clunky or erroring final form undoes every screen before it. Test the final step first, on a phone and on desktop, before polishing anything earlier, and design its confirmation as a deliberate peak (what was received, what happens next and when).
+Example: a checkout that ends with a clear confirmation, order number, and "what happens next" is remembered as good even if the form was long; a flow that ends on a spinner is remembered as broken; a home-services site whose booking form confirms "Thanks, Priya. A technician calls you back within 30 minutes" is remembered as the company that answered, whatever the homepage looked like.
 
 ## Zeigarnik effect
 
@@ -66,7 +66,7 @@ Example: "Complete your setup, 67%" with the remaining two steps named; a draft 
 
 An item that differs from its neighbours is remembered and noticed.
 Rule: one thing stands out per screen; if everything is highlighted, nothing is. Spend colour and weight on the primary action, the selected item and the one finding.
-Example: one filled primary button in a toolbar of text buttons; a single red mark on the overdue row instead of red on every negative number.
+Example: one filled primary button in a toolbar of text buttons; a single red mark on the overdue row instead of red on every negative number; one recommended tier in a pricing table (a "Most popular" label, a filled border or tinted ground) with the other tiers plain, never two highlighted.
 
 ## Aesthetic-usability effect
 
@@ -114,6 +114,12 @@ Example: a bottom tab bar with Home first and Profile last.
 
 Elements that look alike are read as the same kind of thing.
 Rule: same action, same control, same name everywhere; links look like links, buttons like buttons; one icon family at one stroke weight. If the Save button looks different in two places, one is wrong.
+
+## Labor illusion (operational transparency)
+
+When the system visibly does work on the person's behalf, the result is trusted more than the same result delivered behind a blank wait (Buell & Norton, 2011: flight shoppers preferred a slower search that showed which airlines it was checking to one that returned at once).
+Rule: when real work is happening and takes more than a moment, name the step actually running ("Checking availability... Comparing 212 fares...") and show determinate progress when the total is known. Never fabricate steps, pauses or progress: the effect comes from showing real work, and an invented wait is a lie the user eventually catches. Fast results stay instant; a skeleton covers the short waits.
+Example: a report builder that shows "Reading 3 sources, 1,204 rows... Deduplicating... Rendering" with a bar that lands at 100% when the data does, instead of a spinner for eight seconds and then a table.
 
 ## Using the laws in a review
 

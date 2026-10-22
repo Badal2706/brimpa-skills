@@ -18,7 +18,8 @@ Judge the rendered result (screenshots at every width it ships at, every reachab
 
 ## 1. Before you score
 
-- One second, then five: glance and look away. What did you see? There should be one answer. Then five seconds as a stranger: what is this, who is it for, what do I do next?
+- One second, then five: glance and look away. What did you see? There should be one answer. Then the five-second stranger test: show the first screen for five seconds to someone who has never seen the product (or yourself, deliberately as a stranger) and ask three questions: what is this, who is it for, what would you click next? Write the answers down. A wrong or missing answer to any of the three is a P1 on a Persuade surface and at least a P2 elsewhere.
+- Skim the headings: read only the `h1`, the `h2`s and the button labels, nothing else. The screen should still make complete sense and tell its story in order; people scan headings, bold leads and buttons and only then decide whether to read. A heading that needs its paragraph to mean anything, or a button that needs the heading above it, fails.
 - Squint: the screen should reduce to two or three masses with clear size differences; many similar masses means nothing leads.
 - Cover the product name: could this screen belong to a competitor or another industry unchanged? (Judge this before any tool output.)
 - Follow the left edges: a composed screen has two or three x positions reused on purpose.
@@ -95,10 +96,12 @@ Walk the screen as 2-3 of these, chosen by surface type, plus 1-2 derived from t
 
 Selection by surface: landing or marketing -> Jordan, Riley, Casey. Dashboard or admin -> Alex, Sam. E-commerce or checkout -> Casey, Riley, Jordan. Onboarding -> Jordan, Casey. Data-heavy -> Alex, Sam. Form-heavy or wizard -> Jordan, Sam, Casey.
 
+On Persuade surfaces add one trust question per persona, each answered with an element, never "feels untrustworthy": does it look cared for (character), is there real proof it does what it claims where I hesitate (competence), and does it side with me, with the price visible and a cancel path (common goal)?
+
 ## 7. Specificity and emotional journey
 
 - Specificity verdict: could an unrelated product use this screen unchanged? For app screens the cure is product substance (name and scope in the shell, the one finding under the title, words of the trade, one element only this product has), not decoration. For pages, hand the visual question to `web-design`.
-- Emotional journey: find the peak (first success, the data appearing) and the end (confirmation, receipt, what next); find the valleys (waiting without information, an error at the payment step) and add reassurance at high-stakes moments. People remember the peak and the end (peak-end rule).
+- Emotional journey: find the peak (first success, the data appearing) and the end (confirmation, receipt, what next); find the valleys (waiting without information, an error at the payment step) and add reassurance at high-stakes moments. People remember the peak and the end (peak-end rule), so walk the final form or call button first, on a phone and on desktop: a clunky or erroring last step undoes everything above it, and its confirmation should be a designed peak (what was received, what happens next and when).
 
 ## 8. Implementation audit (five dimensions, 0-4 each, out of 20)
 

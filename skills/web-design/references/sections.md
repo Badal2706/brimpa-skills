@@ -1,6 +1,6 @@
 # Sections, heroes and copy
 
-How a page is composed once the direction and tokens exist: which sections a job needs, how a hero earns the first screen, what proof is allowed, and how to write the words. Percentages come from the gallery study (taste-skill, Oct 2026); structural rules from impeccable's Persuade mode and craft floor; pattern lists from the ui-ux-pro-max landing catalog.
+How a page is composed once the direction and tokens exist: which sections a job needs, how a hero earns the first screen, what proof is allowed, and how to write the words. Percentages come from the gallery study (taste-skill, Oct 2026); structural rules from impeccable's Persuade mode and craft floor; pattern lists from the ui-ux-pro-max landing catalog; the conversion rules of thumb (3 s, 5 s, 75 words, proof placement, buyer stakes) are adapted from the website-psychology videos listed in `references/sources.md`.
 
 ## Contents
 
@@ -28,7 +28,7 @@ Before any layout, list the page as claims with their proof, one line per sectio
 4. It costs 240 and is delivered by the maker.              -> price, button
 ```
 
-A section with no claim is filler; delete it. The order of the argument is the order of the page, which is how you escape the stock sequence hero, logos, three features, testimonial, pricing, call to action. Short pages are fine (a quarter of studied sites are one or two screens); do not add sections to seem complete.
+A section with no claim is filler; delete it. The order of the argument is the order of the page, which is how you escape the stock sequence hero, logos, three features, testimonial, pricing, call to action. Short pages are fine (a quarter of studied sites are one or two screens); do not add sections to seem complete. Calibrate restraint to the buyer's stakes: a low-stakes purchase (a sandwich, a haircut) wants a minimal page, while a high-stakes buyer (savings, surgery, a year-long contract) needs more explanation above the fold (method, people, process, proof) or the minimalism reads as evasive. The stakes set the amount of content; the house rules set its form (short blocks, one action, no filler).
 
 Also write the one sentence that makes the page belong to this client: "On this page, **[something that belongs to the subject]** becomes **[the device the direction calls for]**." Put the nearest competitor's name in it; if the sentence still works, the idea belongs to the category, not the client.
 
@@ -90,6 +90,8 @@ Patterns from the landing catalog that remain useful as variants: minimal single
 
 What the first screen must do (Persuade mode): make the offer intelligible and desirable, expose one clear action in the category's working form, and show something only this product can prove. A stranger must be able to say in five seconds what this is and what to do. The `h1` says what it is (the name with what it does; the product with what it is for; the event with its date and place), two lines maximum; the supporting sentence sits 32-48px below it, shown with it, never docked at the foot or held back by animation; one primary action as a real button; everything readable on the first paint.
 
+The hero is the halo moment: visitors judge the page in a glance before reading a word and carry that judgement to everything below, so the first screen gets one picture, one headline, one action and nothing competing. Within about three seconds it must deliver a header that promises what the visitor wants, a sub-line that makes the value concrete, and one button for the page's single job; no "Welcome" header, no "Learn more". One or two primary actions per page, repeated rather than varied: a homepage with five different calls to action freezes visitors.
+
 Hero types, with their share on top-scored versus weak gallery sites:
 
 | Pattern | Top sites | Weak sites | Use when |
@@ -130,6 +132,7 @@ Carry the idea into every section, pricing, FAQ and footer included: the commone
 Never invent customers, quotes from named people, press logos, user counts, ratings, sale notifications or benchmarks. Invented proof is dishonest, can breach consumer-protection law, and is a recognised tell.
 
 - Real reviews: first name and initial, where it was posted, date; pause any shuffle on hover so people can read; aggregate rating and count only from a platform you can link to.
+- Place proof where hesitation peaks: a one-line testimonial beside the primary button, trust marks and certifications beside the price. A testimonials page nobody visits does no work.
 - Sale pings and "X people viewing": only from real orders or real data, exact amounts (round numbers look fake), never a timer loop.
 - Logos: only clients who agreed; sponsors on an event page are the honest logo row.
 - Numbers: real, with the unit next to the number and the period it covers ("1,240 appointments in 2025"), counted up once on first view, formatted with `toLocaleString`.
@@ -142,6 +145,7 @@ Never invent customers, quotes from named people, press logos, user counts, rati
 - Show real monthly and annual totals and the actual saving; the "Save X%" badge must be the real maths. Default to yearly only if most revenue is annual.
 - Highlight the plan that fits the intended audience with a field or an inverted card, not a glow or a gradient border; explain plan differences in plain words; free tier grey, enterprise dark is the catalog habit, not a rule.
 - Three tiers is a habit, not a law; one price gets one price block, not a comparison of three plans.
+- Show the price, or at least "starting at": hidden pricing reads as expensive and wastes calls; a published floor filters the buyers who were never going to pay it.
 - Comparison table ("us versus them"): five rows maximum, only claims that are true and verifiable, your column marked by a field, grey cross versus a check in the accent, the action under the table.
 - A price roll on the billing toggle is a fine moment (see motion.md); the odometer is decoration if there is only one price.
 - Tabular figures, currency symbol next to the number, the period in text ("per seat per month").
@@ -156,7 +160,7 @@ Never invent customers, quotes from named people, press logos, user counts, rati
 
 ## 8. Navigation
 
-- The plain form: the wordmark at one end, three to five text links (median on strong sites is 3), one action, at text size on the page ground with no bar, border or background. Link labels are single nouns.
+- The plain form: the wordmark at one end, three to five text links (median on strong sites is 3), one action, at text size on the page ground with no bar, border or background. Link labels are plain single nouns ("Prices", "Blog", not "Learn" or "Explore"); four or five items at most, sub-pages grouped under plain dropdowns ("Services", "About").
 - The nav sits on the same margins as the content (a header on one inset and the page on another is the commonest small fault).
 - Fixed navigation must never sit on top of content at any scroll position; floating pill bars with blur are where this happens most, and glass is warned at two or more instances.
 - On desktop the nav takes no more than about a tenth of the first screen; on a phone it is one row: wordmark and one action in view, links in a simple full-screen sheet opened by a text button ("Menu"), or moved to the footer when there are only three. A nav that eats the hero cost a whole usability point in blind tests.
@@ -189,6 +193,7 @@ General: write the whole page as plain text before markup. Plain verbs, sentence
 - **Supporting sentence:** one sentence, at most about 22 words, concrete: what it is and who it is for; never the headline in other words.
 - **Buttons:** name the action or the thing: "Book a table", "See the plans", "Download for Mac"; one to three words; the primary action keeps one name everywhere ("Publish" then the toast says "Published"); one primary per screen, a second action is a text link; at most one arrow glyph on the page. Not "Get started", "Learn more", "Submit".
 - **Section headings:** two to five words naming the content ("Prices", "The team"); not "Our philosophy", "Field notes", "Quietly trusted by".
+- **Nobody reads:** visitors scan headings, bold phrases and pictures; keep every text block under about 75 words, bold the one phrase that matters, and run the skim test: read only the headings and check that the page still says what this is, for whom, and what to do next.
 - **Body:** short paragraphs of plain statements; no marketing verbs (unlock, unleash, supercharge, elevate, empower, streamline, seamless, effortless, robust, cutting-edge, next-generation, world-class, all-in-one, blazing fast); no "theater" framing; em dashes rarely (eight or more on a page reads as a model); no explainer captions that narrate the design.
 - **Steps:** written as outcomes ("Your page is live"), not tasks; no "Step 1 / Phase 02" labels duplicating numbers; three is the sweet spot, five the maximum.
 - **Numbers:** unit beside the number (%, km, stars), period stated, thousands separators, locale-aware dates.
@@ -202,4 +207,5 @@ General: write the whole page as plain text before markup. Plain verbs, sentence
 - Ask only for what the action needs; a booking form for a clinic is name, phone, preferred time; everything else is friction.
 - When there is no backend yet: the primary button goes to the real destination when the brief names one; otherwise `mailto:` with subject and body prefilled from the visitor's choices, or `tel:` / WhatsApp `wa.me` links for a local business; for a shop, point at `#checkout` and say in the report that it must be wired before launch. Never fake a payment form or a success state that did not happen.
 - Tie any success animation to the real request's promise, never a fixed delay; on error, restore the label and say what to do.
+- The form or call button is where the visit ends and what the visitor remembers (peak-end): build and test it first, on a phone, and make the confirmation say what happens next and when.
 - Forms that collect personal data from people in India need the notice and consent pattern from the dpdp-legal-compliance skill; run the security-review skill before the form goes live.
