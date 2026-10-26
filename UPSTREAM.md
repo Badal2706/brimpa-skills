@@ -26,6 +26,10 @@ The projects this collection was distilled from live under `upstream/` as **git 
 - We **link** (install upstream as-is) when the skill tracks a fast-moving tool or API (Scrapling, REA, three.js r186 API reference). `threejs-skills` is the model case: thirteen version-pinned API skills that would go stale if copied.
 - Every merged rule is attributed in the skill's `references/sources.md`; licenses are reproduced in `NOTICE`.
 
+## Parity promise
+
+A merged skill must give output at least as good as the original on the same task. We check this with blind head-to-head runs recorded in `evals/parity/`. Where the original's strength is a tool (a CLI, MCP server, browser extension or validator script), our markdown carries the method and the judgement, and you install the original alongside for the automation; the marketplace lists those originals so both can be installed with one command each. If a run shows ours losing on any rubric line, the gap is folded into our skill and the pair is re-run.
+
 ## Pinned commits (2026-10-26)
 
 See `git submodule status` for the authoritative list; the table above was pinned on 2026-10-26.

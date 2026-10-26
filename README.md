@@ -126,6 +126,10 @@ brimpa-skills/
 
 Everything here is MIT. The upstream projects it draws from are MIT, Apache-2.0 or BSD-3-Clause and are credited in [NOTICE](NOTICE), [SOURCES.md](SOURCES.md) and each skill's `references/sources.md`. Two upstream skills (Scrapling, REA) are deliberately **not** copied in; their wrapper skills tell you how to install the official version because both track fast-moving tools.
 
+## Parity with the originals
+
+Every merged skill is held to "at least as good as the upstream on the same task". `evals/parity/` has the pairs, the test tasks and blind comparison results; `UPSTREAM.md` says which upstream tools to install alongside when you want their automation (CLIs, MCP servers, validators) on top of our method.
+
 ## Maintenance
 
 Facts that age fastest and should be re-checked every few months: Google rich-result support and spam policies (seo-geo-audit), AI crawler user agents (seo-geo-audit, llm-app-security), DPDP Rules commencement dates (dpdp-legal-compliance), OWASP lists (security-review, llm-app-security). Each skill marks such facts "as of Oct 2026".
