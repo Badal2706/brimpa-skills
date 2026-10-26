@@ -1,0 +1,546 @@
+<!doctype html>
+<!--
+  preview.html - single-page preview skeleton for a procedural mascot (mascot-3d skill,
+  brimpa-skills, MIT). Written fresh; the placeholder character is a neutral blob, not any
+  real brand's mascot. Replace the PLACEHOLDER sections with your character.
+
+  What it gives you (references/pipeline-and-qa.md, section 1):
+  - a sliders panel for the proportions under review, with "Copy values" to bake them as defaults
+    once the owner locks them (body proportions are tuned here, then locked; hands and feet are
+    measured off the concept sheets instead)
+  - a button per state, an expression-sheet mode (every state with its label and trigger),
+    a turntable and fixed review views (front, three-quarter, side, back)
+  - test hooks under window.__mascot for stills, crop reviews and the no-overlap check
+  - optional parts: only the body is required; eyes, arms, hands, legs, the accent object and
+    appendages are modules switched by PARTS (try ?parts=eyes,accent, or ?parts= for body only).
+    The channel object is built from the chosen parts and every state has a fallback variant.
+  - ?test in the URL hides the UI for headless screenshots; ?test&sheet renders the sheet
+
+  Running it: ES modules do not load from file:// in Chromium, so serve the folder
+  (python -m http.server, npx serve) or inline the three helper modules into this file. A single
+  inlined file is what the extractor slices into the site module (never hand-edit that output).
+
+  three.js: pinned to r170 below. For r186 change both URLs to three@0.186.0 and read
+  threejs-skills: Clock is deprecated (this file computes dt itself), PCFSoftShadowMap is
+  deprecated (this file uses VSM), envMapIntensity no longer scales scene.environment (use
+  scene.environmentIntensity), and WebGPURenderer would need the grain ported to TSL.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mascot preview</title>
+<style>
+  :root {
+    /* PLACEHOLDER brand tokens for the fictional bakery in SKILL.md's worked example
+       (a circle, a wheat stalk and a dot). Replace with the brand's tokens.css values. */
+    --ground: #f6efe6;     /* {brand ground} */
+    --ink: #3b2a20;        /* {brand ink} */
+    --mid: #d4a373;        /* {brand mid-tone} */
+    --accent: #e85d3a;     /* {brand accent} - owns the one emissive object */
+  }
+  html, body { margin: 0; height: 100%; background: var(--ground); color: var(--ink);
+    font: 13px/1.4 system-ui, sans-serif; }
+  #stage { position: fixed; inset: 0; }
+  #stage canvas { display: block; width: 100%; height: 100%; }
+  #panel { position: fixed; top: 12px; right: 12px; width: 260px; max-height: calc(100% - 24px);
+    overflow: auto; background: rgba(255,255,255,.92); border-radius: 10px; padding: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.12); }
+  #panel h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; margin: 12px 0 6px; }
+  #panel label { display: grid; grid-template-columns: 1fr 52px; gap: 4px; margin: 4px 0; }
+  #panel input[type=range] { grid-column: 1 / -1; width: 100%; }
+  #panel button { margin: 2px; padding: 4px 8px; border: 1px solid #ccc; border-radius: 6px;
+    background: #fff; cursor: pointer; }
+  #panel button[aria-pressed=true] { background: var(--ink); color: #fff; }
+  #labels { position: fixed; inset: 0; pointer-events: none; }
+  #labels div { position: absolute; font-size: 11px; padding: 4px; }
+  #labels b { display: block; font-size: 12px; }
+  body.test #panel { display: none; }
+</style>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body>
+<div id="stage"></div>
+<div id="labels" aria-hidden="true"></div>
+<aside id="panel">
+  <h2>States</h2><div id="stateButtons"></div>
+  <h2>Modes</h2>
+  <button id="btnSheet" aria-pressed="false">Expression sheet</button>
+  <button id="btnTurn" aria-pressed="false">Turntable</button>
+  <button id="btnFreeze" aria-pressed="false">Freeze</button>
+  <button id="btnMirror" aria-pressed="false">Mirror</button>
+  <h2>Views</h2><div id="viewButtons"></div>
+  <h2>Proportions (tune, then lock)</h2><div id="sliders"></div>
+  <button id="btnCopy">Copy values</button>
+</aside>
+
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { roundBox, sphere, capsule, smin, meshRayProjection, meshSmooth, toBufferGeometry } from './sdf-toolkit.js';
+import { createGrainMaterial, setGrain } from './grain-material.js';
+import { createMascotRuntime, buildNeutral, resolveStates } from './mascot-runtime.js';
+
+const test = new URLSearchParams(location.search).has('test');
+if (test) document.body.classList.add('test');
+
+// ------------------------------------------------------------------ palette: the lit variant
+// The mascot renders a "lit variant" of the brand tokens: each colour mixed a little toward a
+// warm white, so the character separates from a page built on the same tokens. Record the mix
+// amount and the reason in BRAND.md (references/concept-sheets.md and SKILL.md, Palette).
+const css = getComputedStyle(document.documentElement);
+const WARM_WHITE = new THREE.Color('#fff3e0');
+const LIT_MIX = 0.08; // 0.06-0.12 is the useful range; 0 = exact tokens (blends into the page)
+const lit = (name) => new THREE.Color(css.getPropertyValue(name).trim()).lerp(WARM_WHITE, LIT_MIX);
+const colours = { body: lit('--mid'), ink: lit('--ink'), accent: new THREE.Color(css.getPropertyValue('--accent').trim()) };
+
+// ------------------------------------------------------------------ parameters under review
+// PLACEHOLDER: body units, half the body width = 1.0. Bake the locked values here.
+const params = {
+  bodyHalfW: 1.0, bodyHalfH: 0.85, bodyHalfD: 0.8, cornerR: 0.78,
+  grainFreq: 44, grainBump: 0.03, armLen: 0.62, legLen: 0.32,
+};
+const ranges = {
+  bodyHalfW: [0.7, 1.3, 0.01], bodyHalfH: [0.7, 1.4, 0.01], bodyHalfD: [0.3, 1.0, 0.01],
+  cornerR: [0.05, 0.6, 0.01], grainFreq: [10, 160, 1], grainBump: [0, 0.06, 0.001],
+  armLen: [0.3, 1.0, 0.01], legLen: [0.1, 0.6, 0.01],
+};
+
+// ------------------------------------------------------------------ renderer, lights, camera
+const stage = document.getElementById('stage');
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75));
+renderer.toneMapping = THREE.NeutralToneMapping;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.VSMShadowMap;
+stage.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+// Four directional lights + hemisphere. Keep the ratios; re-tune every colour for the brand page.
+const hemi = new THREE.HemisphereLight(0xfff6ea, 0xc9b9a3, 1.1);
+const key = new THREE.DirectionalLight(0xffffff, 2.0); key.position.set(-3, 5, 4);
+const fill = new THREE.DirectionalLight(0xffffff, 0.66); fill.position.set(4, 1, 3);
+const rim = new THREE.DirectionalLight(0xffffff, 0.6); rim.position.set(0, 4, -5);
+const bounce = new THREE.DirectionalLight(colours.body, 0.74); bounce.position.set(0, -3, 3);
+key.castShadow = true;
+key.shadow.mapSize.set(2048, 2048);
+key.shadow.bias = -0.0005; key.shadow.normalBias = 0.02; key.shadow.radius = 4;
+Object.assign(key.shadow.camera, { left: -2.5, right: 2.5, top: 3, bottom: -1.5, near: 0.5, far: 15 });
+scene.add(hemi, key, fill, rim, bounce);
+
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(20, 20), new THREE.ShadowMaterial({ opacity: 0.14 }));
+ground.rotation.x = -Math.PI / 2;
+ground.receiveShadow = true;
+scene.add(ground);
+
+const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 50);
+const VIEWS = {   // slight three-quarter by default; match the concept sheet before judging a crop
+  threeQuarter: [2.6, 1.6, 7.2], front: [0, 1.3, 7.6], side: [7.6, 1.3, 0], back: [0, 1.3, -7.6],
+};
+let currentView = 'threeQuarter';
+function setView(name) {
+  currentView = name;
+  camera.position.set(...VIEWS[name]);
+  camera.lookAt(0, 1.15, 0);
+}
+setView('threeQuarter');
+
+// ------------------------------------------------------------------ PLACEHOLDER character
+// Parts are optional modules (SKILL.md, Parts catalogue). Only the body is required; record the
+// chosen set in MASCOT.md. Try subsets with ?parts=eyes,accent (body is implied); ?parts= alone
+// gives a body-only mascot. Every block below is built only if its part is chosen.
+const ALL_PARTS = ['eyes', 'arms', 'hands', 'legs', 'accent', 'appendages'];
+const partsArg = new URLSearchParams(location.search).get('parts');
+const PARTS = partsArg === null ? ALL_PARTS : partsArg.split(',').map((s) => s.trim()).filter(Boolean);
+const hasPart = (p) => PARTS.includes(p);
+if (hasPart('hands') && !hasPart('arms')) throw new Error('hands need arms');
+
+const rig = new THREE.Group();        // turntable and float
+const body = new THREE.Group();       // tilt, yaw, pitch, jump, squash
+rig.add(body);
+scene.add(rig);
+
+const bodyMat = createGrainMaterial(THREE, { color: colours.body, freq: params.grainFreq, bump: params.grainBump });
+const inkMat = new THREE.MeshPhysicalMaterial({ color: colours.ink, roughness: 0.15, clearcoat: 1, clearcoatRoughness: 0.1 });
+const accentMat = new THREE.MeshStandardMaterial({ color: colours.accent, metalness: 0.6, roughness: 0.25, emissive: colours.accent, emissiveIntensity: 0.4 });
+const handMat = createGrainMaterial(THREE, { color: colours.ink.clone().lerp(new THREE.Color('#ffffff'), 0.85), freq: 125, bump: 0.018 });
+
+let bodySdf = null;
+let bodyMesh = null;
+// Without legs the body rests on the ground.
+const bodyCenterY = () => (hasPart('legs') ? params.legLen : 0.02) + params.bodyHalfH;
+
+function buildBody() {
+  // Convex blob -> ray projection. Never relax this output (sdf-toolkit.js explains why).
+  const { bodyHalfW: w, bodyHalfH: h, bodyHalfD: d, cornerR: r } = params;
+  const box = roundBox([0, 0, 0], [w, h, d], Math.min(r, w, h, d) * 0.999);
+  const belly = sphere([0, -0.1 * h, 0.25 * d], 0.55 * Math.min(w, h));
+  bodySdf = (x, y, z) => smin(box(x, y, z), belly(x, y, z), 0.12);
+  const pad = 0.4;
+  const { mesh } = meshRayProjection(bodySdf, { center: [0, 0, 0], min: [-w - pad, -h - pad, -d - pad],
+    max: [w + pad, h + pad, d + pad], res: test ? [80, 80, 24] : [56, 56, 18] });
+  const geo = toBufferGeometry(THREE, mesh);
+  if (bodyMesh) { bodyMesh.geometry.dispose(); bodyMesh.geometry = geo; }
+  else { bodyMesh = new THREE.Mesh(geo, bodyMat); bodyMesh.castShadow = true; body.add(bodyMesh); }
+  body.position.y = bodyCenterY();
+  placeParts();
+}
+
+// Eyes (usual): pills that squash for blinks, plus an arc for the smiling eye.
+const eyes = {};
+if (hasPart('eyes')) {
+  for (const side of ['L', 'R']) {
+    const g = new THREE.Group();
+    const pill = new THREE.Mesh(new THREE.CapsuleGeometry(0.065, 0.14, 6, 16), inkMat);
+    const arc = new THREE.Mesh(new THREE.TorusGeometry(0.09, 0.03, 8, 24, Math.PI), inkMat);
+    g.add(pill, arc);
+    body.add(g);
+    eyes[side] = { g, pill, arc };
+  }
+}
+
+// Appendage (optional): the mark's wheat stalk on top. Its lean is the signature channel `sway`,
+// not a fixed transform.
+let stalk = null;
+if (hasPart('appendages')) {
+  stalk = new THREE.Group();
+  const stalkMesh = new THREE.Mesh(new THREE.CapsuleGeometry(0.035, 0.45, 4, 12), inkMat);
+  stalkMesh.position.y = 0.26;
+  stalk.add(stalkMesh);
+  body.add(stalk);
+}
+// Accent object (optional): on the stalk tip if there is a stalk, else floating above the body.
+// If present it is the only light the character owns; if absent, nothing glows.
+let accent = null;
+if (hasPart('accent')) {
+  accent = new THREE.Mesh(new THREE.SphereGeometry(0.11, 32, 16), accentMat);
+  (stalk || body).add(accent);
+}
+
+// Arms (optional): shoulder pivot -> capsule -> hand if the mascot has hands.
+// A skinned hand replaces this placeholder (references/modelling.md).
+function buildHandGeometry() {
+  // Thick-mitten placeholder: palm + 3 fingers + thumb, surface nets at a preview step.
+  // Fingers stay separate because the gap stays visible and finger-to-finger blends stay tiny.
+  const fr = 0.045;
+  const pieces = [
+    roundBox([0, 0, 0], [0.14, 0.12, 0.06], 0.05),
+    capsule([-0.09, 0.1, 0], [-0.1, 0.27, 0], fr, fr * 0.9),
+    capsule([0, 0.11, 0], [0, 0.3, 0], fr, fr * 0.9),
+    capsule([0.09, 0.1, 0], [0.1, 0.27, 0], fr, fr * 0.9),
+    capsule([0.13, -0.02, 0.02], [0.24, 0.08, 0.04], fr),
+  ];
+  const sdf = (x, y, z) => {
+    let d = pieces[0](x, y, z);
+    for (let i = 1; i < pieces.length; i++) d = smin(d, pieces[i](x, y, z), 0.03); // palm to digit root
+    return d;
+  };
+  return toBufferGeometry(THREE, meshSmooth(sdf, { min: [-0.22, -0.2, -0.12], max: [0.32, 0.38, 0.14], step: test ? 0.011 : 0.016 }));
+}
+const arms = {};
+if (hasPart('arms')) {
+  const handGeo = hasPart('hands') ? buildHandGeometry() : null;
+  for (const side of ['L', 'R']) {
+    const s = side === 'L' ? -1 : 1;
+    const shoulder = new THREE.Group();
+    const arm = new THREE.Mesh(new THREE.CapsuleGeometry(0.11, 1, 6, 16), bodyMat);
+    arm.castShadow = true;
+    shoulder.add(arm);
+    let hand = null;
+    if (handGeo) {
+      hand = new THREE.Mesh(handGeo, handMat);
+      // A reflection inverts triangle winding. three.js compensates for a negative-scale object
+      // (it flips the front face when the world matrix determinant is negative); a mirror baked
+      // into the geometry itself must swap two indices per triangle instead.
+      hand.scale.x = s;
+      hand.castShadow = true;
+      shoulder.add(hand);
+    }
+    body.add(shoulder);
+    arms[side] = { s, shoulder, arm, hand };
+  }
+}
+// Legs (optional).
+const legs = {};
+if (hasPart('legs')) {
+  for (const side of ['L', 'R']) {
+    const leg = new THREE.Mesh(new THREE.CapsuleGeometry(0.15, 1, 6, 16), bodyMat);
+    leg.castShadow = true;
+    rig.add(leg);
+    legs[side] = leg;
+  }
+}
+
+function placeParts() {
+  const { bodyHalfW: w, bodyHalfH: h, bodyHalfD: d, armLen, legLen } = params;
+  for (const side of ['L', 'R']) {
+    const s = side === 'L' ? -1 : 1;
+    if (eyes[side]) eyes[side].g.position.set(0.32 * s, 0.25 * h, d + 0.01);
+    const a = arms[side];
+    if (a) {
+      a.shoulder.position.set(s * (w + 0.06), 0.05 * h, 0);
+      a.arm.scale.set(1, armLen, 1);
+      a.arm.position.set(0, -armLen * 0.5 - 0.1, 0);
+      if (a.hand) { a.hand.position.set(0, -armLen - 0.22, 0); a.hand.rotation.z = Math.PI; } // root inside the arm end
+    }
+    const leg = legs[side];
+    if (leg) {
+      leg.scale.set(1, legLen + 0.05, 1);
+      leg.position.set(0.42 * s, (legLen + 0.15) * 0.5, 0);
+    }
+  }
+  if (stalk) stalk.position.set(0, h - 0.06, 0);
+}
+
+// Marks: sprites outside the silhouette, never painted on the body.
+function markSprite(draw) {
+  const c = document.createElement('canvas'); c.width = c.height = 128;
+  const g = c.getContext('2d'); g.lineWidth = 14; g.lineCap = g.lineJoin = 'round';
+  g.strokeStyle = g.fillStyle = css.getPropertyValue('--accent').trim(); draw(g);
+  const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(c), transparent: true }));
+  s.scale.setScalar(0.001);
+  scene.add(s);
+  return s;
+}
+const marks = {
+  tick: markSprite((g) => { g.beginPath(); g.moveTo(28, 68); g.lineTo(54, 94); g.lineTo(102, 36); g.stroke(); }),
+  question: markSprite((g) => { g.font = 'bold 104px system-ui'; g.textAlign = 'center'; g.fillText('?', 64, 104); }),
+};
+
+// ------------------------------------------------------------------ channels, presets, states
+// The channel object is built from the chosen parts; channels of absent parts never exist.
+const neutral = buildNeutral(PARTS);
+const handPresets = { open: { curl: 0, twist: 0 }, relaxed: { curl: 0.3, twist: 0.2 }, fist: { curl: 1, twist: 0 } };
+// PLACEHOLDER states: the five musts plus one optional, each with fallbacks for absent parts
+// (the first variant whose `requires` parts all exist wins). Keep label/trigger/notes accurate.
+const stateDefs = [
+  { id: 'idle', label: 'Idle', trigger: 'Default', notes: { body: 'gentle breathing' },
+    variants: [{ requires: [], pose: { hands: { L: 'relaxed', R: 'relaxed' } },
+      anim: (te, p) => { p.squash += 0.012 * Math.sin(te * 2.2); if ('accentY' in p) p.accentY += 0.03 * Math.sin(te * 1.6); } }] },
+  { id: 'wave', label: 'Wave', trigger: 'First paint', notes: { body: 'arm wave; else stalk sway; else tilt and hop' },
+    variants: [
+      { requires: ['arms'], pose: { armOutR: 2.6, armFwdR: 0.3, tilt: -0.05, hands: { L: 'relaxed', R: 'open' } },
+        anim: (te, p) => { p.armOutR += 0.09 * Math.sin(te * 9); if ('handTwistR' in p) p.handTwistR += 0.08 * Math.sin(te * 9 + 0.6); } },
+      { requires: ['appendages'], pose: { sway: 0.15, tilt: -0.04 }, anim: (te, p) => { p.sway += 0.12 * Math.sin(te * 7); } },
+      { requires: [], pose: { tilt: -0.08 }, anim: (te, p) => { p.jump += 0.07 * Math.abs(Math.sin(te * 5.2)); } },
+    ] },
+  { id: 'happy', label: 'Happy', trigger: 'Hover or focus on the primary button', notes: { eyes: 'happy arc if eyes', accent: 'brighter if accent' },
+    variants: [{ requires: [], pose: { jump: 0.04, armOutL: 0.45, armOutR: 0.45, hands: { L: 'open', R: 'open' } },
+      anim: (te, p) => { p.jump += 0.03 * Math.abs(Math.sin(te * 5)); } }] },
+  { id: 'success', label: 'Success', trigger: 'Form sent', notes: { marks: 'tick, outside the silhouette' }, props: ['tick'],
+    variants: [
+      { requires: ['arms'], pose: { armOutL: 2.4, armOutR: 2.4, hands: { L: 'fist', R: 'fist' } }, anim: (te, p) => { p.jump += 0.06 * Math.abs(Math.sin(te * 4)); } },
+      { requires: [], pose: {}, anim: (te, p) => { p.jump += 0.08 * Math.abs(Math.sin(te * 4)); p.squash += 0.04 * Math.sin(te * 8); } },
+    ] },
+  { id: 'error', label: 'Error', trigger: 'Send failed; 404', notes: { body: 'droops, looks down' },
+    variants: [{ requires: [], pose: { pitch: 0.12, squash: 0.97, armOutL: 0.05, armOutR: 0.05, hands: { L: 'relaxed', R: 'relaxed' } },
+      anim: (te, p) => { p.yaw += 0.04 * Math.sin(te * 1.3); } }] },
+  { id: 'thinking', label: 'Thinking', trigger: 'Typing in a form', notes: { body: 'signature channel at half value; else a tilt' }, props: ['question'],
+    variants: [
+      { requires: ['appendages'], pose: { sway: 0.13, tilt: 0.05, armOutR: 0.9, armFwdR: 0.9, hands: { L: 'relaxed', R: 'fist' } }, anim: (te, p) => { p.sway += 0.03 * Math.sin(te * 1.8); } },
+      { requires: [], pose: { tilt: 0.1, armOutR: 0.9, armFwdR: 0.9, hands: { L: 'relaxed', R: 'fist' } }, anim: (te, p) => { p.tilt += 0.02 * Math.sin(te * 1.8); } },
+    ] },
+];
+// Per-part pose extras merged into every state when the part exists, so eyes and accent act in
+// all states without each variant repeating them.
+const PART_POSES = {
+  eyes: { wave: { eyesHappy: 1 }, happy: { eyesHappy: 1 }, success: { eyesHappy: 1 }, error: { lookY: -0.6, follow: 0 }, thinking: { lookX: 0.5, lookY: 0.4, follow: 0 } },
+  accent: { happy: { accentGlow: 0.8 }, success: { accentGlow: 1 }, error: { accentGlow: 0.1 } },
+};
+const states = resolveStates(stateDefs, PARTS).map((s) => {
+  // Drop channels of absent parts from shared poses (arm values when there are no arms, etc.).
+  const pose = {};
+  for (const [k, v] of Object.entries(s.pose || {})) if (k === 'hands' ? hasPart('hands') : k in neutral) pose[k] = v;
+  for (const p of PARTS) Object.assign(pose, PART_POSES[p]?.[s.id] || {});
+  return { ...s, pose };
+});
+
+// ------------------------------------------------------------------ adapter: channels -> scene
+// Touches only the parts that exist; `?? 0` covers the gaze channels when there are no eyes.
+const adapter = {
+  apply(o, info) {
+    const lookX = o.lookX ?? 0, lookY = o.lookY ?? 0;
+    body.rotation.set(o.pitch + lookY * 0.08, o.yaw + lookX * 0.3, o.tilt);
+    body.position.y = bodyCenterY() + o.jump;
+    body.scale.set(1 / Math.sqrt(o.squash), o.squash, 1 / Math.sqrt(o.squash));
+    for (const side of ['L', 'R']) {
+      const e = eyes[side];
+      if (e) {
+        e.g.position.x = (side === 'L' ? -0.32 : 0.32) + lookX * 0.05;
+        e.g.position.y = 0.25 * params.bodyHalfH + lookY * 0.04;
+        e.pill.scale.set(1, Math.max(0.08, (1 - o.eyesClosed) * (1 - o.eyesHappy)), 1);
+        e.arc.scale.setScalar(Math.max(0.001, o.eyesHappy));
+      }
+      const a = arms[side];
+      if (a) {
+        a.shoulder.rotation.set(-o['armFwd' + side], 0, a.s * o['armOut' + side]);
+        if (a.hand) a.hand.rotation.set((o['handCurl' + side] ?? 0) * 1.2, o['handTwist' + side] ?? 0, Math.PI);
+      }
+    }
+    if (stalk) stalk.rotation.z = o.sway;   // full value = the mark's lean; half value for "thinking"
+    if (accent) {
+      accent.position.set(o.accentX, (stalk ? 0.58 : params.bodyHalfH + 0.45) + o.accentY, 0);
+      accentMat.emissiveIntensity = 0.2 + o.accentGlow;
+    }
+    const mx = info.mirrored ? -1 : 1;
+    const top = bodyCenterY() + params.bodyHalfH;
+    marks.tick.position.set(1.7 * mx, top + 0.2, 0); marks.tick.scale.setScalar(0.001 + 0.6 * (info.props.tick || 0));
+    marks.question.position.set(1.5 * mx, top + 0.3, 0); marks.question.scale.setScalar(0.001 + 0.6 * (info.props.question || 0));
+  },
+};
+
+const runtime = createMascotRuntime({ neutral, states, handPresets, adapter,
+  negate: ['lookX', 'tilt', 'yaw', 'sway', 'accentX', 'eyeRotL', 'eyeRotR'].filter((c) => c in neutral) });
+
+// ------------------------------------------------------------------ modes
+let sheetMode = false, turntable = false;
+const labels = document.getElementById('labels');
+
+function resize() {
+  renderer.setSize(stage.clientWidth, stage.clientHeight, false);
+}
+addEventListener('resize', resize);
+resize();
+
+addEventListener('pointermove', (e) => {
+  runtime.setPointer((e.clientX / innerWidth) * 2 - 1, -((e.clientY / innerHeight) * 2 - 1));
+});
+renderer.domElement.addEventListener('pointerdown', () => runtime.poke());
+
+function renderSheet() {
+  // Every state in a grid, posed with poseAt() (no easing, no blink), with its documentation.
+  const W = stage.clientWidth, H = stage.clientHeight;
+  const cols = Math.ceil(Math.sqrt(states.length)), rows = Math.ceil(states.length / cols);
+  const cw = W / cols, ch = H / rows;
+  renderer.setScissorTest(true);
+  renderer.setClearColor(0x000000, 0);
+  camera.aspect = cw / ch; camera.updateProjectionMatrix();
+  labels.textContent = '';
+  states.forEach((s, i) => {
+    const cx = (i % cols) * cw, cy = Math.floor(i / cols) * ch;
+    const pose = runtime.poseAt(s.id, 1.2, { mirror: runtime.mirrored });
+    const props = {}; for (const n of s.props || []) props[n] = 1;
+    adapter.apply(pose, { props, mirrored: runtime.mirrored, time: 0, stateId: s.id });
+    renderer.setViewport(cx, H - cy - ch, cw, ch);
+    renderer.setScissor(cx, H - cy - ch, cw, ch);
+    renderer.clear();
+    renderer.render(scene, camera);
+    const div = document.createElement('div');
+    div.style.left = cx + 'px'; div.style.top = cy + 'px';
+    div.innerHTML = `<b>${s.label}</b>${s.trigger}`;
+    labels.appendChild(div);
+  });
+  renderer.setScissorTest(false);
+  renderer.setViewport(0, 0, W, H);
+}
+
+let last = performance.now();
+function frame(now) {
+  const dt = Math.min((now - last) / 1000, 0.1); last = now;
+  if (sheetMode) { renderSheet(); return; }
+  labels.textContent = '';
+  camera.aspect = stage.clientWidth / stage.clientHeight; camera.updateProjectionMatrix();
+  if (turntable) rig.rotation.y += dt * 0.6;
+  runtime.update(dt);
+  renderer.render(scene, camera);
+}
+renderer.setAnimationLoop(frame);
+
+// ------------------------------------------------------------------ UI
+const btn = (parent, text, onClick) => { const b = document.createElement('button'); b.textContent = text; b.onclick = onClick; parent.appendChild(b); return b; };
+for (const s of states) btn(document.getElementById('stateButtons'), s.label, () => runtime.setState(s.id));
+for (const v of Object.keys(VIEWS)) btn(document.getElementById('viewButtons'), v, () => setView(v));
+const toggle = (id, fn) => { const b = document.getElementById(id); b.onclick = () => { const on = b.getAttribute('aria-pressed') !== 'true'; b.setAttribute('aria-pressed', String(on)); fn(on); }; };
+toggle('btnSheet', (on) => hooks.sheet(on));
+toggle('btnTurn', (on) => hooks.turntable(on));
+toggle('btnFreeze', (on) => runtime.freeze(on));
+toggle('btnMirror', (on) => runtime.setMirror(on));
+
+let rebuildTimer = 0;
+const sliders = document.getElementById('sliders');
+const SLIDER_PART = { armLen: 'arms', legLen: 'legs' };   // hide sliders of absent parts
+for (const [k, [min, max, step]] of Object.entries(ranges)) {
+  if (SLIDER_PART[k] && !hasPart(SLIDER_PART[k])) continue;
+  const label = document.createElement('label');
+  label.innerHTML = `<span>${k}</span><output>${params[k]}</output><input type="range" min="${min}" max="${max}" step="${step}" value="${params[k]}">`;
+  const input = label.querySelector('input'), out = label.querySelector('output');
+  input.oninput = () => { out.textContent = input.value; hooks.setParam(k, Number(input.value)); };
+  sliders.appendChild(label);
+}
+document.getElementById('btnCopy').onclick = () => {
+  const text = JSON.stringify(params, null, 2);
+  navigator.clipboard?.writeText(text).catch(() => {});
+  console.log('Locked values (bake into params):', text);
+};
+
+// ------------------------------------------------------------------ clearance probe
+// Minimum of the body field over points sampled along each arm and hand, in body space.
+// Require at least about 0.02 units in every pose and mid-crossfade (references/animation.md).
+function clearance(stateId, te = 1.2) {
+  const pose = runtime.poseAt(stateId, te, { mirror: runtime.mirrored });
+  adapter.apply(pose, { props: {}, mirrored: runtime.mirrored, time: 0, stateId });
+  scene.updateMatrixWorld(true);
+  const inv = new THREE.Matrix4().copy(bodyMesh.matrixWorld).invert();
+  const v = new THREE.Vector3();
+  // Runs only on parts that exist: arms and hands here; add props and appendages that can swing
+  // toward the body. A mascot with none of them has nothing to check (returns null).
+  let min = Infinity, checked = 0;
+  for (const side of ['L', 'R']) {
+    const a = arms[side];
+    if (!a) continue;
+    for (let i = 0; i <= 10; i++) {
+      // points down the arm axis
+      v.set(0, -0.1 - params.armLen * (i / 10), 0).applyMatrix4(a.shoulder.matrixWorld).applyMatrix4(inv);
+      min = Math.min(min, bodySdf(v.x, v.y, v.z) - 0.11); checked++;
+    }
+    if (a.hand) {
+      v.set(0, 0.1, 0).applyMatrix4(a.hand.matrixWorld).applyMatrix4(inv);
+      min = Math.min(min, bodySdf(v.x, v.y, v.z) - 0.15); checked++;
+    }
+  }
+  return checked ? min : null;
+}
+
+// ------------------------------------------------------------------ test hooks
+const hooks = {
+  ready: false,
+  parts: () => [...PARTS],
+  freeze: (on = true) => runtime.freeze(on),
+  setState: (id) => runtime.setState(id),
+  seek: (t) => runtime.seek(t),
+  sheet: (on = true) => { sheetMode = !!on; if (!on) labels.textContent = ''; },
+  turntable: (on = true) => { turntable = !!on; if (!on) rig.rotation.y = 0; },
+  view: (name) => setView(name),
+  yaw: (rad) => { turntable = false; rig.rotation.y = rad; },   // turnaround QA: 0, +-0.6, 1.45, PI
+  setParam: (k, value) => {
+    params[k] = value;
+    if (k === 'grainFreq' || k === 'grainBump') { setGrain(bodyMat, { freq: params.grainFreq, bump: params.grainBump }); return; }
+    clearTimeout(rebuildTimer); rebuildTimer = setTimeout(buildBody, 120); // debounce rebuilds
+  },
+  params: () => ({ ...params }),
+  channels: () => runtime.channels(),
+  states: () => runtime.states(),
+  handPresets: () => runtime.handPresets(),
+  poseAt: (id, te) => runtime.poseAt(id, te),
+  clearance,
+};
+window.__mascot = hooks;
+
+buildBody();
+runtime.setState('wave');
+setTimeout(() => runtime.setState('idle'), 2500);
+if (new URLSearchParams(location.search).has('sheet')) hooks.sheet(true); // ?test&sheet for a sheet still
+hooks.ready = true;
+</script>
+</body>
+</html>

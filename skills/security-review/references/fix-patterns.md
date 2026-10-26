@@ -182,6 +182,7 @@ Set them in one place (framework security middleware or the ingress), then add a
 - Pair with request-size caps (body, upload, field count, header size, nesting depth), server-side validation of pagination and record-count parameters, execution timeouts, and per-request and per-tenant budgets plus provider-side spending alerts for paid services (OWASP API4:2023).
 - Make thresholds configuration, not constants; log and alert on sustained limit hits per key.
 - CAPTCHA or an equivalent on public forms is an abuse control, not a replacement for limits.
+- Turning on a CAPTCHA such as Cloudflare Turnstile changes the CSP: allow its script and frame origin (`https://challenges.cloudflare.com` in `script-src` and `frame-src`, and `connect-src` if the widget needs it) in **every** place the CSP is set (framework headers file, reverse proxy, CDN). A missed entry makes the widget fail to load, and with a fail-closed server check the form silently stops working. Verify the token server-side in the production endpoint, not only in a preview function, and check `hostname` and `action` in the verification response. (Found on a real site, Oct 2026.)
 
 ## 11. Object-level authorization and RLS
 

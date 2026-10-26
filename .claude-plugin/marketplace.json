@@ -6,14 +6,14 @@
     "url": "https://github.com/Badal2706"
   },
   "metadata": {
-    "version": "1.4.0"
+    "version": "1.5.0"
   },
   "plugins": [
     {
       "name": "brimpa-skills",
       "source": "./",
       "description": "All fourteen Brimpa skills in one plugin. Install this unless you want to cherry-pick with `npx skills add`.",
-      "version": "1.4.0",
+      "version": "1.5.0",
       "category": "productivity",
       "tags": [
         "security",
