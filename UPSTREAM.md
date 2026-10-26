@@ -20,6 +20,15 @@ The projects this collection was distilled from live under `upstream/` as **git 
 | upstream/rea | morluto/rea | MIT | reverse-engineering | `npx rea-agents setup` |
 | upstream/threejs-skills | CloudAI-X/threejs-skills | MIT | (three.js reference for mascot and 3D work; not merged, used as-is) | `/plugin install threejs-skills@brimpa` or `npx skills add cloudai-x/threejs-skills` |
 | upstream/brag | latent-spaces/brag | MIT | launch-video (parity bar: Brag's Brimpa Care films; music-cue snap tolerances credited) | `/plugin install brag@brimpa` or `npx skills add https://github.com/latent-spaces/brag --skill brag-slim` |
+| upstream/gsap-skills | greensock/gsap-skills | MIT | web-design motion, luxury-web-design signature moments, mascot-3d (Draggable pitfall); used for the Brimpa site's GSAP/ScrollTrigger work | `/plugin install gsap-skills@brimpa` or `/plugin marketplace add greensock/gsap-skills` |
+| upstream/transitions.dev | Jakubantalik/transitions.dev | Transitions.dev licence (use in any project; tooling MIT; do not redistribute the library as a competing product) | web-design motion timings, page transitions, error shake; used for the Brimpa site | `npx skills add Jakubantalik/transitions.dev` |
+| upstream/img2threejs | img2threejs/img2threejs | Apache-2.0 | mascot-3d (reconstructing an object from one reference image as procedural three.js, with quality gates) | `npx skills add img2threejs/img2threejs` |
+| upstream/playwright-cli | microsoft/playwright-cli | Apache-2.0 | screenshot and check tooling for web-design pre-flight, launch-video captures, mascot stills (checked during the Brimpa build; own scripts were enough) | `npx skills add microsoft/playwright-cli` |
+| (not pinned) | DavidHDev/react-bits | MIT + Commons Clause (no selling the library) | ideas only for animated components; 373 MB, so referenced, not pinned | browse https://github.com/DavidHDev/react-bits |
+
+## Used in real builds
+
+The Brimpa website (Oct 2026) used seven of our skills plus gsap-skills, transitions.dev, threejs-skills and img2threejs; details in `knowledge/case-studies/brimpa-website-build.md`.
 
 ## Policy
 

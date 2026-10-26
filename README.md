@@ -2,7 +2,7 @@
 
 _By Brimpa. Previously published as `badal-skills`; this repo replaces it._
 
-Thirteen reusable [Agent Skills](https://agentskills.io/specification) for shipping websites and software, distilled from a year of collected security checklists, design systems, SEO playbooks, compliance guides and launch prompts, then re-verified against primary sources as of **October 2026**.
+Fourteen reusable [Agent Skills](https://agentskills.io/specification) for shipping websites and software, distilled from a year of collected security checklists, design systems, SEO playbooks, compliance guides and launch prompts, then re-verified against primary sources as of **October 2026**.
 
 Works with Claude Code, Claude Desktop / claude.ai (including Cowork), and any agent that reads `SKILL.md` files (Codex, Cursor, Gemini CLI, OpenCode and others via `npx skills add`).
 
@@ -20,6 +20,7 @@ Works with Claude Code, Claude Desktop / claude.ai (including Cowork), and any a
 | [launch-marketing](skills/launch-marketing/) | write positioning, landing copy, pricing pages, Product Hunt / Show HN / LinkedIn posts, newsletters, outreach; de-slop AI copy | opendirectory (human-tone, brand-alchemy, position-me, launch kits, email) |
 | [brand-identity](skills/brand-identity/) | define a palette, type system, logo rules, voice and brand tokens; add an animated mascot | ui-ux-pro-max brand + design references, taste brandkit, Anthropic brand-guidelines pattern, mascot guide |
 | [launch-video](skills/launch-video/) | make a 40–60 s product launch film or demo clip from screenshots with a deterministic HTML render pipeline | "Launch Film With Claude" method |
+| [mascot-3d](skills/mascot-3d/) | design and ship an original 3D brand mascot from a logo: concept sheets, procedural three.js modelling, states, page integration, stills and fallbacks | the method proven on Brimpa's own mascot (kept private; logic and fresh templates only), img2threejs, threejs-skills |
 | [web-scraping](skills/web-scraping/) | collect web data you are authorized to collect; choose fetchers, spiders, sanitize for LLMs | Scrapling official skill (linked, not vendored) + alternatives |
 | [reverse-engineering](skills/reverse-engineering/) | understand how a shipped artifact works, with evidence, within legal limits | REA (linked, not vendored) |
 | [knowledge-base](skills/knowledge-base/) | ask a factual question the notes may answer, add a screenshot / link / PDF "for later", process the knowledge inbox, or feed a local AI with curated notes | the `knowledge/` folder: formulas, free-tier maps, tool catalogs, domain checklists, dated research with citations |

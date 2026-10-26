@@ -34,3 +34,15 @@
 [submodule "upstream/brag"]
 	path = upstream/brag
 	url = https://github.com/latent-spaces/brag.git
+[submodule "upstream/gsap-skills"]
+	path = upstream/gsap-skills
+	url = https://github.com/greensock/gsap-skills.git
+[submodule "upstream/img2threejs"]
+	path = upstream/img2threejs
+	url = https://github.com/img2threejs/img2threejs.git
+[submodule "upstream/playwright-cli"]
+	path = upstream/playwright-cli
+	url = https://github.com/microsoft/playwright-cli.git
+[submodule "upstream/transitions.dev"]
+	path = upstream/transitions.dev
+	url = https://github.com/Jakubantalik/transitions.dev.git

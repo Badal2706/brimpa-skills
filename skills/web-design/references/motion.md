@@ -16,6 +16,8 @@ Motion is the last pass, never a way to rescue a weak layout: the static page mu
 10. What gives generated motion away
 11. Motion pre-flight
 
+When the build uses GSAP or needs ready-made transitions, install the upstreams listed in the repo's UPSTREAM.md alongside this skill: `gsap-skills` (GreenSock's official rules for core, timelines, ScrollTrigger and plugins) and `transitions.dev` (crafted UI transitions, page-to-page fades, error shakes, with timing and easing). This file decides *what* moves and how much; those decide *how* to write it correctly. The Brimpa site used both this way (Oct 2026).
+
 ## 1. The one-moment rule and the budget
 
 - **One moving thing per screen.** If two animations are visible at the same time, cut one.
