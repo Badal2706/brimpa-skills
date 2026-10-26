@@ -1,30 +1,77 @@
 {
   "name": "brimpa",
-  "description": "Brimpa's reusable Agent Skills: security review, LLM app security, DPDP legal compliance, UI/UX, web design, luxury web design, SEO/GEO audit, launch marketing, brand identity, launch video, web scraping, reverse engineering.",
+  "description": "Brimpa's reusable Agent Skills (security review, LLM app security, DPDP legal compliance, UI/UX, web design, luxury web design, SEO/GEO audit, launch marketing, brand identity, launch video, web scraping, reverse engineering, knowledge base) plus the upstream skill repos they were distilled from, installable as-is.",
   "owner": {
     "name": "Brimpa",
     "url": "https://github.com/Badal2706"
   },
   "metadata": {
-    "version": "1.1.0"
+    "version": "1.2.0"
   },
   "plugins": [
     {
       "name": "brimpa-skills",
       "source": "./",
-      "description": "All twelve Brimpa skills in one plugin. Install this unless you want to cherry-pick with `npx skills add`.",
-      "version": "1.1.0",
+      "description": "All thirteen Brimpa skills in one plugin. Install this unless you want to cherry-pick with `npx skills add`.",
+      "version": "1.2.0",
       "category": "productivity",
-      "tags": [
-        "security",
-        "ui-ux",
-        "design",
-        "luxury",
-        "seo",
-        "marketing",
-        "compliance",
-        "scraping"
-      ]
+      "tags": ["security", "ui-ux", "design", "luxury", "seo", "marketing", "compliance", "scraping", "knowledge"]
+    },
+    {
+      "name": "threejs-skills",
+      "source": { "source": "github", "repo": "CloudAI-X/threejs-skills" },
+      "description": "Upstream, installed as-is: thirteen three.js r186 API skills (fundamentals, geometry, materials, lighting, textures, animation, loaders, shaders, post-processing, interaction, performance, React Three Fiber, asset pipeline). MIT.",
+      "category": "development",
+      "tags": ["threejs", "3d", "webgl", "webgpu", "upstream"]
+    },
+    {
+      "name": "claude-seo",
+      "source": { "source": "github", "repo": "AgriciDaniel/claude-seo" },
+      "description": "Upstream, installed as-is: the full claude-seo suite that seo-geo-audit was distilled from. MIT.",
+      "category": "marketing",
+      "tags": ["seo", "upstream"]
+    },
+    {
+      "name": "taste-skill",
+      "source": { "source": "github", "repo": "Leonxlnx/taste-skill" },
+      "description": "Upstream, installed as-is: taste-skill design directions and inspector scripts. MIT.",
+      "category": "design",
+      "tags": ["design", "frontend", "upstream"]
+    },
+    {
+      "name": "impeccable",
+      "source": { "source": "github", "repo": "pbakaus/impeccable" },
+      "description": "Upstream, installed as-is: impeccable design commands (needs its CLI for live and detector features). Apache-2.0.",
+      "category": "design",
+      "tags": ["design", "frontend", "upstream"]
+    },
+    {
+      "name": "ui-ux-pro-max",
+      "source": { "source": "github", "repo": "nextlevelbuilder/ui-ux-pro-max-skill" },
+      "description": "Upstream, installed as-is: UI UX Pro Max design-system generator, styles, brand and slides skills. MIT.",
+      "category": "design",
+      "tags": ["design", "ui-ux", "upstream"]
+    },
+    {
+      "name": "security-audit-skill",
+      "source": { "source": "github", "repo": "cloudflare/security-audit-skill" },
+      "description": "Upstream, installed as-is: Cloudflare's security-audit skill with its full-audit mode and validators. MIT.",
+      "category": "security",
+      "tags": ["security", "upstream"]
+    },
+    {
+      "name": "strix",
+      "source": { "source": "github", "repo": "usestrix/strix" },
+      "description": "Upstream, installed as-is: Strix skills (they drive the Strix CLI / cloud). Apache-2.0.",
+      "category": "security",
+      "tags": ["security", "pentest", "upstream"]
+    },
+    {
+      "name": "opendirectory-gtm-skills",
+      "source": { "source": "github", "repo": "Varnan-Tech/opendirectory" },
+      "description": "Upstream, installed as-is: 65 GTM and marketing skills from OpenDirectory. MIT.",
+      "category": "marketing",
+      "tags": ["marketing", "gtm", "upstream"]
     }
   ]
 }

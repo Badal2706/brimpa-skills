@@ -1,0 +1,33 @@
+[submodule "upstream/security-audit-skill"]
+	path = upstream/security-audit-skill
+	url = https://github.com/cloudflare/security-audit-skill.git
+[submodule "upstream/strix"]
+	path = upstream/strix
+	url = https://github.com/usestrix/strix.git
+[submodule "upstream/skills"]
+	path = upstream/skills
+	url = https://github.com/anthropics/skills.git
+[submodule "upstream/impeccable"]
+	path = upstream/impeccable
+	url = https://github.com/pbakaus/impeccable.git
+[submodule "upstream/taste-skill"]
+	path = upstream/taste-skill
+	url = https://github.com/Leonxlnx/taste-skill.git
+[submodule "upstream/ui-ux-pro-max-skill"]
+	path = upstream/ui-ux-pro-max-skill
+	url = https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git
+[submodule "upstream/claude-seo"]
+	path = upstream/claude-seo
+	url = https://github.com/AgriciDaniel/claude-seo.git
+[submodule "upstream/opendirectory"]
+	path = upstream/opendirectory
+	url = https://github.com/Varnan-Tech/opendirectory.git
+[submodule "upstream/Scrapling"]
+	path = upstream/Scrapling
+	url = https://github.com/D4Vinci/Scrapling.git
+[submodule "upstream/rea"]
+	path = upstream/rea
+	url = https://github.com/morluto/rea.git
+[submodule "upstream/threejs-skills"]
+	path = upstream/threejs-skills
+	url = https://github.com/CloudAI-X/threejs-skills.git

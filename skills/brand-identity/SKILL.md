@@ -4,8 +4,8 @@ description: Create or document a brand kit, brand guidelines, style guide or vi
 license: MIT
 metadata:
   author: Brimpa
-  version: "1.1"
-  updated: "2026-10-22"
+  version: "1.2"
+  updated: "2026-10-26"
 ---
 
 # Brand identity

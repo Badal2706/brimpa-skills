@@ -14,3 +14,7 @@ Thumbs.db
 node_modules/
 __pycache__/
 *-workspace/
+
+# raw intake for the knowledge base (processed files are deleted)
+knowledge/inbox/*
+!knowledge/inbox/README.md

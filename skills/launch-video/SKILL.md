@@ -4,8 +4,8 @@ description: Produce a 40-60 second product launch film, feature demo or social 
 license: MIT
 metadata:
   author: Brimpa
-  version: "1.0"
-  updated: "2026-10-20"
+  version: "1.1"
+  updated: "2026-10-26"
 ---
 
 # Launch video: a product film built entirely in code
@@ -133,6 +133,9 @@ or two showcase beats; keep the one-second test and the single CTA.
 | 10 | Edits the only version | Keeps v1, builds v2, compares |
 
 ## Toolchain
+
+
+Alternative engine: if the HyperFrames skills are installed (HTML rendered to video with a block registry, CLI and cloud render), they cover the same render(t)-to-MP4 job with less hand-built tooling; keep this skill's beat structure, hard rules, sound design and QA, and let HyperFrames do capture and encode.
 
 - **Renderer:** one HTML file, Canvas 2D (or DOM + CSS transforms driven by `render(t)`), fonts
   embedded as base64 so headless Chromium draws the same glyphs as the browser preview.

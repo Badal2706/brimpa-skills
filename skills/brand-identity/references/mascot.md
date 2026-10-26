@@ -225,3 +225,25 @@ Commit `assets/brand/mascot/{name}.avatar.json`, the studio project backup, a PN
 and a `README.md` note with: the licence decision (AGPL-3.0 caution acknowledged by {owner} on
 {date}), the mascot card, the trigger map, and the reduced-motion behaviour. Add the mascot row to
 BRAND.md's asset section so `web-design` and `launch-video` know it exists and how it behaves.
+
+
+## The deep route: a procedural 3D mascot (`mascot-3d`)
+
+When a client wants more craft than a 2D studio gives (a character derived from the logo's own
+shapes, arbitrary poses, stills and films from one source), use the `mascot-3d` skill. It builds
+every mascot procedurally in three.js, with only the body required and every other part (eyes,
+arms and hands, legs and feet, a glowing accent object, appendages) chosen from the mark. It covers
+deriving the character from the mark (each logo element becomes body, face, light or props; a
+rotation rule becomes an animation channel; the accent colour owns the one glowing part; a mouth
+only if the mark has a curve that reads as one), concept sheets made with an image generator,
+procedural three.js modelling, named states, a worker-rendered mount with still-image fallbacks,
+and QA. It ships generic templates. This method was proven on Brimpa's own mascot, which stays
+private; nothing in either skill describes that character. Avatar Lab remains the fast,
+low-budget option. For three.js API detail install the upstream `threejs-skills` plugin.
+
+Rules worth copying whatever the tool: derive every shape and colour from the brand mark; render
+the mascot in a slightly warmer, lighter "lit variant" of the tokens so it separates from a page
+built on the same colours, and record the offset in BRAND.md; eyes only unless the brand speaks;
+one expression at a time; marks and props sit outside the silhouette; the mascot never covers
+content, and any idle nudge is rate-limited and quiet (respect a sleep state); reduced motion
+means no mount at all, with a still in its place.
