@@ -165,16 +165,18 @@ As of Oct 2026, OWASP Top 10:2025 (presented Nov 2025) is the current web editio
 
 | OWASP 2025 | Checklist sections | QUICK prompts | Typical tool lead |
 |---|---|---|---|
-| A01 Broken Access Control (incl. SSRF) | 3 Authorization, 4 Business logic, 5 (SSRF items), 15 (GraphQL/WebSocket authz) | 1, 4 | Manual actor x object matrix; CodeQL/Semgrep for SSRF sinks |
-| A02 Security Misconfiguration | 7 Secrets and configuration, 11 Headers/CORS/CSP, 12 Cloud/CI | 9, 10 | Header assertion tests; rendered-config review |
+| A01 Broken Access Control (incl. SSRF) | 3 Authorization, 4 (role-transition and step-token binding items), 5 (SSRF items), 15 (GraphQL/WebSocket authz) | 1, 4 | Manual actor x object matrix; CodeQL/Semgrep for SSRF sinks |
+| A02 Security Misconfiguration | 7 Secrets and configuration, 11 Headers/CORS/CSP, 12 Cloud/CI, 9 (a resource bound that exists but is mis-set or disabled), 18 (mail authentication) | 9, 10 | Header assertion tests; rendered-config review |
 | A03 Software Supply Chain Failures | 13 Supply chain | 6 | npm audit / pip-audit / cargo audit / osv-scanner, syft |
-| A04 Cryptographic Failures | 10 Cryptography, 2 (token properties), 14 (backup key scope) | 2 | Semgrep crypto rules; manual review |
+| A04 Cryptographic Failures | 10 Cryptography, 2 (token properties), 14 (backup key scope) | 2, 9 | Semgrep crypto rules; manual review |
 | A05 Injection | 5 Input validation and injection, 16 (DOM XSS) | 4 | Semgrep, CodeQL taint queries |
-| A06 Insecure Design | 4 Business logic, 3 (parallel paths), 9 (abuse controls) | 1, 3 | Manual only; threat model |
+| A06 Insecure Design | 4 Business logic, 3 (parallel paths), 9 (abuse controls; no bound on resource use by design, e.g. a limiter map that grows per key), 18 (open mail relay) | 1, 3 | Manual only; threat model |
 | A07 Authentication Failures | 1 Authentication, 2 Sessions and tokens | 2, 3 | Semgrep JWT rules; manual |
 | A08 Software or Data Integrity Failures | 13 (signatures, pinning), 15 (webhook signatures), 5 (deserialization) | 6, 10 | osv-scanner image scan; manual |
 | A09 Security Logging and Alerting Failures | 8 Error handling and logging | 7 | Manual only; never "passed" from a black-box run |
-| A10 Mishandling of Exceptional Conditions | 8 Error handling, 9 Availability, 3 (fail-closed items) | 7 | Semgrep; manual fail-open review |
+| A10 Mishandling of Exceptional Conditions | 8 Error handling, 9 (cleanup on timeout/disconnect, retry ceilings, malformed-record quarantine), 3/7/12 (fail-closed items) | 7 | Semgrep; manual fail-open review |
+
+Resource exhaustion and unbounded consumption are **not** A10, which covers fail-open branches, unhandled errors and missing cleanup on failure. Map unbounded consumption to A06 Insecure Design when the design has no bound, or A02 Security Misconfiguration when a bound exists but is mis-set or disabled, plus API4:2023 for APIs. A process crash on malformed input is A10.
 
 ## 8. OWASP API Security Top 10 (2023) mapping
 
@@ -185,7 +187,7 @@ Apply in addition to the web list for any REST, GraphQL or gRPC API.
 | API1 Broken Object Level Authorization | 3 (object-level items) | 1 |
 | API2 Broken Authentication | 1, 2 | 2 |
 | API3 Broken Object Property Level Authorization (excess data exposure + mass assignment) | 3 (body-field override), 5 (schema validation), fix-patterns mass-assignment row | 1, 4 |
-| API4 Unrestricted Resource Consumption | 9 Rate limiting and availability | 3 |
+| API4 Unrestricted Resource Consumption | 9 Rate limiting and availability, 18 (send caps), fix-patterns section 10 | 3 |
 | API5 Broken Function Level Authorization | 3 (function-level items) | 1 |
 | API6 Unrestricted Access to Sensitive Business Flows | 4 Business logic, 9 (CAPTCHA, budgets) | 3 |
 | API7 Server Side Request Forgery | 5 (SSRF items), 12 (metadata service), fix-patterns section 12 | 4 |

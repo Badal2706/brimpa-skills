@@ -19,6 +19,7 @@ The projects this collection was distilled from live under `upstream/` as **git 
 | upstream/Scrapling | D4Vinci/Scrapling | BSD-3-Clause | web-scraping | `npx skills add D4Vinci/Scrapling --skill scrapling-official` |
 | upstream/rea | morluto/rea | MIT | reverse-engineering | `npx rea-agents setup` |
 | upstream/threejs-skills | CloudAI-X/threejs-skills | MIT | (three.js reference for mascot and 3D work; not merged, used as-is) | `/plugin install threejs-skills@brimpa` or `npx skills add cloudai-x/threejs-skills` |
+| upstream/brag | latent-spaces/brag | MIT | launch-video (parity bar: Brag's Brimpa Care films; music-cue snap tolerances credited) | `/plugin install brag@brimpa` or `npx skills add https://github.com/latent-spaces/brag --skill brag-slim` |
 
 ## Policy
 

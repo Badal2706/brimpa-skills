@@ -117,7 +117,7 @@ Mood words map too: "calm, trustworthy" pulls toward 1, 2, 8; "bold, loud, young
 
 **Signature move:** the live thing is the booking: real open slots, or a "call / WhatsApp / directions" trio that works on a thumb, or an opening-hours block that says whether the clinic is open right now computed from real hours. Secondary: a held picture with passing captions for the treatment journey (consult, plan, treatment, review).
 
-**Pitfalls:** cyan-plus-white that could be any clinic (take one colour from the building, the uniform or the city); icon-topped "Our services" cards in a row of three (use a list with a picture per service, or a two-column table of service and price); invented review counts and star rows; a hero metric ("10,000+ smiles"); forgetting the phone-width composition when most patients arrive from Maps on a phone. See the seo-geo-audit skill for NAP consistency and LocalBusiness schema once the page is designed.
+**Pitfalls:** cyan-plus-white that could be any clinic (take one colour from the building, the uniform or the city); icon-topped "Our services" cards in a row of three (use a list with a picture per service, or a two-column table of service and price); invented review counts and star rows; a hero metric ("10,000+ smiles"); forgetting the phone-width composition when most patients arrive from Maps on a phone. Ship the LocalBusiness-subtype JSON-LD (`Dentist`, `Physiotherapy`, `MedicalClinic`) with the build from the facts on the page; see the seo-geo-audit skill for NAP consistency and the full schema rules.
 
 ---
 

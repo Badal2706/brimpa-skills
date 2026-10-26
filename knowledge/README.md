@@ -38,7 +38,13 @@ Rules:
 2. Ask Claude to process the inbox with the `knowledge-base` skill. It transcribes or fetches, decides whether the content is a **procedure** (becomes or extends a skill) or **knowledge** (becomes or extends a note), writes it, records the source, and deletes the raw file.
 3. Review the diff; commit.
 
-What Claude can fetch directly: YouTube auto-captions (yt-dlp), public web pages, public Instagram reel captions and frames (yt-dlp downloads the video; frames can be read as images; speech needs a local transcriber such as whisper). On-screen text in reels is most reliably captured from a screenshot.
+What Claude can read directly:
+- **Local video files** (mp4, mov, mkv, webm): `python skills/knowledge-base/scripts/video_digest.py <file>` extracts scene-change keyframes and a timestamped Whisper transcript (Hindi, English or Hinglish, auto-detected; Hindi also gets an English translation). Tested on this machine's RTX 3050 with the `medium` model: a 75-second English talk took 26 seconds end to end (including the first-run model load), transcript accurate. Hindi accuracy is best with `--model large-v3`.
+- **YouTube**: auto-captions via yt-dlp, or download and run the digest.
+- **Instagram reels**: yt-dlp downloads public reels (some need browser cookies), then the digest. On-screen text is often clearer from a screenshot.
+- **Web pages** and **PDFs**: fetched or read page by page.
+
+For a folder of downloaded videos, drop them in `knowledge/inbox/` (git-ignored) and ask Claude to process the inbox; it runs the digest on each, writes or extends notes, and deletes the raw video once captured.
 
 ## Using these notes with a local model
 

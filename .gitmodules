@@ -31,3 +31,6 @@
 [submodule "upstream/threejs-skills"]
 	path = upstream/threejs-skills
 	url = https://github.com/CloudAI-X/threejs-skills.git
+[submodule "upstream/brag"]
+	path = upstream/brag
+	url = https://github.com/latent-spaces/brag.git

@@ -20,6 +20,7 @@ Read this when fixing anything a review found. The rule throughout: fix the clas
 14. [Webhook verification](#14-webhook-verification)
 15. [Cache TTL jitter and stampede control](#15-cache-ttl-jitter-and-stampede-control)
 16. [Error handling](#16-error-handling)
+17. [Email-sending features](#17-email-sending-features)
 
 ## 1. Vulnerability class to correct fix
 
@@ -35,7 +36,8 @@ Read this when fixing anything a review found. The rule throughout: fix the clas
 | CSRF | Framework CSRF middleware (token) plus `SameSite` cookies and Origin validation | CORS configuration, custom-header checks alone for form posts |
 | Secrets exposure | **Rotate the secret AND remove it from code and history**, then move it to a secret manager (section 3) | Deleting the line, force-pushing without rotation |
 | Mass assignment / property-level authorization | Explicit allowlist of writable fields per role (DTO / serializer); never bind request bodies straight onto models | Denylisting `isAdmin` |
-| Missing rate limits | Tiered limits keyed on principal or ingress-set IP, before expensive work; budgets on paid calls | A single global limit keyed on `X-Forwarded-For` |
+| Missing rate limits | Tiered limits keyed on principal or ingress-set IP (IPv6 on the /64 prefix), held at the edge or in a shared store, before expensive work; budgets on paid calls | A single global limit keyed on `X-Forwarded-For`; an in-memory map on a multi-instance or frequently restarted host; keys on the full IPv6 address |
+| Open mail relay (user content to a user-chosen address) | Remove the user-addressed send; fixed-text acknowledgement to the submitter, full content only to the owner's fixed inbox; send caps; CR/LF stripped from header values (section 17) | CAPTCHA alone, a per-IP limit alone, filtering words in the message |
 | Verbose errors / debug on | Generic error plus correlation ID; debug impossible in production builds | Catching and re-throwing with the same message |
 | Vulnerable dependency | Upgrade to the fixed version in the lockfile; replace abandoned packages; strict installs in CI | Suppressing the audit |
 | Misconfigured CORS / headers | Exact-origin allowlist; header baseline set at one layer (framework middleware or ingress) and verified in a test | Reflecting Origin "temporarily" |
@@ -51,6 +53,7 @@ Before editing, establish from the code:
 - The narrowest place the invariant can be enforced.
 - The legitimate behaviour, public APIs and error semantics that must survive.
 - The repository's existing helpers for this kind of control - reach for the codebase's own validator or authorization helper before inventing one.
+- Which user-visible promises depend on the current behaviour (needed for gate 6).
 
 Judge in this order and never trade an earlier property for a later one: (1) the current state is correctly classified (vulnerable, already safe, unproven); (2) the fix completely closes the boundary; (3) legitimate behaviour and compatibility are preserved; (4) repository checks pass; (5) repository conventions are followed; (6) the patch contains only what 1-5 require. "Minimal" means the smallest repository-native change that satisfies everything above, not the fewest lines.
 
@@ -61,12 +64,13 @@ Gates, in order; a failure at any gate disqualifies the fix:
 3. **Bypass review.** Re-read without leaning on the reasoning that produced the patch; trace changed branches from their callers; check equivalent sinks and sibling call sites of the same helper; consider at least one alternate input class (different encoding, content type, type variant, nested value, different HTTP verb or transport).
 4. **Preserved behaviour.** Exercise the legitimate case through the same boundary.
 5. **Repository checks.** Focused tests, then the owning package's tests, then formatter/linter/type checker. Confirm the new test **fails if the security change is removed** - a test that passes with and without the patch proves nothing.
+6. **User-visible side effects.** When the fix removes or changes behaviour (drops a "copy to sender" email, adds or tightens a limit, shortens a session, blocks a file type), search the UI copy, form labels, success and error messages, confirmation pages and email templates, help pages and docs, FAQ, privacy policy or notice, and tests or snapshots for text that promises the old behaviour ("You'll receive a copy of your message"). List each location (file:line) in the fix and update it in the same change, or flag it to the owner when it lives outside the repo (CMS, app-store listing, published policy). A fix that leaves the product promising something that no longer happens is incomplete.
 
 What disqualifies a fix: it closes the specific payload but not the input class; it sanitizes at the wrong layer (after the value was already used, or in a helper other callers bypass); it relies on a caller passing the right flag or an operator-set config; it fails open (the new check sits inside a try/except that swallows failure, or returns "allowed" on error); it weakens authentication, authorization, tenant isolation, validation, sandboxing or logging to make something else pass; it silently accepts, truncates or reinterprets unsafe state instead of rejecting it; it drags in unrelated refactors.
 
 If the gates cannot be passed, withhold the patch and give prose remediation, stating which gate could not be cleared. Do not patch an adjacent weakness as a consolation prize, and do not add speculative defense-in-depth to a path never proven reachable.
 
-Order fixes critical -> high -> medium -> low. Re-test in the environment the finding came from and re-run the project's own test suite. Report per finding: severity, root cause, fix applied (file:line), verification result.
+Order fixes critical -> high -> medium -> low. Re-test in the environment the finding came from and re-run the project's own test suite. Report per finding: severity, root cause, fix applied (file:line), verification result, and the user-visible side effects updated or flagged.
 
 ## 3. Leaked secret: rotate and purge
 
@@ -171,6 +175,9 @@ Set them in one place (framework security middleware or the ingress), then add a
 - Tier by endpoint type: strict on login, signup, password reset, OTP/MFA verification and invite acceptance; moderate on public forms, search and anything that sends email/SMS or calls a paid API; looser on authenticated actions; separate budgets for webhooks.
 - On auth routes combine per-IP and per-account limits with exponential backoff rather than a hard lockout, so an attacker cannot lock legitimate users out.
 - Key on something the client cannot choose: the authenticated principal or tenant, or the client IP as set by your own ingress (which overwrites any client-supplied `X-Forwarded-For`).
+- **IPv6:** one user typically holds a /64 (often a /56 or /48), so a per-address key hands them billions of fresh identities. Key IPv6 clients on the /64 prefix, after normalizing IPv4-mapped addresses; consider a looser second tier on a wider prefix for abuse-heavy endpoints.
+- **Where the state lives:** an in-memory limiter resets on every restart, deploy or crash and keeps a separate count per instance, replica, serverless invocation or edge isolate, so the effective limit is `limit x instances` and zero just after a deploy. Enforce limits that matter at the proxy/edge (CDN or gateway rate-limit rules) or in a shared store with atomic increment plus expiry (for example Redis `INCR` with `EXPIRE`, or the platform's rate-limit service). In-memory is acceptable only for one long-lived process, and the report says so.
+- **Bounded limiter memory:** use fixed- or sliding-window counters (one number per key per window) with TTL expiry, not a per-key list that appends a timestamp for every request including rejected ones; evict idle keys and cap the key map (LRU), so a flood of distinct keys cannot grow memory without limit.
 - Run the limiter before body parsing, password hashing, database lookups and external calls.
 - Pair with request-size caps (body, upload, field count, header size, nesting depth), server-side validation of pagination and record-count parameters, execution timeouts, and per-request and per-tenant budgets plus provider-side spending alerts for paid services (OWASP API4:2023).
 - Make thresholds configuration, not constants; log and alert on sustained limit hits per key.
@@ -277,3 +284,15 @@ function cached(key, baseTtlSeconds, compute):
 - Validation errors are specific about the field and rule, never about internal structure or SQL.
 - Crypto and verification failures throw and abort; no fallback to plaintext, skipped verification or "allowed" on exception.
 - Security events are logged with principal, tenant, action, resource, outcome and time; someone is alerted on login anomalies, role changes and mass exports.
+
+## 17. Email-sending features
+
+Contact forms, invites, share-by-email and "send me a copy" options. The checks are in `checklist.md` section 18; the secure shape:
+
+- Send the full submission only to the owner's inbox, configured server-side. The submitter gets at most a fixed-text acknowledgement with no echoed content, or nothing.
+- From is always an address on your sending domain; put the submitter's validated address in Reply-To only on mail to your own inbox.
+- Build headers through the mail library's structured API; strip or reject CR, LF and other control characters in subject, from-name, reply-to and recipient values.
+- Cap sends per day per feature and in aggregate, rate-limit the endpoint (section 10), alert when the cap is hit, and keep the provider key server-side and scoped to sending.
+- Send from a dedicated subdomain or provider-verified domain separate from the inbox that receives enquiries; publish SPF, DKIM and DMARC aligned with the visible From, and move DMARC towards `p=quarantine` or `p=reject` once aggregate reports are clean.
+- Suppress hard-bounced and complaining addresses; never auto-reply at volume to unconfirmed addresses (backscatter).
+- When removing a "copy to sender" option, run gate 6 in section 2: the form label, success message, confirmation page and privacy text that mention the copy change in the same release.

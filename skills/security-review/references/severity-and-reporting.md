@@ -179,6 +179,8 @@ Fix:
   Smallest change at the last trusted decision point: <file, helper, diff summary>
   Regression test: <test that fails without the fix>
   Verification: <re-trace or re-run through the patched code; which step now fails>
+  User-visible side effects: <UI copy, success messages, emails, docs, privacy text that promise the
+    old behaviour (file:line), each updated or flagged to the owner; or "none found" plus what was searched>
 
 needs-validation only:
   Blocker question: <the exact fact>
@@ -188,18 +190,20 @@ needs-validation only:
 
 For `not-a-finding`, keep ID, title, claimed root cause, trace and the one-sentence reason ("safe because ... at ... before ...").
 
+Mapping resource exhaustion: unbounded consumption (a limiter map that grows per key, no body-size cap, unbounded pagination or fan-out) is **not** A10:2025, which is Mishandling of Exceptional Conditions (fail-open branches, unhandled errors, missing cleanup on failure). Map it to A06 Insecure Design when the design has no bound at all, or A02 Security Misconfiguration when a bound exists but is mis-set or not enabled; add API4:2023 Unrestricted Resource Consumption for APIs. An unhandled exception that crashes the process on malformed input is A10.
+
 ## 7. Report structure
 
 Prose derives from the records and never changes a verdict, severity, blocker or impact.
 
-1. **Scope and method.** Mode (QUICK/FULL), repository and commit ref (and whether the worktree was dirty), environment used, accounts and tenants used, schema source, out-of-scope list, categories skipped and why, time or budget limits hit, and a plain statement of what could not be assessed. State "source review and bounded local tests only; no production or shared systems were probed."
+1. **Scope and method.** Review depth (quick check or full review), repository and commit ref (and whether the worktree was dirty), environment used, accounts and tenants used, schema source, out-of-scope list, categories skipped and why, time or budget limits hit, and a plain statement of what could not be assessed. Check the usual gaps: email authentication (SPF, DKIM and DMARC records live in DNS, not the repo); firewall and network exposure (open ports, security groups, whether the origin is reachable around the CDN); built output (`dist/`, `build/`, `.next/`) versus source, saying which was reviewed, since a build step can add or strip code; minified, generated or vendored files reviewed only by grep rather than read. State "source review and bounded local tests only; no production or shared systems were probed."
 2. **Posture summary.** Five lines: strongest controls seen, top three risks, launch recommendation (ship / ship after fixing listed Highs / do not ship until Criticals are fixed).
 3. **Confirmed findings table.** ID, severity, title, boundary crossed, one-line observed result. Sorted by severity then by impact rank.
 4. **Per-finding detail** using the template above.
 5. **Needs-validation table.** Title, trace, exact blocker question, bounded local next step, safe owner-observed check. No severity column.
 6. **Hardening notes and positive patterns.** Not findings. Positive patterns matter: they tell the owner what to keep.
-7. **Coverage ledger.** One row per category (and per subsystem in large apps): covered / finding / needs-validation / skipped with reason. For QUICK mode, one row per prompt.
-8. **Next steps.** Fix order (critical, high, medium, low), re-test plan, what to automate in CI (secret scanning, dependency audit, SAST, lockfile enforcement), and when the next review is due (before next release for QUICK; after auth/tenancy/payments/infrastructure changes for FULL).
+7. **Coverage ledger.** One row per category (and per subsystem in large apps): covered / finding / needs-validation / skipped with reason. For a quick check, one row per area checked, named in plain words (authorization, sign-in, rate limits), not by prompt number.
+8. **Next steps.** Written as plain actions the reader can take (see report hygiene). Fix order (critical, high, medium, low), re-test plan, what to automate in CI (secret scanning, dependency audit, SAST, lockfile enforcement), and when the next review is due (before next release for QUICK; after auth/tenancy/payments/infrastructure changes for FULL).
 
 A clean run reports zero confirmed findings and its remaining limits without inventing low-severity filler.
 
@@ -209,3 +213,4 @@ A clean run reports zero confirmed findings and its remaining limits without inv
 - Use dummy principals and synthetic records in every reproduction description.
 - Keep reproductions at the minimum effect; no persistence, exfiltration or availability steps, and no live-test guidance for `needs-validation` items.
 - Date-stamp standards references (OWASP Top 10:2025, API Top 10 2023, OWASP cheat-sheet parameters as of Oct 2026) so a reader in a year knows what to re-check.
+- Write for the client, not for the reviewer. Never reference this skill's internals: QUICK/FULL as instructions, prompt numbers ("re-run QUICK prompts 3, 5"), checklist section numbers or gate numbers. Write next steps as plain actions: "after deploying, check that the contact form refuses a sixth message from the same network within an hour, and re-run the secret scan". Explain a technical term in a few words the first time it appears (IDOR, RLS, needs-validation).

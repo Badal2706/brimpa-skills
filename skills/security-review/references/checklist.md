@@ -28,7 +28,8 @@ How to use it:
 15. [Webhooks, queues, RPC and GraphQL](#15-webhooks-queues-rpc-and-graphql)
 16. [Client-side and SPA](#16-client-side-and-spa)
 17. [Mobile apps and backends](#17-mobile-apps-and-backends)
-18. [Launch-day minimum](#18-launch-day-minimum)
+18. [Features that send email](#18-features-that-send-email)
+19. [Launch-day minimum](#19-launch-day-minimum)
 
 ---
 
@@ -185,6 +186,9 @@ Write down the invariants per workflow first: conservation of value (ledgers), u
 - [ ] Body, message, upload, field-count, header-size and nesting-depth caps exist at the edge and in the app, re-applied after every expansion stage.
 - [ ] Rate limits are tiered by endpoint type (strict on login/signup/reset/OTP/invite, moderate on public forms, search and anything that sends email/SMS or calls a paid API, looser on authenticated actions), combine per-IP and per-account limits with exponential backoff rather than hard lockout on auth routes, and are configurable.
 - [ ] Quotas key on a dimension the requester cannot choose (authenticated principal or tenant, ingress-set client IP), never a client-supplied header, route alias, key prefix or task ID; account switching, retries, reconnects and races cannot escape a budget.
+- [ ] Per-IP limits account for IPv6: one subscriber usually controls at least a /64, so IPv6 clients are keyed on the /64 prefix, not the full address (IPv4-mapped addresses normalized first). A per-address IPv6 key gives one user an effectively unlimited supply of fresh identities.
+- [ ] Limiter state matches the deployment model: an in-memory limiter resets on every restart, deploy or crash and keeps a separate count per instance, replica, serverless invocation or edge isolate, so the effective limit is `limit x instances` and zero just after a deploy. Limits that matter live at the proxy/edge or in a shared store with atomic increments and expiry; in-memory is acceptable only for a provably single long-lived process, and the report says so.
+- [ ] The limiter's own memory is bounded: expiring fixed- or sliding-window counters rather than a per-key list that appends every request (rejected ones included); idle keys evicted and the key map size-capped, so a flood of distinct keys (rotating IPv6 addresses, random headers) cannot grow memory until the process dies.
 - [ ] Aggregate limits accompany per-object limits; many small valid items cannot exhaust tenant- or process-wide state.
 - [ ] Query depth, filter cardinality, pagination size, expansion fields, aggregation and downstream fan-out are bounded and validated server-side.
 - [ ] Regex, nested parsing, recursive validation, graph traversal and template expansion have bounded complexity or bounded input.
@@ -306,13 +310,26 @@ Applies when a native or hybrid mobile app talks to the backend. The app is a fr
 - [ ] Backend endpoints used only by the app receive the same rate limiting, validation and authorization as web endpoints; a "mobile" route prefix is not a trust boundary.
 - [ ] Push-notification payloads and local caches do not carry other users' data or secrets; notification deep links are authorized on open.
 
-## 18. Launch-day minimum
+## 18. Features that send email
+
+Applies to contact and enquiry forms, invites, share-by-email, notifications, password reset and any "send me a copy" option. Mail-authentication records live in DNS, not the repo: record them as checked or as not assessed, never as passed by default.
+
+- [ ] User-supplied content is never sent to a user-supplied address. A form that emails the submitter "a copy" of their message, or accepts free-text recipients, is an open relay: anyone can send arbitrary text to anyone from your domain, which is phishing carrying your reputation. `[Medium; higher if volume is uncapped]`
+- [ ] Acknowledgements to the submitter are fixed text from a template with no echoed user content (no message body, no submitted name or subject); the full submission goes only to the owner's inbox, configured server-side.
+- [ ] The From address is always on your own sending domain; the submitter's address appears only as Reply-To on mail to your own inbox, after validation as a single address.
+- [ ] A daily send cap exists per feature and in aggregate, alongside the endpoint's rate limit (section 9) and per-recipient limits, with an alert when the cap is hit; the provider's account limit is a backstop, not the control. The provider API key is server-side only and scoped to sending.
+- [ ] Outbound mail uses a sending domain or subdomain separate from the inbox that receives enquiries, so a reputation hit or blocklisting on the sender does not also stop inbound mail.
+- [ ] SPF, DKIM and DMARC are published and aligned with the visible From domain, with DMARC moving to `p=quarantine` or `p=reject` once aggregate reports are clean; if DNS was not reviewed, list it under "what could not be assessed".
+- [ ] Bounce and backscatter risk is handled: mail to unverified or attacker-supplied addresses produces bounces and complaints that damage sender reputation; hard bounces and complaints suppress the address, and nothing auto-replies at volume to addresses that never confirmed.
+- [ ] CR, LF and other control characters are stripped or rejected in anything placed in a mail header (subject, from-name, reply-to, recipient), and headers are built through the mail library's structured API, not string concatenation.
+
+## 19. Launch-day minimum
 
 If only one hour remains before launch, verify at least these and record the rest as not covered:
 
 1. Server-side authorization on every API route and server action; RLS on every tenant table; no service-role key in client code.
 2. Password hashing parameters, JWT verification settings, reset-token properties.
-3. Rate limits on login, signup, reset, OTP and any endpoint that sends email/SMS or calls a paid API; CAPTCHA on public forms.
+3. Rate limits on login, signup, reset, OTP and any endpoint that sends email/SMS or calls a paid API, held at the edge or in a shared store; CAPTCHA on public forms; email features send fixed-text acknowledgements only, never user content to a user-supplied address.
 4. Secret scan of repo and history; nothing secret in client build variables; found secrets rotated and purged.
 5. Debug mode off; admin, metrics and debug endpoints authenticated or removed; storage buckets private.
 6. HTTPS enforced; CORS allowlist exact; session cookie flags; baseline headers.

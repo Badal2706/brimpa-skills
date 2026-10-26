@@ -4,8 +4,8 @@ description: Pre-production / pre-launch application security review for web app
 license: MIT
 metadata:
   author: Brimpa
-  version: "1.0"
-  updated: "2026-10-20"
+  version: "1.1"
+  updated: "2026-10-26"
 ---
 
 # Security Review (pre-production / pre-launch)
@@ -23,7 +23,7 @@ A defensive application-security review for web apps, APIs, mobile backends, Saa
 4. **Map the app in ten minutes** before hunting: product and users, principals (anonymous, user, admin, tenant owner, service), entry points (HTTP routes, server actions, RPC/GraphQL, WebSockets, webhooks, jobs, CLI), tenancy model, where authorization is supposed to live, data classes (PII, payment, health, secrets) and which controls are deployment-side (proxy, CDN, IdP, cloud IAM) rather than in the repo. Write this as a one-page architecture note; every later verdict refers to it.
 5. **Run the checks.** QUICK: the ten prompts in order. FULL: categories in priority order - unauthenticated surfaces first, then the boundaries protecting credentials, cross-tenant data, code execution and release authority, then the rest. Keep a coverage ledger: one line per category with `covered | finding | needs-validation | skipped (reason)`.
 6. **Close every candidate** with a trace (entry point -> control -> sink -> effect), the counter-evidence checklist, and exactly one verdict: `confirmed`, `needs-validation`, or `not-a-finding`. Severity is assigned only after that, and only to confirmed items.
-7. **Fix by class, not by payload**, in severity order, using the project's own helpers (ORM parameterization, auth middleware, framework CSRF). Run the verification gates in `references/fix-patterns.md` before calling anything fixed.
+7. **Fix by class, not by payload**, in severity order, using the project's own helpers (ORM parameterization, auth middleware, framework CSRF). Run the verification gates in `references/fix-patterns.md` before calling anything fixed, including the user-visible side-effects gate: when a fix removes or changes behaviour, list the UI copy, success messages, docs and privacy text that still promise the old behaviour.
 8. **Write the report** (template below), including what was not covered. Re-run QUICK before each later release and FULL again after changes to authentication, tenancy, payments or infrastructure.
 
 ## Scope and inputs
@@ -66,7 +66,7 @@ Run them in order; each prompt is self-contained and can be pasted into a coding
 > Review authentication end to end. Password storage: Argon2id (minimum m=19 MiB, t=2, p=1), or bcrypt with work factor >= 10 (mind its 72-byte input limit), or PBKDF2-HMAC-SHA256 with 600,000 iterations; never an MD5/SHA-family hash alone, always a per-user salt. Sessions and JWTs: algorithm pinned server-side, unsigned tokens rejected, exp/iss/aud enforced, no decode-without-verify path, HMAC secret at least 256 bits and not shared across dev/stage/prod, logout and password change actually invalidate, session id rotated on login and privilege change. Reset and magic links: CSPRNG token, single-use, expiring, bound to the user, URL built from a server-configured base URL (never the Host header), prior sessions invalidated on completion. MFA enrollment/disable requires fresh authentication. OAuth/OIDC callbacks validate state, nonce, PKCE (S256) and an exact redirect_uri. Test, seed and default credentials cannot authenticate in production. Login and reset responses reveal account existence only where that is already public. Output findings with file:line and the smallest fix.
 
 **3. Rate limiting and abuse controls.**
-> Add rate limiting appropriate to each endpoint type: stricter limits on authentication routes (login, signup, password reset, OTP/MFA verification, invite acceptance), moderate limits on public endpoints (contact and signup forms, search, anything that sends email/SMS or calls a paid API), looser limits on authenticated user actions. On auth routes combine per-IP and per-account limits with exponential backoff rather than a hard lockout, because a hard lockout lets anyone lock a victim out. Key limits on a dimension the client cannot choose (authenticated principal, or the client IP as set by your own ingress - never a client-supplied X-Forwarded-For). Make thresholds configurable, not hardcoded. Confirm the limit runs before expensive work (parsing, hashing, database, external calls); body, upload and field-count caps exist; paid or metered calls (email, SMS, LLM, cloud APIs) have per-request and per-tenant budgets; public forms have CAPTCHA or an equivalent abuse control. Before changing anything, list every public and auth endpoint with its current limit or "none".
+> Add rate limiting appropriate to each endpoint type: stricter limits on authentication routes (login, signup, password reset, OTP/MFA verification, invite acceptance), moderate limits on public endpoints (contact and signup forms, search, anything that sends email/SMS or calls a paid API), looser limits on authenticated user actions. On auth routes combine per-IP and per-account limits with exponential backoff rather than a hard lockout, because a hard lockout lets anyone lock a victim out. Key limits on a dimension the client cannot choose (authenticated principal, or the client IP as set by your own ingress - never a client-supplied X-Forwarded-For). Per-IP keys are weak against IPv6, where one user controls at least a /64: key IPv6 clients on the /64 prefix, not the full address. An in-memory limiter resets on every restart or deploy and shares no state across instances or serverless invocations, so put limits that matter at the proxy/edge or in a shared store; the limiter must also stay bounded in memory (expiring counters, idle keys evicted, never a growing record of every rejected request). Make thresholds configurable, not hardcoded. Confirm the limit runs before expensive work (parsing, hashing, database, external calls); body, upload and field-count caps exist; paid or metered calls (email, SMS, LLM, cloud APIs) have per-request and per-tenant budgets; public forms have CAPTCHA or an equivalent abuse control; anything that sends email never sends user-supplied content to a user-supplied address, has a daily send cap, and strips CR/LF from header values. Before changing anything, list every public and auth endpoint with its current limit or "none".
 
 **4. Input validation and injection.**
 > Validate every input against a strict schema (type, length, format, allowed values) at the boundary and reject anything that does not match - do not merely sanitize or escape - and validate field names, keys and headers as strictly as values. Then trace untrusted input to dangerous sinks and confirm: every SQL/NoSQL query is parameterized, including ORDER BY, column names, JSON paths and NoSQL operator objects; no shell command, eval, template source or native deserializer receives user input; HTML output is contextually encoded and escape hatches (dangerouslySetInnerHTML, v-html, |safe, .html()) receive only sanitized content; user-controlled file paths are canonicalized and confined to a base directory; server-side fetches of user-supplied URLs (webhooks, link previews, importers, avatars) allowlist scheme and host and block private, link-local and cloud-metadata ranges after every redirect; redirect/next/return parameters are allowlisted; cookie-authenticated state-changing routes have CSRF protection (token, or strict SameSite plus Origin check). Output a table: input -> sink -> control present (file:line) -> verdict -> fix.
@@ -107,7 +107,7 @@ Open `references/checklist.md` for the complete item list per category; the head
 
 **7. Error handling and logging** - generic errors plus correlation ID; no oracle between "not found" and "no access"; redaction in the logging layer; security events logged with principal/tenant/action/resource/outcome; audit logging cannot be disabled by an overlay; crypto and verification errors never fall through to success.
 
-**8. Rate limiting, abuse, availability and production readiness** - earliest size/rate/concurrency gate before expensive work; limits keyed on non-client-chosen dimensions; aggregate and per-tenant quotas; bounded query depth, pagination, fan-out and regex complexity; retries with ceilings, jitter and circuit breakers; budgets on paid calls. Caching: Redis in front of the database is not a strategy by itself - give keys a base TTL plus a random jitter so a warm cache does not expire all at once and stampede the database, coalesce concurrent recomputes of the same key, key every cache entry on tenant and authorization state, and never cache personalized responses at the edge without `Vary` and `private, no-store` where appropriate.
+**8. Rate limiting, abuse, availability and production readiness** - earliest size/rate/concurrency gate before expensive work; limits keyed on non-client-chosen dimensions, with IPv6 keyed on the /64 prefix; limiter state at the edge or in a shared store rather than per-process memory that resets on restart and differs per instance, and bounded so rejected requests cannot grow it; aggregate and per-tenant quotas; bounded query depth, pagination, fan-out and regex complexity; retries with ceilings, jitter and circuit breakers; budgets on paid calls. Caching: Redis in front of the database is not a strategy by itself - give keys a base TTL plus a random jitter so a warm cache does not expire all at once and stampede the database, coalesce concurrent recomputes of the same key, key every cache entry on tenant and authorization state, and never cache personalized responses at the edge without `Vary` and `private, no-store` where appropriate.
 
 **9. Cryptography and password storage** - Argon2id/scrypt/bcrypt/PBKDF2 at current parameters; CSPRNG for every token; constant-time comparisons; authenticated encryption (AES-GCM, ChaCha20-Poly1305) with unique nonces; signatures verified before payload use; TLS enforced inbound and verified outbound; crypto failures abort rather than degrade.
 
@@ -125,6 +125,8 @@ Open `references/checklist.md` for the complete item list per category; the head
 
 **16. AI, LLM and agent features** - if the app sends user or third-party content to a model, lets a model call tools, or does retrieval over user data, run the `llm-app-security` skill as well; this skill does not cover prompt injection, tool permissions or RAG authorization.
 
+**17. Features that send email** (contact forms, invites, share-by-email, "send me a copy") - user-supplied content never goes to a user-supplied address (an open relay for phishing from your domain); acknowledgements to the submitter are fixed text; a daily send cap; a sending domain separate from the inbox that receives enquiries; SPF, DKIM and DMARC alignment checked or listed as not assessed; bounce and backscatter risk to sender reputation considered; CR/LF stripped from anything placed in a header (subject, from-name, reply-to). Items in `references/checklist.md` section 18.
+
 ## Evidence, verdicts and severity
 
 Full rules, the counter-evidence checklist and the finding template are in `references/severity-and-reporting.md`; read it before writing any FULL-mode finding. The short form:
@@ -141,22 +143,28 @@ Full rules, the counter-evidence checklist and the finding template are in `refe
 Use this structure for both modes (QUICK may collapse sections 4-6 into one table). Prose never changes a verdict or severity.
 
 ```
-# Security review - <app> - <date> - <QUICK|FULL>
+# Security review - <app> - <date> - <quick check | full review>
 1. Scope: repo + ref, environment used, accounts/tenants used, schema source, out-of-scope list,
-   categories skipped and why, what could not be assessed (e.g. "no second tenant: A01 incomplete").
+   categories skipped and why, what could not be assessed (e.g. "no second tenant: access control
+   incomplete"; email authentication - SPF/DKIM/DMARC records; firewall and network exposure;
+   built output (dist/) vs source; minified or generated files reviewed only by grep).
 2. Posture summary (5 lines max): the strongest controls seen, the top 3 risks, launch recommendation
    (ship / ship after fixing listed Highs / do not ship).
 3. Confirmed findings table: ID | Severity | Title | Boundary crossed | One-line observed result.
 4. Per confirmed finding: location (file:line), lower-trust principal, trace entry -> control -> sink,
    conditions, bounded reproduction in the app's native interface (dummy data), observed result, impact,
    counter-evidence checked, smallest fix (invariant + change at the last trusted decision point +
-   regression test), verification status.
+   regression test), verification status, user-visible side effects (UI copy, success messages,
+   docs, privacy text promising the old behaviour - updated or flagged).
 5. Needs-validation table: Title | Trace | Exact blocker question | Bounded local check | Safe
    owner-observed check. No severity.
 6. Hardening notes and positive patterns (not findings).
 7. Coverage ledger: category -> covered / finding / needs-validation / skipped (reason).
-8. Next steps: fix order, re-test plan, what to automate (secret scan, dependency audit, SAST in CI).
+8. Next steps: fix order, re-test plan, what to automate (secret scan, dependency audit, SAST in CI),
+   written as plain actions.
 ```
+
+The report is client-facing: never reference this skill's internals (prompt numbers, mode names, checklist section numbers) or unexplained jargon. "Re-run QUICK prompts 3, 5" becomes "after deploying, re-check the rate limits on the login and contact forms and re-run the secret scan".
 
 The finding template with all fields is in `references/severity-and-reporting.md`; fix snippets and configuration baselines are in `references/fix-patterns.md`; exact tool commands are in `references/tools.md`.
 
@@ -167,6 +175,8 @@ The finding template with all fields is in `references/severity-and-reporting.md
 - Fixing the payload instead of the class: blocking one string instead of parameterizing the query, hiding an endpoint instead of authorizing it, patching one route instead of the shared helper, sanitizing after the value was already used.
 - Removing a leaked secret from code without rotating it, or rotating without purging history and checking where else it was copied (CI logs, images, chat). Both, always, and record the rotation time.
 - Pasting live secrets, tokens or other users' data into the report or chat.
+- Shipping a fix that removes or changes behaviour (dropping a "copy to sender" email, adding a limit) while the form label, success message, docs or privacy text still promise the old behaviour.
+- Writing internal instructions into the client's report ("re-run QUICK prompts 3, 5") instead of plain actions.
 - Testing against production or any shared environment, stress-testing a live service, or spending paid API quota to "prove" a rate-limit gap.
 - Treating a WAF, CDN rule, obscure URL, client-side check, or "the IDs are UUIDs" as the fix.
 - Inventing low-severity filler so a clean run looks thorough, or presenting a budget-capped or no-test-account run as a completed assessment.
@@ -188,7 +198,7 @@ The finding template with all fields is in `references/severity-and-reporting.md
 
 **"Found an AWS key in an old commit. It's deleted now, are we fine?"** -> No: rotate first (new key, update the secret manager, deploy), review CloudTrail or the equivalent for use of the old key since the commit date, then purge history, invalidate the old key, and add a pre-commit secret scan plus a CI secret scan so it cannot recur. Steps are in `references/fix-patterns.md`.
 
-**"Add rate limiting to my Express API."** -> Inventory endpoints by type first (auth, public, authenticated, webhooks, paid-call triggers), then apply tiered limits keyed on principal or ingress-set IP, exponential backoff on auth routes, configurable thresholds, and limits positioned before body parsing and hashing; add body-size caps at the same time.
+**"Add rate limiting to my Express API."** -> Inventory endpoints by type first (auth, public, authenticated, webhooks, paid-call triggers), then apply tiered limits keyed on principal or ingress-set IP (IPv6 on the /64 prefix), held in a shared store or at the edge if the app runs more than one instance or restarts on deploy, exponential backoff on auth routes, configurable thresholds, and limits positioned before body parsing and hashing; add body-size caps at the same time.
 
 ## Hand-offs
 

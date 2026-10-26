@@ -55,14 +55,16 @@ Calibration question: could someone guess this aesthetic from the category alone
 - Cover the name: could an unrelated product in the same category use this page unchanged? If yes, the direction is not committed.
 - The skeleton test: strip the copy; does the bare structure still say what each section is?
 - One memorable element, everything around it quiet; boldness spent once. "Before leaving the house, remove one accessory."
+- At least one crafted artefact from the subject's real-world paper or signage (menu card, receipt, ticket, appointment chit, prescription pad, letterhead) is on the page, built in real HTML with real content, readable at 390, carrying the boldness, and named in the report. A page whose only distinctive element is its motion move fails this (rules and ideas: `references/sections.md` §4).
 - The idea sentence ("On this page, X becomes Y") survives the competitor test and reaches pricing, FAQ and footer.
 - The direction ledger is updated (client, industry, direction, date) so the next brief in this industry rolls differently.
 
 ## 5. Content and honesty
 
-- Real content throughout: the full menu, every room, every speaker, the real price; sample details listed in the report for the client to confirm.
+- Real content throughout: the full menu, every room, every speaker, the real price.
+- Every sample detail (an invented price, duration, response time, walk-in policy, payment method or operational promise) carries a visible marker on the rendered page, a "[sample: confirm]" tag or the one highlighted placeholder style, and is listed in the report for the client to confirm. Check in the screenshot, not the source: a value marked only in an HTML comment fails.
 - No invented proof: customers, quotes, logos, user counts, ratings, sale pings, benchmarks, certifications, "as seen in". Any placeholder testimonial section is plainly fictional, has no real names, and is flagged in the report.
-- Every claim and configuration comes from supplied truth; illustrative values are labelled; no invented prices, endpoints or capabilities.
+- Every claim and configuration comes from supplied truth; illustrative values are labelled on the page; no invented prices, endpoints or capabilities.
 - Numbers carry units and periods; dates and currency are locale-correct.
 - The first screen says what this is and offers the action. Five-second stranger test: show the first screen to someone who has not seen the brief for five seconds, then ask what the business does and where they would click; two wrong answers fail the hero.
 - Skim test: read only the headings from top to bottom; they alone must say what this is, for whom, and what to do next. No text block runs over about 75 words.
@@ -90,7 +92,7 @@ Calibration question: could someone guess this aesthetic from the category alone
 - Colour never the only channel (icons, text, position accompany state); contrast per section 2; Windows high contrast mode and 200% zoom do not break the layout; text spacing overrides (line height 1.5, paragraph 2em, letter 0.12em, word 0.16em) do not clip anything.
 - Motion: `prefers-reduced-motion` honoured per effect with an intentional alternative; no flashing; autoplaying media muted with a visible pause and captions; carousels controllable.
 - Icon-only controls have accessible names; live badge updates use one atomic status message; dragging has a button alternative.
-- Language set on `<html lang>`; page title and meta description present (the seo-geo-audit skill owns the rest of metadata and schema).
+- Language set on `<html lang>`; page title and meta description present (the seo-geo-audit skill owns the rest of metadata and the full schema rules; the local-business JSON-LD check is in §10).
 
 ## 8. Performance budget
 
@@ -113,17 +115,21 @@ Targets are Core Web Vitals "good" thresholds; measure with Lighthouse and the P
 - Stock placeholders (Picsum ids, Unsplash) are listed in the report as stand-ins to replace; no watermarks, burned-in text, scanner edges or recognisable people who could be taken for staff or customers.
 - One treatment for the whole set (untouched, all greyscale, multiply on a field, darkened for dark); two or three crop ratios; square corners or one radius; no device frames or browser chrome around pictures; no colour washes, duotones, vignettes or grain overlays.
 - Nothing lies on top of a headline or a statement; text over a photograph sits in a calm region or on a neutral scrim.
-- At least four real pictures on a page that has a subject to show (usually six to twelve); SVG drawings do not count toward that floor; software pages count their real interface fragments.
+- At least four real pictures on a page that has a subject to show (usually six to twelve); SVG drawings and placeholders do not count toward that floor; software pages count their real interface fragments.
+- Photo placeholders (the client's photos are not shot yet) are modest and intentional: never the largest element on the desktop or phone first screen; each styled as a drawn stand-in, a caption-led slot stating the shot to take, or a type-and-colour composition; never an empty grey box; each listed in the report as a shot to take.
 
 ## 10. Links, forms and states
 
 - Every link resolves (no `#` placeholders left except a documented `#checkout`); external links open sensibly; `mailto:`/`tel:`/`wa.me` links carry the real address and number.
 - Primary action works end to end or is wired to a real destination; no fake payment, booking or sign-up success; success animations await the real request; errors restore the form with input preserved.
+- The primary action goes straight to the action when a direct one exists, and its label matches its destination: "Book on WhatsApp" opens `wa.me/<number>?text=` with a prefilled, URL-encoded message; "Call" is `tel:`; "Book online" is the real booking URL. A button that scrolls to a form never names a channel; the form further down is the second path. Tap each one on a phone.
+- On a phone the booking form shows only the minimum fields; optional fields are collapsed; three to seven options are chips, not a dropdown.
+- Local business: JSON-LD of the most specific LocalBusiness subtype (`Dentist`, not plain `LocalBusiness`) with name, address, geo if known, telephone, openingHoursSpecification and sameAs; every value is visible on the page and identical to it; no value still tagged as sample; no rating without real reviews; it parses in the Schema Markup Validator or Rich Results Test (or is listed as not verified). Full rules: seo-geo-audit.
 - States present where relevant: hover, focus, active, disabled, loading, error, empty, success; the booking or contact form has been submitted once in testing, on a phone, as the first thing checked (it is the end of the visit and what is remembered), and the confirmation says what happens next and when.
 - Opening hours, prices, addresses and names match the client's listing exactly (NAP consistency: see seo-geo-audit).
 - Dark mode (if shipped) checked in every state and overlay; theme does not flash on load; `theme-color` set per scheme.
 - Legal and privacy links exist where personal data is collected (dpdp-legal-compliance for Indian audiences); the security-review skill has been run on anything with a form or a backend before launch.
-- The report lists every sample detail, every stand-in picture, every redraw of the direction and every check not run.
+- The report lists every sample detail, every stand-in picture and photo slot, every redraw of the direction and every check not run.
 
 ## 11. Self-lint list (61 detector rules)
 
@@ -140,6 +146,7 @@ Rules that are tool-specific do not apply here (ignore markers, hook tiers); the
 ```
 Direction: <name> (composed with <name> for <what>), chosen over <struck candidates>; category default refused: <one line>.
 Idea: On this page, <subject thing> becomes <device>. Live thing: <what the visitor can do>.
+Artefact: <real-world object rebuilt on the page, its content, where it sits>.
 Tokens: colours <4-6 named hex>; type <faces and roles>; spacing base <n>px, sections <n>px; radius <policy>; shadow <policy>; motion depth <low/medium/high>.
 Sections (in order): <hero pattern>, <section: blueprint>, ...; footer: <close>.
 Dark mode: <shipped / not shipped and why>.
@@ -149,9 +156,10 @@ Pre-flight:
   Responsive (320/375/414/768/1024/1440): pass / issues; evidence: <device or emulation>
   Accessibility: pass / issues
   Performance (LCP/INP/CLS, measured on <device/throttle>): <numbers or "not measured">
-  Images: <count>, credits listed below; stand-ins to replace: <list>
-  Links and forms: <pass / #checkout noted / mailto fallback>
-Sample content to confirm: <list>
+  Images: <count>, credits listed below; stand-ins to replace: <list>; photo slots: <list with the shot to take>
+  Links and forms: <primary goes to wa.me / tel: / booking URL; form as second path; #checkout noted / mailto fallback>
+  Structured data: <subtype, fields, validated with what, or not verified>
+Sample content to confirm: <list, each visibly tagged on the page>
 Image credits: <file, title, creator, licence, source, where credited>
 Not verified: <every check you did not run>
 Hand-offs: ui-ux (app screens), seo-geo-audit (metadata, schema, NAP), security-review (forms), dpdp-legal-compliance (consent), brand-identity (logo/palette gaps), launch-marketing, launch-video.

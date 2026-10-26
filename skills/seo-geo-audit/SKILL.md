@@ -4,8 +4,8 @@ description: "Audit and improve a website for Google Search, local/Maps visibili
 license: MIT
 metadata:
   author: Brimpa
-  version: "1.0"
-  updated: "2026-10-20"
+  version: "1.1"
+  updated: "2026-10-26"
 ---
 
 # SEO + GEO Audit
@@ -17,8 +17,8 @@ Audit first, report, then change only what needs changing. The goal is the stron
 1. **Gather inputs.** Live URL (or repo + staging URL), business type (local brick-and-mortar / service-area / online / publisher / SaaS / e-commerce), locations and languages, the 5-10 queries the owner wants to win, CMS or framework, and what access exists: Search Console, GA4, Google Business Profile ownership, hosting. Ask for missing items once; proceed with what you have.
 2. **Declare depth.** Say which of these you can actually use: page fetch only; headless browser (rendered DOM, screenshots); PageSpeed Insights / CrUX; Search Console data; paid rank/backlink tools. Anything you cannot measure is reported as "not measured", never scored.
 3. **Audit, do not edit.** Inspect the homepage and one page per template (service, location, article, product, contact), plus `robots.txt`, the sitemap(s), JSON-LD, `llms.txt` if present, and the GBP listing for local businesses. Respect robots.txt and rate limits when crawling (see the web-scraping skill for polite crawling). Work through `references/technical-checklist.md` first.
-4. **Score.** One score per category with the weights in `references/report-template.md`; mark unmeasured categories as such. Scores are heuristics, not Google-internal signals.
-5. **Report as KEEP / MODIFY / REMOVE / DO NOT TOUCH** with a priority (Critical / High / Medium / Low), the observation each finding rests on, the exact fix, and how you would know the fix failed. Use the template in `references/report-template.md`.
+4. **Score.** One score per category with the weights in `references/report-template.md`, over measured categories only (an unmeasured category is left out of the total, never estimated into it), with the arithmetic printed. Scores are heuristics, not Google-internal signals.
+5. **Report as KEEP / MODIFY / REMOVE / DO NOT TOUCH** with a priority (Critical / High / Medium / Low / Info) set by the root cause, the observation each finding rests on, the exact fix, and a mandatory `Failed if:` line on every finding: one command or observable condition (curl, `openssl s_client`, grep, Rich Results Test, a Search Console report). Ready-made checks are in `references/technical-checklist.md` section 17; the template is in `references/report-template.md`.
 6. **Get sign-off** on the change list before touching code or the GBP listing. Flag anything that is irreversible (URL changes, category changes, deleting pages).
 7. **Implement only approved items**, smallest change first: fix blockers (noindex, robots, canonical, redirects) before anything cosmetic.
 8. **Validate.** JSON-LD parses and passes the Rich Results Test; exactly one H1 per page; no stray `noindex`; redirects resolve in one hop; sitemap returns 200 and lists only canonical 200 URLs; URL Inspection in Search Console shows the page as indexable.
@@ -51,6 +51,16 @@ Full detail with thresholds lives in `references/technical-checklist.md` (read i
 - **Structured data:** JSON-LD, the most specific type, only facts visible on the page, no retired types, validated.
 - **Security and page experience:** HTTPS everywhere, no mixed content, no intrusive interstitials, no back-button hijacking, no hidden text or links.
 - **Hygiene:** remove `meta keywords` (ignored by Google), placeholder URLs, staging hostnames, duplicate pages, orphan files.
+- **Surface checks** (one line each, detail in the technical checklist):
+  - `<html lang>` present and matching the content language (Bing hint, WCAG 3.1.1).
+  - Viewport meta present; `user-scalable=no` or `maximum-scale` below 5 blocks zoom, an accessibility fail as well as a mobile one.
+  - Favicon and `apple-touch-icon` return `200` with real image bytes, not an HTML page.
+  - TLS certificate SAN covers every served or linked host (bare and `www`); expiry date noted in the report.
+  - Security headers listed by name, present or absent, not scored; configuration goes to security-review.
+  - Discovery-file probes (`/llms.txt`, `/llms-full.txt`, `/.well-known/*`): optional, Info; absent is not a defect.
+  - IndexNow: optional submission option for Bing/Yandex; Google does not support it (as of Oct 2026).
+  - Brand SERP and intent: search the brand name, note the official site's position, look-alikes and whether the results match the intended intent.
+  - Per-page on-page table: URL | title | description | H1 | canonical | robots | OG | JSON-LD types.
 
 ## Local SEO essentials
 
@@ -125,12 +135,17 @@ Use `references/report-template.md` for the full scorecard, weights, priority SL
 Health score: NN/100 (heuristic)  | Not measured: <categories>
 Top 5 critical issues | Top 5 quick wins
 ## Scorecard (Technical 22 / Content 23 / On-page 20 / Schema 10 / CWV 10 / AI readiness 10 / Images 5)
-## Findings: KEEP / MODIFY / REMOVE / DO NOT TOUCH  (priority, observation, fix, failure check)
+   Arithmetic: (22x78 + 23x61 + ...) / <sum of measured weights> = NN
+## Findings: KEEP / MODIFY / REMOVE / DO NOT TOUCH  (priority, root cause, observation, fix,
+   "Failed if: <one command or observable condition>" on every finding)
+## On-page table (one row per inspected page) and brand SERP note
 ## Local SEO (if applicable): GBP completeness, NAP matrix, reviews, service pages, citations
 ## AI search: crawler access, snippet controls, citability, measurement plan
 ## Action plan: Week 1 (Critical) / Weeks 2-3 (High) / Month 2 (Medium) / Ongoing
 ## Limitations: what this audit could not assess
 ```
+
+Report rules: score only measured categories; severity follows the root cause (symptoms of one cause are grouped under it, not each rated Critical); every finding has a `Failed if:` line; the printed arithmetic must reproduce the total; no internal tool or skill names and no promotional footers in a client report (write "a security review", not a skill name).
 
 ## Worked examples
 

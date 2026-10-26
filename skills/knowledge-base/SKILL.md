@@ -4,8 +4,9 @@ description: Look up and maintain Brimpa's curated knowledge notes (facts, formu
 license: MIT
 metadata:
   author: Brimpa
-  version: "1.0"
+  version: "1.1"
   updated: "2026-10-26"
+compatibility: Video intake needs ffmpeg and faster-whisper (pip install faster-whisper); a CUDA GPU is used when present. YouTube/Instagram intake needs yt-dlp.
 ---
 
 # Knowledge base
@@ -21,7 +22,7 @@ The `knowledge/` folder at the repo root holds facts, not procedures: formulas, 
 
 **Intake** (user shares material or says "process the inbox")
 1. Collect the raw items: files in `knowledge/inbox/`, links in the message, pasted text.
-2. Extract the content: screenshots and images with the Read tool; YouTube with yt-dlp auto-captions; web pages with WebFetch; Instagram reels with yt-dlp (caption text and frames; speech needs a local transcriber); PDFs page by page.
+2. Extract the content: screenshots and images with the Read tool; web pages with WebFetch; PDFs page by page; YouTube with yt-dlp auto-captions (`yt-dlp --skip-download --write-auto-subs --sub-langs en`; YouTube rate-limits after about 15 caption pulls in a row, so space them). For any local video file (mp4, mov, mkv, webm, downloaded reels and lectures), run `scripts/video_digest.py <file>`: it writes scene-change keyframes plus a timestamped Whisper transcript and `digest.md`; then read the digest, look at the frames, and read the transcript. Hindi, English and Hinglish are detected automatically; Hindi keeps its Devanagari transcript and also gets an English translation (`transcript_en.md`). Use `--model large-v3` for the best Hindi, `medium` (default) for speed, `--max-frames` to control how many frames to read. Instagram reels: `yt-dlp <reel url>` downloads public reels (some need `--cookies-from-browser chrome`), then run the digest; on-screen text in a reel is often clearer from a screenshot.
 3. Classify each item: **procedure** (steps someone follows to produce something) -> extend the matching skill, or propose a new skill if it is a coherent, repeatable job; **knowledge** (facts, formulas, lists, tool pointers, research findings) -> a note; **mixed** -> split; **noise** (ads, personal receipts, unrelated) -> drop and say why.
 4. Write or extend the note using the format in `knowledge/README.md`: frontmatter with title, topic, tags, source, source_type, confidence, date; sections "The point in one line", details, example, caveats, related. Rewrite in plain words; never paste copyrighted paragraphs or account handles; label every number with its source.
 5. Prefer extending an existing note over creating a near-duplicate. One topic per file.

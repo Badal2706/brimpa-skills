@@ -12,6 +12,12 @@ Contents
 8. SFX recipes by event type
 9. Music bed at 120 bpm
 10. Mix settings, ducking and loudness
+11. Cutting to the bar grid
+12. Licensed track: BPM, strongest section, offset
+13. Problem to reveal: muffled bed, filter-opening riser, silence beat, drop
+14. Audio-reactive accents from RMS
+15. SFX posture and restraint
+16. Music licences and credits
 
 All motion values are functions of `t` (see `render-pipeline.md`). The helpers assumed below:
 `seg(t, a, b, ease)` returns eased progress 0..1 through the window `[a, b]`; `lerp(a, b, p)`;
@@ -160,9 +166,9 @@ All recipe values below are starting points; tune by ear against the picture.
 | Glitch burst (where the picture glitches) | 30-80 ms slices of a square wave at 80-200 Hz alternating with bit-crushed noise (sample-and-hold every 8-16 samples), stutter pattern from `hash` | 0.25 |
 | Logo glint sweep | Short sine 4 kHz -> 6 kHz over 200 ms with reverb, synced to the glint crossing the mark | 0.12 |
 
-Rules of thumb: every visible action has a sound and every sound has a visible cause; the same
-event type always uses the same recipe so the ear learns the vocabulary; nothing louder than the
-boom; during the voice, SFX sit under the duck.
+Rules of thumb: every sound has a visible cause; the same event type always uses the same recipe
+so the ear learns the vocabulary; nothing louder than the boom; during the voice, SFX sit under the
+duck. Whether every visible action gets a sound depends on the posture (section 15).
 
 ## 9. Music bed at 120 bpm
 
@@ -180,6 +186,8 @@ with the collapse to the dot. At 120 bpm a beat is 0.5 s and a bar is 2 s.
   first payoff line.
 - Lay the structure on the beat sheet: an 8-bar section per act, a fill (hat roll) into the CTA.
 - Leave room for the voice: no melodic lead; the bass and kick carry it.
+- Cut the picture to this bed's bar grid (section 11) and give the reveal the same muffled-to-open
+  treatment a licensed track gets (section 13): it is what makes the drop feel earned.
 
 ## 10. Mix settings, ducking and loudness
 
@@ -199,5 +207,175 @@ with the collapse to the dot. At 120 bpm a beat is 0.5 s and a bar is 2 s.
   (target reached when integrated is within 0.5 LU of -14 and true peak is at or below -1.5 dBTP).
 - Leave a 0.3 s silent head and a 0.5 s tail so the loop point and the first SFX do not clip the
   platform's fade-in.
+- A licensed bed with no voice: place it at about 0.4 of full scale with effects 3-6 dB under its
+  peaks, then let the two-pass `loudnorm` bring the whole mix to -14 LUFS. Two-pass linear keeps
+  the drop's dynamics instead of compressing them flat.
+- Measure each cut separately; a 30 s cut and an 80 s cut of the same bed do not land at the same
+  integrated loudness.
 
 Exact ffmpeg filtergraphs are in `render-pipeline.md`, section 8.
+
+## 11. Cutting to the bar grid
+
+Let the music set the clock. Scene changes that land on bar lines feel edited; the same changes a third
+of a beat off feel like a slideshow with a song under it.
+
+- Beat = 60 / BPM, bar = 4 beats in 4/4. At 120 BPM a beat is 0.5 s and a bar 2 s.
+- Use the measured BPM, not a rounded one, and anchor the grid at the drop:
+  `barT(k) = DROP + k * BAR`. A 120.19 BPM track has a 1.997 s bar; rounding it to 2 s drifts about
+  0.13 s over 40 bars, which is visible on a late hit. Snap every bar time to the nearest frame.
+- What lands where: scene changes, the reveal and the end mark on bar lines; lines meant to be read
+  (problem lines, payoffs) one per bar, never one per beat, because they are read, not danced to;
+  entrances inside a scene may sit on beats.
+- Half a bar only when reading time needs it (0.5 s + 0.3 s per word); note it in the beat sheet.
+- Snap tolerance: a major hit may move up to about 0.15 s toward a strong cue and a small entrance
+  about 0.1 s toward a beat. Anything more means the story or reading time wins and the music gives
+  way.
+- In code, define scenes by bar index, not seconds, so a tempo change moves the whole film:
+
+```js
+const BPM = 120.19, DROP = 8.0, BAR = 240 / BPM;               // per cut; DROP is the reveal
+const barT = k => Math.round((DROP + k * BAR) * FPS) / FPS;    // frame-snapped bar line
+const SCENES = [ { name: "Hook", t: 0 }, { name: "Problem", t: barT(-2) },
+                 { name: "Reveal", t: barT(0) }, { name: "Proof 1", t: barT(1.5) } /* ... */ ];
+```
+
+## 12. Licensed track: BPM, strongest section, offset
+
+1. **Pick by feel and tempo**, not by the product's subject ("a calm pulse that builds to a bright
+   drop, around 120 BPM"). Start the bed where the track has energy rather than in its quiet intro,
+   and check that what remains after the entry point covers the longest cut.
+2. **BPM and beats:** from the library's metadata; or `npx hyperframes beats` (the
+   `hyperframes-cli` skill) if HyperFrames is installed, which writes the track's beat grid as JSON;
+   or a beat tracker such as aubio or librosa. Tap along once to confirm.
+3. **Loudness curve:** RMS every 0.1 s with ffmpeg (one line per window in `work/track_rms.txt`):
+
+```bash
+ffmpeg -v error -i refs/music/track.mp3 -af "aresample=48000,asetnsamples=n=4800:p=0,astats=metadata=1:reset=1,ametadata=mode=print:key=lavfi.astats.Overall.RMS_level:file=work/track_rms.txt" -f null -
+```
+
+4. **Strongest section:** the bar whose energy jumps most against the two bars before it, tried at
+   all four beat phases (`tools/strong.py`, standard library only):
+
+```python
+#!/usr/bin/env python3
+"""python tools/strong.py work/track_rms.txt BPM FIRST_BEAT_S [UNTIL_S] -> strongest section starts"""
+import re, sys
+txt, bpm, b0 = sys.argv[1], float(sys.argv[2]), float(sys.argv[3])
+until = float(sys.argv[4]) if len(sys.argv) > 4 else 60.0
+raw = open(txt).read().replace("-inf", "-120")
+lin = [10 ** (float(v) / 20) for v in re.findall(r"RMS_level=(-?[\d.]+)", raw)]   # one value per 0.1 s
+beat, bar = 60 / bpm, 240 / bpm
+def energy(a): w = lin[int(a * 10):int((a + bar) * 10)]; return sum(w) / max(1, len(w))
+best = []
+for phase in range(4):                                  # which beat of the bar is the downbeat
+    t, bars = (b0 + phase * beat) % bar, []
+    while t + bar <= min(until, len(lin) / 10): bars.append((t, energy(t))); t += bar
+    for i in range(2, len(bars)):
+        best.append((bars[i][1] / max(1e-6, (bars[i - 1][1] + bars[i - 2][1]) / 2), round(bars[i][0], 2)))
+best.sort(reverse=True)
+for ratio, t in best[:5]: print("strong section at %.2f s (energy x%.2f vs the two bars before)" % (t, ratio))
+```
+
+   This finds where the energy steps up, not where it feels like a drop: listen to the top two
+   candidates and pick by ear. A library that ships cue files (strong beats, reveal candidates)
+   saves this step; read them first.
+5. **Offset:** `track_offset = cue_in_track - drop_in_film`. A 30 s cut with the drop at 8.0 s on a
+   cue at 16.0 s starts the track at 8.0 s; an 80 s cut with the drop at 14.0 s starts it at 2.0 s.
+   A negative offset means choose a later cue or a later drop; never stretch the track.
+
+## 13. Problem to reveal: muffled bed, filter-opening riser, silence beat, drop
+
+The emotional beat of the film is the music opening up as the product arrives. Timeline per cut
+(times in film seconds; values from the parity reference job, tune by ear):
+
+| Span | Muffled copy (low-passed) | Full copy | Effects |
+|---|---|---|---|
+| 0 -> build start | Low-pass 380 Hz twice (steep), gain 0.62 | Silent | Soft tick per problem line |
+| Build: the last 3 beats before the silence (1.5 s at 120 BPM) | Fades linearly to 0 | Rises on a squared curve to 0.85: the filter "opens" | Riser ending exactly where the silence begins |
+| Silence: one beat (0.5 s at 120 BPM) | 0 | 0 | Nothing: the held breath |
+| Drop (the reveal frame) -> last bar | 0 | 1.0 | Impact + a bell or sting on the mark |
+| Last bar | 0 | Fades to 0 on the final bar line | One sting on the end mark |
+
+`tools/music.py` builds one bed per cut with ffmpeg (B0 = build start, S0 = silence start, F0 =
+last bar start, BAR = bar length; all derived from BPM, DROP and the cut length):
+
+```bash
+ffmpeg -y -i refs/music/track.mp3 -filter_complex "
+  [0:a]atrim=start=$OFFSET:duration=$TOTAL,asetpts=PTS-STARTPTS,asplit=2[a][b];
+  [a]lowpass=f=380,lowpass=f=380,volume=eval=frame:volume='if(lt(t,$B0),0.62,if(lt(t,$S0),0.62*(1-(t-$B0)/($S0-$B0)),0))'[m];
+  [b]volume=eval=frame:volume='if(lt(t,$B0),0,if(lt(t,$S0),0.85*pow((t-$B0)/($S0-$B0),2),if(lt(t,$DROP),0,if(lt(t,$F0),1,max(0,1-(t-$F0)/$BAR)))))'[f];
+  [m][f]amix=inputs=2:normalize=0,afade=t=in:st=0:d=0.6[o]" -map "[o]" -ar 48000 work/bed-$CUT.wav
+```
+
+- **Riser:** the synthesized noise riser (section 8), or a reversed bell: take a bell hit, pitch it
+  down about 12% (`asetrate=44100*0.88,aresample=44100`), `areverse`, fade in over 0.9 s, and place
+  it so its end meets the silence.
+- **Synthesized bed:** the same shape in Web Audio. Put a `BiquadFilterNode` (lowpass) on the music
+  bus: `frequency` at 380 Hz until the build, `exponentialRampToValueAtTime(18000, S0)`; bus gain
+  `setValueAtTime(0, S0)` and `setValueAtTime(1, DROP)`. It renders identically in the
+  `OfflineAudioContext`.
+- The beat of silence is the part people skip and the part that makes the drop. Keep it even in
+  the 15 s cut.
+
+## 14. Audio-reactive accents from RMS
+
+One accent element (the soft glow behind the cards) breathes with the music; nothing else reacts.
+
+- Compute RMS every 0.1 s from each cut's **final** bed (after the edit, so the silence beat shows
+  as a dip), normalise to 0-1 and embed it per cut:
+
+```python
+import json, re, sys   # python tools/rms_json.py work/bed-web_rms.txt work/rms-web.json
+v = [10 ** (float(x) / 20) for x in re.findall(r"RMS_level=(-?[\d.]+)", open(sys.argv[1]).read().replace("-inf", "-120"))]
+m = max(v) or 1; json.dump([round(x / m, 3) for x in v], open(sys.argv[2], "w"))
+```
+
+- In `render(t)`: interpolate the array, map it to the glow's opacity over a narrow band (about
+  0.05-0.14 on a light ground, 0.12-0.25 on a dark one), and draw. A precomputed array keeps the
+  frame a pure function of `t`; a live `AnalyserNode` would not.
+
+```js
+function rmsAt(t) { const i = t * 10, a = RMS[Math.floor(i)] ?? 0, b = RMS[Math.floor(i) + 1] ?? a; return lerp(a, b, i % 1); }
+const glowAlpha = t => P.GLOW_LO + P.GLOW_SPAN * rmsAt(t);   // per-theme values in the palette
+```
+
+- No equaliser bars, waveforms or text that pulses: those read as a music video, not a product.
+
+## 15. SFX posture and restraint
+
+Choose the posture in the plan:
+
+| Posture | When | What gets a sound |
+|---|---|---|
+| Full foley | Synthesized bed, cursor-driven demo; playful or technical tone | Every visible action, from the recipes in section 8 |
+| Sparse | A licensed track carries the film; cinematic or app-store tone | Key ticks on typed text (every other key), one soft tick per problem line, one low whoosh per feature change (two takes alternated), one pop on each key moment, riser + impact at the drop, one sting on the end mark |
+
+Restraint, either way:
+
+- Nothing harsh: no hard clicks, sirens or bright hits; low-pass anything that bites.
+- No sound on every card; the music carries the cuts.
+- Effects sit 3-6 dB under the bed's peaks.
+- Never the same sample twice in a row: alternate two takes or vary pitch by a few percent.
+- A key moment gets a sound only where the picture moves.
+
+Sound files, when not synthesized: CC0 packs (Kenney's audio packs are CC0) or the `media-use`
+skill's sound-effect search if HyperFrames is installed; keep each file's licence next to it.
+
+## 16. Music licences and credits
+
+Not legal advice; when the licence is unclear, ask the user for it before using the track.
+
+- Fine for a launch film: music the user owns or licensed for commercial video, the synthesized
+  bed, CC0, and CC BY.
+- Not fine: CC BY-NC (a launch film is commercial use) and CC BY-ND. Under the CC 4.0 licences,
+  music synced in timed relation with a moving image always counts as adapted material, which ND
+  does not allow to be shared.
+- CC BY 4.0 asks for a credit "in any reasonable manner based on the medium": title, author,
+  source, licence with a link, and a note that it was modified (the muffled, cut and faded bed is a
+  modification). For a film posted with a caption, put the credit in the caption and on the web
+  page beside an embedded video, not burnt into the film: the end card keeps its one CTA and a
+  re-cut needs no re-render. Credit on screen only where no caption travels with the film (an
+  event screen, a TV loop).
+- Keep `refs/music/licence.txt` (where the track came from, the licence text or link, the date) and
+  put the credit line in `out/share-copy.txt` and the README.

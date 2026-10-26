@@ -7,7 +7,7 @@ How a page is composed once the direction and tokens exist: which sections a job
 1. The argument comes first
 2. Landing-page anatomy by job
 3. Hero patterns (and the ones to refuse)
-4. Section blueprints with variants
+4. Section blueprints with variants, and the crafted artefact
 5. Social proof: never fake
 6. Pricing and comparison
 7. FAQ
@@ -52,7 +52,7 @@ Each job lists the sections that usually carry a claim, in a defensible order. V
 - The people: real portraits, same crop, name and role, credentials stated as facts.
 - Proof that exists: real reviews quoted with first name and initial and where they were posted, or the aggregate from a platform you can link; otherwise none.
 - Practicalities as a designed block: address, map (a real map or embed), hours computed as "open now / opens at", parking, languages, insurance.
-- Close: the booking action again; footer with NAP identical to the listing (see the seo-geo-audit skill for schema and NAP consistency).
+- Close: the booking action again; footer with NAP identical to the listing, and the same facts in LocalBusiness-subtype JSON-LD (see the seo-geo-audit skill for the full schema rules and NAP consistency).
 
 **Portfolio (job: get hired or be remembered)**
 - Hero: the work itself leads from the first viewport (Experience mode); the name and one line saying what you do.
@@ -89,6 +89,8 @@ Patterns from the landing catalog that remain useful as variants: minimal single
 ## 3. Hero patterns (and the ones to refuse)
 
 What the first screen must do (Persuade mode): make the offer intelligible and desirable, expose one clear action in the category's working form, and show something only this product can prove. A stranger must be able to say in five seconds what this is and what to do. The `h1` says what it is (the name with what it does; the product with what it is for; the event with its date and place), two lines maximum; the supporting sentence sits 32-48px below it, shown with it, never docked at the foot or held back by animation; one primary action as a real button; everything readable on the first paint.
+
+The primary action goes straight to the action when a direct one exists: a `https://wa.me/<number>?text=<message>` link (number in international format without `+` or spaces, the message URL-encoded and naming the business and the request, e.g. "Hello, I would like an appointment at <clinic name>"), a `tel:` link, or the real booking URL. A label that names a channel must open that channel: "Book on WhatsApp" opens WhatsApp and "Call the clinic" dials; neither scrolls to a form. The richer form further down is the second path (a text link beside the button such as "Or choose a time"), for people who want to pick a slot or leave details. A button that scrolls to a form is the primary only when the form is the only path, and then its label names the form ("Choose a time"), not a channel.
 
 The hero is the halo moment: visitors judge the page in a glance before reading a word and carry that judgement to everything below, so the first screen gets one picture, one headline, one action and nothing competing. Within about three seconds it must deliver a header that promises what the visitor wants, a sub-line that makes the value concrete, and one button for the page's single job; no "Welcome" header, no "Learn more". One or two primary actions per page, repeated rather than varied: a homepage with five different calls to action freezes visitors.
 
@@ -127,6 +129,32 @@ No two neighbouring sections share a layout; a shape used three times is the tem
 
 Carry the idea into every section, pricing, FAQ and footer included: the commonest failure even among good sites is a distinctive first screen followed by stock blocks. Break the system once on purpose (one centred line, one inverted section, one picture at a different scale) so the rule is visible.
 
+### The crafted artefact
+
+Every page carries at least one bespoke object derived from the subject's real-world artefacts, in addition to the signature motion move: the thing a visitor would hold in their hand at this business, rebuilt in HTML and CSS with the real content and set with care (a printed-menu treatment list, a receipt-style booking slip, the phone number as huge display type, a ticket for the event). It is what visitors describe an hour later, so it is where the page spends its boldness; everything around it stays quiet. One per page is the norm, two at most.
+
+- Build it from real content: the full treatment list with prices on the fee card, the real hours on the appointment chit, the visitor's own choices on the booking slip. Sample values on it carry the visible sample tag (§11) like everywhere else.
+- Its own marks are allowed because they belong to the object, not to the page: a ticket's perforation and stub, a menu's dot leaders, a receipt's ruled total, a letterhead's rule, a stamp. Never fake the material: no paper-grain textures, `feTurbulence`, torn-edge clip-paths, page curl or shadows at rest.
+- Semantics first: a menu or fee card is a list or a `<table>`, a ticket or chit is a `<dl>`, the phone number set as display type is a real `tel:` link; real text at readable sizes, never an image of text; it recomposes on a phone (a receipt narrows naturally, a two-column menu becomes one).
+- A receipt-style booking slip summarises what the visitor chose before sending and says what happens next; it never says "Booked" or "Confirmed" unless a real system confirmed it.
+
+Artefact ideas by industry (take them from the subject's own paper and signage first, this list second):
+
+| Industry | Artefacts |
+|---|---|
+| Dentist, clinic, physio | appointment chit (doctor, chair, date, what to bring); prescription pad for aftercare notes; treatment fee card; the phone number as display type, as on the clinic's sign |
+| Restaurant, cafe | printed menu card with dot leaders and real prices; the bill as the price summary; the kitchen order ticket; the specials board set in type |
+| Bakery, maker, farm shop | jar or bag label as the hero; the order slip; the batch or harvest tag |
+| Hotel, guesthouse | room key tag; the welcome note on letterhead; the luggage tag carrying the directions |
+| Salon, barber, spa | appointment card; the price board; the stamp card (only if the client runs one) |
+| Event, conference, festival | the ticket or wristband with real date, gate and time; the printed programme |
+| Law firm, accountant, consultant | letterhead; the fee schedule; the first page of the engagement letter |
+| Gym, studio, school | the class timetable board; the membership card; the term calendar |
+| Shop, D2C | the swing tag with size and care; the packing slip; the shipping label carrying the real delivery promise |
+| Real estate, architecture | the floor plan with real dimensions; the listing sheet; the drawing's title block |
+| SaaS, dev tool | the invoice or receipt the product produces; the real CLI output; the changelog entry |
+| Photographer, portfolio | the contact sheet; the print's edition label |
+
 ## 5. Social proof: never fake
 
 Never invent customers, quotes from named people, press logos, user counts, ratings, sale notifications or benchmarks. Invented proof is dishonest, can breach consumer-protection law, and is a recognised tell.
@@ -138,7 +166,7 @@ Never invent customers, quotes from named people, press logos, user counts, rati
 - Numbers: real, with the unit next to the number and the period it covers ("1,240 appointments in 2025"), counted up once on first view, formatted with `toLocaleString`.
 - When the brief supplies no proof, use what is true by construction: show the thing itself, large; state how it works; use facts from the brief (price, place, year, materials, what is included).
 - If a testimonial or logo section is explicitly requested and nothing real exists, build it with plainly fictional sample content, no real company or person names, and say so in the report so it is replaced before launch.
-- Sample details are different from proof and are expected: six rooms each with a name, a bed and a rate; every dish with a price; every speaker with a talk title. List every sample detail in the report for the client to confirm.
+- Sample details are different from proof and are expected: six rooms each with a name, a bed and a rate; every dish with a price; every speaker with a talk title. Tag every sample detail visibly on the page (§11) and list it in the report for the client to confirm.
 
 ## 6. Pricing and comparison
 
@@ -197,6 +225,7 @@ General: write the whole page as plain text before markup. Plain verbs, sentence
 - **Body:** short paragraphs of plain statements; no marketing verbs (unlock, unleash, supercharge, elevate, empower, streamline, seamless, effortless, robust, cutting-edge, next-generation, world-class, all-in-one, blazing fast); no "theater" framing; em dashes rarely (eight or more on a page reads as a model); no explainer captions that narrate the design.
 - **Steps:** written as outcomes ("Your page is live"), not tasks; no "Step 1 / Phase 02" labels duplicating numbers; three is the sweet spot, five the maximum.
 - **Numbers:** unit beside the number (%, km, stars), period stated, thousands separators, locale-aware dates.
+- **Sample details, visibly marked:** every invented price, duration, response time ("we reply within an hour"), walk-in policy, payment method or operational promise ("same-day appointments", "parking at the door") carries a visible marker on the rendered page: a small "[sample: confirm]" tag after the value, or one highlighted placeholder style (for example `<mark class="sample">` with a dashed underline in the accent ink) used for every such value. HTML comments alone do not count: the client signs off from the rendered page, not the source, and an unmarked guess ships as a promise. Keep the tag in sentence case at the small size (13px or more, 4.5:1), on one class so it comes off in one pass once confirmed, and list every tagged value in the report.
 - **Errors and empty states on forms:** say what failed and how to recover, near the field, without blame; success says what happens next.
 - **Furniture text to delete:** local time and coordinates strips, "Est. 2024", version stamps, "Scroll to explore", status lines with a dot ("Available for work"), strings joined by middle dots or slashes, "WORD — fragment" labels, "→" appended to every link.
 - **Micro-typography:** curly quotes, real ellipsis, en dash for ranges, non-breaking space before a unit and before the last short word of a headline that would orphan.
@@ -205,6 +234,8 @@ General: write the whole page as plain text before markup. Plain verbs, sentence
 
 - Fields: persistent labels (placeholders are examples), correct `type` and `inputmode`, `autocomplete`, required marked consistently, inline validation on blur, specific errors referenced by `aria-describedby`, input preserved on error, the button disabled while submitting and showing its state.
 - Ask only for what the action needs; a booking form for a clinic is name, phone, preferred time; everything else is friction.
+- On a phone the booking form keeps to those minimum fields so it reads as one short screen; optional fields (email, reason for visit, notes) sit collapsed behind a `<details>` toggle such as "Add a note"; a choice of three to seven options (day, time band, doctor, treatment) is a row of chips (radio inputs in a `<fieldset>` with a `<legend>`, styled as 44px targets, keyboard-operable) rather than a dropdown; more than seven, or a date, uses the native control.
+- When a direct channel exists (WhatsApp, phone, a booking URL), the form is the second path and the hero's primary button goes to the channel (§3).
 - When there is no backend yet: the primary button goes to the real destination when the brief names one; otherwise `mailto:` with subject and body prefilled from the visitor's choices, or `tel:` / WhatsApp `wa.me` links for a local business; for a shop, point at `#checkout` and say in the report that it must be wired before launch. Never fake a payment form or a success state that did not happen.
 - Tie any success animation to the real request's promise, never a fixed delay; on error, restore the label and say what to do.
 - The form or call button is where the visit ends and what the visitor remembers (peak-end): build and test it first, on a phone, and make the confirmation say what happens next and when.

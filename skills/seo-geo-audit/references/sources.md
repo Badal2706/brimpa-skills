@@ -26,7 +26,12 @@ This skill is MIT licensed. It merges and adapts material from the sources below
 | Google Business Profile help and contribution policy (`support.google.com/contributionpolicy`) | review policy; Q&A removal and 2026 policy changes were reported by secondary sources and are flagged as such in the text |
 | schema.org | type and property vocabulary; `Attorney` deprecation |
 | RFC 9309 (Robots Exclusion Protocol) | group selection rule |
-| WCAG 2.2 | 24x24 px target size |
+| WCAG 2.2 | 24x24 px target size; 1.4.4 Resize Text (zoom-blocking viewport); 3.1.1 Language of Page (`<html lang>`) |
+| Google: Define a favicon to show in search results | favicon size (multiple of 48x48 px), crawlability |
+| Google: Managing multi-regional and multilingual sites | Google ignores code-level language markup such as `lang` |
+| Lighthouse `meta-viewport` audit | `user-scalable=no` / `maximum-scale` below 5 flagged |
+| CA/B Forum ballot SC-081 (2025) | 200-day maximum public TLS certificate lifetime from 15 Mar 2026 |
+| Chrome UX Report API docs | `records:queryRecord` field-data check |
 
 ## Open-source skills and repositories
 
@@ -34,6 +39,7 @@ This skill is MIT licensed. It merges and adapts material from the sources below
 |---|---|---|
 | AgriciDaniel/claude-seo (v2.4.2) | MIT (FLOW prompts CC BY 4.0, not reused) | adapted: category checklists, health-score weights, priority levels, "score only what was measured", active/retired structured-data table, LocalBusiness subtype tables, 25-field GBP checklist, NAP/citation tiers, review rules, E-E-A-T weighting convention, coverage floors, cluster and drift rules, programmatic and hreflang gates, crawler taxonomy, llms.txt evidence posture, backlink data-sufficiency gate |
 | Varnan-Tech/opendirectory (position-me, geo-gap-fixer, llms-txt-generator, schema-markup-generator) | MIT | adapted: LIFT / Hick's law / PAS / fluff-test teardown lens and separate scorecard; share-of-voice rubric (mention rate, average rank, win rate, citation share) and citation gap list; llms.txt format and placement table; `MISSING_field` convention and framework injection points. Its FAQPage/HowTo/"llms.txt is critical" claims were dropped as contradicted by Google documentation |
+| Blind head-to-head of this skill against AgriciDaniel/claude-seo on the same site (Oct 2026) | n/a (internal evaluation) | v1.1: mandatory `Failed if:` check on every finding, check bank, surface checks (html lang, viewport zoom, favicon, TLS SAN, discovery-file probes, brand SERP, per-page on-page table); wording original |
 | Badal Patel, local-seo-audit v1 (this collection's predecessor) | MIT | kept: audit-first KEEP/MODIFY/REMOVE/DO NOT TOUCH order of work, verify-against-primary-sources rule, anti-patterns, YMYL rules, launch checklist; all dated facts updated |
 
 ## Other material
