@@ -59,7 +59,7 @@ def extract_frames(video, out, scene, every, max_frames, duration):
         p.rename(fdir / name); final.append((name, t))
     return final
 
-def transcribe(video, out, model_name, lang, translate):
+def transcribe(video, out, model_name, lang, translate, auto_translate=True):
     from faster_whisper import WhisperModel
     try:
         import ctranslate2; cuda = ctranslate2.get_cuda_device_count() > 0
@@ -68,12 +68,13 @@ def transcribe(video, out, model_name, lang, translate):
     device, ctype = ("cuda", "int8_float16") if cuda else ("cpu", "int8")
     model = WhisperModel(model_name, device=device, compute_type=ctype)
     language = None if lang == "auto" else lang
-    segs, info = model.transcribe(str(video), language=language, task="transcribe", vad_filter=True, beam_size=5)
+    segs, info = model.transcribe(str(video), language=language, task="transcribe", vad_filter=True, beam_size=5,
+                                   condition_on_previous_text=False, temperature=[0.0, 0.2, 0.4])
     lines = [f"- [{ts(s.start)}] {s.text.strip()}" for s in segs]
     detected = info.language
     (out / "transcript.md").write_text(f"# Transcript ({detected}, p={info.language_probability:.2f}, model {model_name}, {device})\n\n" + "\n".join(lines) + "\n", encoding="utf-8")
     en_path = None
-    if translate or (detected != "en" and lines):
+    if translate or (auto_translate and detected != "en" and lines):
         segs2, _ = model.transcribe(str(video), language=detected, task="translate", vad_filter=True, beam_size=5)
         en = [f"- [{ts(s.start)}] {s.text.strip()}" for s in segs2]
         en_path = out / "transcript_en.md"
@@ -86,6 +87,7 @@ def main():
     ap.add_argument("--lang", default="auto"); ap.add_argument("--translate", action="store_true")
     ap.add_argument("--scene", type=float, default=0.3); ap.add_argument("--every", type=float, default=20.0)
     ap.add_argument("--max-frames", type=int, default=60); ap.add_argument("--no-audio", action="store_true")
+    ap.add_argument("--no-translate", action="store_true", help="skip the automatic English translation of non-English speech")
     a = ap.parse_args()
     video = pathlib.Path(a.video).resolve()
     out = pathlib.Path(a.out).resolve() if a.out else video.with_name(video.stem + "_digest")
@@ -95,7 +97,7 @@ def main():
     frames = extract_frames(video, out, a.scene, a.every, a.max_frames, dur)
     tr = None
     if has_audio and not a.no_audio:
-        tr = transcribe(video, out, a.model, a.lang, a.translate)
+        tr = transcribe(video, out, a.model, a.lang, a.translate, auto_translate=not a.no_translate)
     md = [f"# Video digest: {video.name}", "",
           f"- Duration: {ts(dur)} | Resolution: {w}x{h} | Audio: {'yes' if has_audio else 'no'}",
           f"- Frames: {len(frames)} (scene threshold {a.scene}, floor every {a.every:.0f}s) in `frames/`"]

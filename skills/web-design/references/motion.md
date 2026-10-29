@@ -1,6 +1,6 @@
 # Motion
 
-Motion is the last pass, never a way to rescue a weak layout: the static page must already be finished. Numbers below come from the gallery motion study (99 Awwwards Sites of the Day, July to October 2026, via taste-skill), impeccable's animate and craft-floor rules, the ui-ux-pro-max motion table, and the "12 landing page animations" guide (MadeToScale, 2026) for the GSAP recipes.
+Motion is the last pass, never a way to rescue a weak layout: the static page must already be finished. Numbers below come from the gallery motion study (99 Awwwards Sites of the Day, July to October 2026, via taste-skill), impeccable's animate and craft-floor rules, the ui-ux-pro-max motion table, and the "12 landing page animations" guide (MadeToScale, 2026) for the GSAP recipes. The video recipes in §12 are adapted from the MIT-licensed parts of Motionsites-AI/claude-skill and rewritten to the house rules; every browser behaviour in them was checked against MDN, WebKit or the hls.js docs in Oct 2026 (the check is noted beside each claim).
 
 ## Contents
 
@@ -15,6 +15,7 @@ Motion is the last pass, never a way to rescue a weak layout: the static page mu
 9. Signature moves by direction
 10. What gives generated motion away
 11. Motion pre-flight
+12. Background and hero video (when to use it, the base recipe, HLS, crossfade loop, framing, scroll scrub, boomerang, scrims, budgets)
 
 When the build uses GSAP or needs ready-made transitions, install the upstreams listed in the repo's UPSTREAM.md alongside this skill: `gsap-skills` (GreenSock's official rules for core, timelines, ScrollTrigger and plugins) and `transitions.dev` (crafted UI transitions, page-to-page fades, error shakes, with timing and easing). This file decides *what* moves and how much; those decide *how* to write it correctly. The Brimpa site used both this way (Oct 2026).
 
@@ -185,3 +186,177 @@ The same fade-up on every block; a dozen staggered entrances in the hero; hover 
 - Every control has press, hover and focus feedback; carousels have controls and stop on focus.
 - Tested on a mid-range Android and with CPU throttling; no dropped frames on the signature move.
 - Nothing animated is fake: counters, pings, reviews, progress and success states all read real data or real requests.
+- Any background or hero video passes §12: poster composed on the first frame, muted and inline, a pause control, off-screen and hidden-tab pause, no download under reduced motion or save-data, inside the size budget.
+
+## 12. Background and hero video
+
+A video counts as the page's one moving picture (§1). It never replaces a decided first screen: the hero must already be composed on its poster, with the headline, sentence and action readable, before a single video byte arrives.
+
+### When video is the wrong choice
+
+Use a still (or nothing) when any of these is true:
+- There is no real footage of the subject. A stock loop of "the vibe" is decoration and fails the cover-the-name test; a real photograph of the client's own place beats it.
+- The visitor arrives on a phone to act fast (a clinic from Maps, a takeaway menu): the page's job is the action, and the bytes compete with it.
+- The text would sit over the busy part of the frame for most of the loop, or the footage only works under a heavy dark overlay. Choose calmer footage or a picture.
+- The page already has a loud signature move, a marquee or another loop on the same screen (one moving thing per screen).
+- The surface is an app screen, docs or anything people read or operate (ui-ux skill: feedback and continuity only).
+- The footage carries information (speech, a demo to follow). Then it is content: controls and captions, no autoplay.
+
+### Base recipe: muted inline autoplay with poster and fallbacks
+
+- `muted` and `playsinline` on the element, and `video.muted = true` in script as well. MDN's autoplay guide (checked Oct 2026): media may autoplay when it is muted or has no audio track; `playsinline` is required for autoplay in Safari. WebKit's iOS policy: muted autoplay starts only while the element is visible in the viewport and pauses when it leaves; without `playsinline` iPhone plays fullscreen.
+- Strip the audio track at encode time (`-an`): a silent file is the safest autoplay case and smaller.
+- `play()` returns a promise that rejects (for example `NotAllowedError`) when autoplay is refused (MDN). Catch it and leave the poster; never show an error or a broken frame.
+- The poster is a separate `<img>` with `fetchpriority="high"` under the video, exported from the clip's first frame so the hand-over is invisible. web.dev counts a `<video>`'s poster load or first frame, whichever is earlier, as its LCP time (checked Oct 2026); a separate poster image keeps LCP on an image you control. Give the section a ground colour sampled from the poster.
+- Reduced motion and low data never download the video: the sources sit in `data-src` and script assigns them only when allowed. Under `prefers-reduced-motion: reduce` the poster is the finished state. For low data read `navigator.connection.saveData` where it exists (Chromium only, not Baseline per MDN, Oct 2026). Do not rely on `prefers-reduced-data`: MDN marks it experimental and unsupported by any browser (Oct 2026).
+- A visible pause control: WCAG 2.2.2 (Pause, Stop, Hide) requires one for moving content that starts automatically and lasts over five seconds. A user pause sticks; scrolling back does not restart it.
+- Pause off-screen (IntersectionObserver) and when the tab is hidden (`visibilitychange`).
+- Settle-in: the video fades in over its own poster (700 ms, `--ease-out`) and settles from `scale(1.04)` inside the 1.2 s load sequence (§7). Never fade up from black, never hold the reveal past the load sequence.
+- Without JavaScript the page shows the poster and works.
+
+```html
+<section class="vhero">
+  <img class="vhero__still" src="hero-poster.avif" alt="" width="1920" height="1080" fetchpriority="high">
+  <video class="vhero__video" muted loop playsinline preload="none" aria-hidden="true">
+    <source data-src="hero-av1.webm" type='video/webm; codecs="av01.0.08M.08"'>
+    <source data-src="hero-hevc.mp4" type='video/mp4; codecs="hvc1.1.6.L120.90"'>
+    <source data-src="hero-h264.mp4" type="video/mp4">
+  </video>
+  <button class="vhero__pause" type="button" aria-pressed="false" hidden>Pause background video</button>
+  <div class="vhero__copy">headline, sentence, action</div>
+</section>
+```
+```css
+.vhero { position: relative; min-height: 100svh; overflow: clip; background: var(--poster-ground); isolation: isolate; }
+.vhero__still, .vhero__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: var(--focus, 50% 50%); z-index: -1; }
+.vhero__video { opacity: 0; }
+.vhero__video.is-playing { opacity: 1; }
+@media (prefers-reduced-motion: no-preference) {
+  .vhero__video { transform: scale(1.04); transition: opacity 700ms var(--ease-out), transform 1200ms var(--ease-soft); }
+  .vhero__video.is-playing { transform: none; }
+}
+```
+```js
+function mountHeroVideo(root) {
+  const v = root.querySelector('video'), btn = root.querySelector('.vhero__pause');
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches || navigator.connection?.saveData === true;
+  if (still) return;                                   // the poster is the finished state
+  root.querySelectorAll('source[data-src]').forEach((s) => { s.src = s.dataset.src; });
+  v.muted = true; v.load();
+  let inView = false, userPaused = false;
+  const play = () => { if (inView && !userPaused && !document.hidden) v.play().catch(() => {}); };
+  v.addEventListener('playing', () => { v.classList.add('is-playing'); btn.hidden = false; }, { once: true });
+  new IntersectionObserver(([e]) => { inView = e.isIntersecting; inView ? play() : v.pause(); }).observe(v);
+  document.addEventListener('visibilitychange', () => (document.hidden ? v.pause() : play()));
+  btn.addEventListener('click', () => {
+    userPaused = !userPaused; userPaused ? v.pause() : play();
+    btn.setAttribute('aria-pressed', String(userPaused));
+    btn.textContent = userPaused ? 'Play background video' : 'Pause background video';
+  });
+}
+document.querySelectorAll('.vhero').forEach(mountHeroVideo);
+```
+
+The browser plays the first `<source>` it can and moves to the next when one fails (MDN `<video>`, Oct 2026), so order sources best codec first. Write the `codecs` string that matches the actual encode and confirm each with `video.canPlayType()` in the target browsers; the strings above are examples for 1080p AV1 Main and HEVC Main.
+
+### HLS streams (`.m3u8`)
+
+A 6-12 s loop is one MP4; HLS earns its cost for long footage, many renditions, or a host that only serves `.m3u8`. Support as checked in Oct 2026:
+- Safari on macOS and iOS plays HLS natively through `video.src`.
+- Desktop Chromium added built-in HLS playback around Chrome 141-142 (late 2025, per the Chromium issue tracker and press reports; no official release note found). The hls.js README warns that Chrome 147 reports support through `canPlayType('application/vnd.apple.mpegurl')` yet may fail on some assets, and recommends hls.js (Media Source Extensions) first, with native first only where `ManagedMediaSource` exists (modern Safari). So a bare `canPlayType` check, the common recipe, is no longer enough.
+- Firefox needs hls.js.
+
+Order: native where `ManagedMediaSource` is present, else hls.js where `Hls.isSupported()`, else native if `canPlayType` answers (older iOS without MSE), else the poster stays. Load hls.js only on the path that needs it.
+
+```js
+const loadScript = (src) => new Promise((ok, fail) => {
+  const s = document.createElement('script'); s.src = src; s.onload = ok; s.onerror = fail; document.head.append(s);
+});
+async function attachStream(video, url) {
+  const native = video.canPlayType('application/vnd.apple.mpegurl') !== '';
+  if (native && 'ManagedMediaSource' in window) { video.src = url; return null; }
+  try { await loadScript('https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js'); } catch {}  // pin an exact 1.x in production
+  if (window.Hls?.isSupported()) {
+    const hls = new Hls({ capLevelToPlayerSize: true });  // only renditions that fit the element (default false)
+    hls.loadSource(url); hls.attachMedia(video);
+    return hls;                                           // hls.destroy() on unmount; stopLoad()/startLoad() off and on screen
+  }
+  if (native) video.src = url;
+  return null;
+}
+```
+
+Everything else from the base recipe applies: off-screen and hidden-tab pause, the settle-in on the first `playing` event, and reduced motion or save-data keep the poster and never attach the stream. In a component framework, destroy the instance in the effect cleanup.
+
+### Seamless loop via crossfade
+
+A native `loop` shows a hard cut when the last frame differs from the first. Fix it in the file:
+
+```bash
+# clip length D=8 s, fade F=1 s: body = 1..8 s, head = 0..1 s, xfade offset = D - 2F; output is D - F seconds
+ffmpeg -i in.mp4 -an -filter_complex "[0:v]split[a][b];[a]trim=1:8,setpts=PTS-STARTPTS[body];[b]trim=0:1,setpts=PTS-STARTPTS[head];[body][head]xfade=transition=fade:duration=1:offset=6[v]" -map "[v]" -c:v libx264 -crf 24 -pix_fmt yuv420p -movflags +faststart loop.mp4
+```
+The output starts at the source's 1 s frame and its last second dissolves into the source's first second, which ends on that same 1 s frame, so the loop point matches. Then use native `loop`.
+
+Runtime crossfade only when the file cannot be re-encoded: two stacked `<video>` elements with the same source; when the playing one has F seconds left, start the other from 0 and fade it in over F (opacity only), then swap roles. It costs a second decoder and double memory, so keep it off phones. Never dip to black between loops.
+
+### Framing per breakpoint
+
+- Focal point by `object-position` from a custom property changed per breakpoint, so the subject lands away from the copy: `--focus: 50% 50%` on phones, `--focus: 70% 50%` from 1024px with the copy on the left. Check at 390, 768 and 1440 on frames from the start, middle and end of the clip.
+- Bleed: `scale(1.02-1.05)` hides encoder edge lines and one-pixel letterbox slivers.
+- On phones, when the text would sit over the subject, put the video in-flow below the copy in a 1:1 or 4:5 frame instead of behind the text.
+- A portrait encode beats cropping a landscape one: choose the source with `matchMedia('(max-width: 768px)')` once at mount (never swap on resize) and give it its own poster.
+
+### Edge-blend scrim for text over video
+
+The one gradient the house rules allow: a neutral scrim from the section's exact ground colour (or neutral black) to transparent, under text only. Never chromatic, never a glow.
+- Start late and ease it with several stops; a two-stop gradient bands: `linear-gradient(to top, var(--ground) 0%, color-mix(in oklch, var(--ground) 85%, transparent) 10%, color-mix(in oklch, var(--ground) 55%, transparent) 22%, color-mix(in oklch, var(--ground) 20%, transparent) 34%, transparent 46%)`.
+- The exact ground colour of the next section, so the hand-off has no seam.
+- On portrait screens a directional scrim from the copy's side usually beats a full-frame dim.
+- Contrast is checked over the brightest frame in the text zone, not the poster alone: grab frames at 0, 50 and 100% of the clip.
+- No scrim is better when the footage has a calm zone; never rescue busy footage with a heavy overlay.
+
+### Scroll-scrubbed video via a canvas frame cache
+
+The scroll position is the timeline: a fixed clip advances only as the visitor scrolls. It is the page's signature move and its one moving picture, so nothing else moves near it; it suits 3D / Immersive Showcase and Dark Cinematic with two or three sparse screens of text.
+
+- Layers: a poster `<img>`, under a paused `<video>` (fallback), under a `<canvas>` drawing pre-extracted frames.
+- Frame count `clamp(round(duration x 12), 24, 90)`; frames at most 960px wide (640px on phones); canvas at `min(devicePixelRatio, 2)`; draw with cover maths.
+- Start extracting only after the visible video reports `loadeddata` plus about 300 ms, so the first paint is not starved; extract by seeking a hidden copy and drawing after each `seeked`.
+- Map progress linearly to the section's scroll range; smoothing, if any, lerp 0.1-0.14 and off for touch (§2). Until the cache is ready, seek the video directly, only when not already seeking and the change is over about 0.04 s.
+- Encode the fallback with short keyframe intervals so seeks land quickly (`-g 6`, or all-intra `-g 1` for a larger file).
+- Drawing a cross-origin video into a canvas works but taints it, which only blocks reading pixels back (`getImageData`, `toDataURL`, `toBlob`; MDN, Oct 2026). Do not add `crossorigin` unless the host sends CORS headers, or the video fails to load.
+- Reduced motion: the poster and the text, no scrub (§6, the finished composition).
+
+The cost, stated in the report: each cached frame is width x height x 4 bytes, so 90 frames at 960x540 hold about 187 MB and 90 at 640x360 about 83 MB; extraction is seconds of decode work after load; each transformation needs about 80vh of scroll runway. On phones prefer a held picture with passing captions (§9) or a pre-extracted image sequence served as files.
+
+### Boomerang loop (pre-rendered)
+
+For a clip that does not loop (a push-in, a flower opening), play it forward then backward, rendered into the file and looped natively:
+
+```bash
+ffmpeg -i in.mp4 -an -filter_complex "[0:v]split[a][b];[b]reverse[r];[a][r]concat=n=2:v=1:a=0[v]" -map "[v]" -c:v libx264 -crf 22 -pix_fmt yuv420p -movflags +faststart boomerang.mp4
+```
+The `reverse` filter buffers the whole clip in memory, so trim the source to 3-5 s first; the output doubles in length and size. Capturing frames at runtime (with `requestVideoFrameCallback`, Baseline since Oct 2024 per MDN, and a `requestAnimationFrame` fallback) costs about 2 MB per 960x540 frame and is a last resort.
+
+### Budgets and formats
+
+Durations and sizes adapted from the Motionsites guide; codec support checked against MDN's web video codec guide (Oct 2026).
+- Hero loop 6-12 s, no audio track, 24-30 fps; 1080p for desktop at about 5 MB (8 MB ceiling); a 720p (or portrait) encode for phones. Anything over 25 MB or a minute is flagged in the report (`references/preflight.md` §8).
+- `-movflags +faststart` on every MP4 so playback starts before the file finishes downloading.
+- Codec ladder, best first:
+  1. AV1 in WebM or MP4: smallest; Chrome, Edge and Firefox decode it; Safari only on devices with a hardware decoder (M3 Macs and later, iPhone 15 Pro, iPhone 16 and later).
+  2. HEVC in MP4 tagged `hvc1` (`-tag:v hvc1`; Apple's HLS authoring guidance prefers `hvc1` over `hev1`): Safari decodes it; Chrome 107+ and Firefox depend on platform hardware or OS support.
+  3. H.264 in MP4: the universal fallback every major browser plays (Firefox through the OS codecs).
+- WebM for AV1 or VP9 where an open container is wanted; MP4 for HEVC and H.264. Never ship only AV1 or only HEVC.
+
+```bash
+ffmpeg -i in.mp4 -an -vf "scale=1920:-2,fps=24" -c:v libsvtav1 -crf 35 -preset 6 hero-av1.webm
+ffmpeg -i in.mp4 -an -vf "scale=1920:-2,fps=24" -c:v libx265 -crf 28 -tag:v hvc1 -pix_fmt yuv420p -movflags +faststart hero-hevc.mp4
+ffmpeg -i in.mp4 -an -vf "scale=1920:-2,fps=24" -c:v libx264 -crf 24 -preset slow -pix_fmt yuv420p -movflags +faststart hero-h264.mp4
+ffmpeg -i in.mp4 -an -vf "scale=1280:-2,fps=24" -c:v libx264 -crf 26 -preset slow -pix_fmt yuv420p -movflags +faststart hero-720.mp4
+ffmpeg -i hero-h264.mp4 -frames:v 1 hero-poster.png   # then convert to AVIF or WebP for the poster
+```
+Tune CRF until the file meets the budget; judge the result by eye at the hero's real size.
+
+Not adopted from the source (house rules): a delayed video reveal after the type intro (breaks the 1.2 s load sequence), fade-to-black loops, glass chrome or grain over footage, progressive backdrop blur over full-screen video, cursor-scrubbed video, and a bobbing foreground frame over a scene switcher (an infinite loop that means nothing).

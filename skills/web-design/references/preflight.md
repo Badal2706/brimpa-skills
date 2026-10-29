@@ -16,13 +16,17 @@ Run this on the built page before you call it done. It is hard and honest: every
 10. Links, forms and states
 11. Self-lint list (61 detector rules)
 12. Report template
+13. First-paint check and QA probes
+14. Optional scored review (a layer on top, never a replacement)
 
 ## 1. How to run it
 
 1. Settle or disable entrance motion, then capture full-page screenshots from the top at 1440, 768 and 390 (plus the user's actual viewport). Open every capture and confirm it shows what its name claims.
-2. Batch the checks: fix everything one look shows before looking again. Two rounds is the ceiling for a build; a third means the plan was wrong.
-3. Review in a fresh context where possible (a second pass without the build thread's optimism); judge only the pictures: if a problem is visible in a screenshot it is real, whatever the code says.
-4. Report at the scope you checked. Never dress a fix-list score as whole-page approval, and never claim a check you did not run.
+2. Capture the first-paint frame at about 0.35 s and run the QA probes (§13) at 1440 and 390; any probe failure is a blocking fail before the visual review starts.
+3. Batch the checks: fix everything one look shows before looking again. Two rounds is the ceiling for a build; a third means the plan was wrong.
+4. Review in a fresh context where possible (a second pass without the build thread's optimism); judge only the pictures: if a problem is visible in a screenshot it is real, whatever the code says.
+5. Optionally, once everything above passes, run the scored review (§14) for a finer read of quality.
+6. Report at the scope you checked. Never dress a fix-list score as whole-page approval, and never claim a check you did not run.
 
 ## 2. Craft floor (numbers)
 
@@ -159,8 +163,84 @@ Pre-flight:
   Images: <count>, credits listed below; stand-ins to replace: <list>; photo slots: <list with the shot to take>
   Links and forms: <primary goes to wa.me / tel: / booking URL; form as second path; #checkout noted / mailto fallback>
   Structured data: <subtype, fields, validated with what, or not verified>
+  First paint and probes: <0.35 s frame composed / issues; failed requests; videos playing; fonts loaded; overflow at 390 and 1440>
+Scored review (optional): <average, lowest dimension and score, rounds run, fixes made per round, or "not run">
 Sample content to confirm: <list, each visibly tagged on the page>
 Image credits: <file, title, creator, licence, source, where credited>
 Not verified: <every check you did not run>
 Hand-offs: ui-ux (app screens), seo-geo-audit (metadata, schema, NAP), security-review (forms), dpdp-legal-compliance (consent), brand-identity (logo/palette gaps), launch-marketing, launch-video.
 ```
+
+## 13. First-paint check and QA probes
+
+Adapted from the screenshot-and-QA loop in Motionsites-AI/claude-skill (MIT parts); the DOM properties used were checked against MDN in Oct 2026.
+
+### First paint at about 0.35 s
+
+Navigate, wait for `DOMContentLoaded`, wait 350 ms more, and capture the viewport at 1440 (and 390 when the phone hero differs). This frame shows what a visitor on a normal connection sees before images, video and late fonts arrive. It passes only when the hero is already composed:
+- The ground is the page's ground colour, with no white flash on a dark design (background set on `html` and `body` in the first CSS rule or inline critical CSS).
+- The headline, the sentence and the action are present and readable, in the display face or a metric-matched fallback that does not reflow when the face arrives.
+- A video hero shows its poster (or the poster ground colour), never black or empty; an image hero shows the image or a ground sampled from it.
+- Nothing is waiting on a reveal: no blank band, no element at opacity 0 that only script will show (§11 `content-hidden-at-rest`).
+- The layout is final: nothing that will jump when fonts, images or the video land (CLS).
+
+In Playwright: `await page.goto(url, { waitUntil: 'domcontentloaded' }); await page.waitForTimeout(350); await page.screenshot({ path: 'first-paint.png' });`. Without automation, the DevTools Performance panel's screenshot strip or a Lighthouse filmstrip shows the same frame.
+
+### QA probes
+
+Run after the page settles (network idle plus about 2.5 s), at 1440 and 390.
+
+1. **Failed network requests.** Collect `requestfailed` events and every response with status 400 or higher (Playwright `page.on('requestfailed')` and `page.on('response')`; or the DevTools Network panel sorted by status). Every failure is a fail: broken image, font, script or video URL. Media range requests the browser cancels itself (shown as aborted) are not failures.
+2. **Video actually playing.** For each `<video>` that should play: `readyState` at least 3, `paused` false, `error` null, and `currentTime` advancing between two reads about 500 ms apart. A video that should be a still under reduced motion is probed with reduced motion emulated and must show its poster with no video request.
+3. **Fonts loaded.** After `await document.fonts.ready` (resolves when font loading and layout are done; Baseline widely available, MDN), list the faces with `status === 'loaded'` and confirm the display and text faces named in the token plan are among them; the h1's computed `font-family` leads with the display face.
+4. **No horizontal overflow.** `document.documentElement.scrollWidth > document.documentElement.clientWidth` is a fail (MDN: when content fits, `scrollWidth` equals `clientWidth`). Name the culprits: elements whose `getBoundingClientRect().right` exceeds `clientWidth`, ignoring fixed-position ones.
+5. **Console.** No uncaught errors on load (§8).
+
+```js
+// pass to page.evaluate(), or in DevTools wrap it as (…)() and await the result; returns a report object
+async () => {
+  await document.fonts.ready;
+  const de = document.documentElement, vw = de.clientWidth;
+  const sample = () => [...document.querySelectorAll('video')].map((v) => v.currentTime);
+  const t0 = sample(); await new Promise((r) => setTimeout(r, 500)); const t1 = sample();
+  return {
+    overflowX: de.scrollWidth > vw, scrollWidth: de.scrollWidth, clientWidth: vw,
+    wide: [...document.querySelectorAll('body *')]
+      .filter((el) => el.getBoundingClientRect().right > vw + 1 && getComputedStyle(el).position !== 'fixed')
+      .slice(0, 5).map((el) => el.tagName.toLowerCase() + (el.id ? '#' + el.id : el.classList[0] ? '.' + el.classList[0] : '')),
+    videos: [...document.querySelectorAll('video')].map((v, i) => ({
+      src: v.currentSrc, readyState: v.readyState, paused: v.paused, error: v.error?.code ?? null, advancing: t1[i] > t0[i] })),
+    fontsLoaded: [...new Set([...document.fonts].filter((f) => f.status === 'loaded').map((f) => f.family.replace(/"/g, '')))],
+    h1Font: getComputedStyle(document.querySelector('h1') ?? de).fontFamily,
+    brokenImages: [...document.images].filter((img) => img.complete && img.naturalWidth === 0).map((img) => img.currentSrc || img.src),
+  };
+}
+```
+
+Headless browsers and codecs: reports conflict on whether Playwright's bundled browser decodes H.264 (it varies by version and platform, Oct 2026). Before judging a black video as a bug, run `document.createElement('video').canPlayType('video/mp4; codecs="avc1.42E01E"')` in the launched browser; if it is empty, relaunch with an installed Chrome (`channel: 'chrome'`) or judge the video from a real browser, and say which in the report.
+
+## 14. Optional scored review (a layer on top, never a replacement)
+
+The pass/fail pre-flight above decides whether the page ships. The scored review is an optional finer read once every blocking item passes, useful for a redesign, a high-stakes page, or when the owner asks "how good is it". A score never overrides a fail: a page with an unreadable headline or a horizontal scroll fails whatever it scores. Adapted from Motionsites-AI/claude-skill's review rubric, rewritten to the house rules.
+
+Score each dimension 1-10 from the screenshots (1440, 768, 390, the first-paint frame), in a fresh context where possible, as a juror who has seen a thousand landing pages this year:
+
+1. **First glance.** One focal point; the five-second stranger test passes; it looks decided, not templated.
+2. **Idea and signature.** The idea sentence survives the competitor test; one memorable move, everything around it quiet.
+3. **Specificity.** The crafted artefact is real and carries the boldness; the cover-the-name test passes; the idea reaches the footer.
+4. **Typography.** Faces chosen for the subject, at most five sizes, confident display, calm body, headlines two lines or fewer.
+5. **Composition and space.** Equal margins, no holes, neighbours in different layouts, the eye travels headline, sentence, action.
+6. **Colour and surface.** A palette from the subject at its declared commitment; depth from tone steps, not glow, glass, grain or gradients.
+7. **Imagery and media.** Real pictures of the subject, cropped and placed on purpose; video (if any) framed per breakpoint and legible under text.
+8. **Motion.** One orchestrated moment settled by 1.2 s, entrances once, reduced motion is the finished page.
+9. **Phone composition.** Its own composition at 390, not a stack: one dominant thing, re-cropped media, 44px targets, the signature still present.
+10. **Copy and honesty.** Specific, short, in the product's own language; actions named; no invented proof; sample details tagged.
+
+Bar: an average of 8 or more with nothing under 7. Most first builds land at 6-7.
+
+Fix loop:
+1. Name the three weakest dimensions and, for each, one change in exact values, not adjectives: "h1 from 64px to clamp(48px, 6vw, 88px), tracking -0.03em", "scrim from the ground colour at 0% to transparent at 46% under the copy", "price table moved beside the booking action, 24px gap".
+2. Make the three changes, re-shoot, re-run the probes (§13), score again.
+3. At most 3 rounds, counted separately from the two pre-flight fix rounds in §1. If round 3 still misses the bar, stop: report the scores honestly and name what would lift them (usually the plan: the direction, the idea or the imagery, not more polish).
+
+Fixes stay inside the house rules: "it looks flat" is answered with a real picture, a tone step or a change of scale, never grain, glass or a glow; "it looks generic" with a stronger idea, bigger type and fewer words, never a styled accent word or a marquee. Report the scores per dimension, per round, in the report's "Scored review" line.

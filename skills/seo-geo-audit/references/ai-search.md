@@ -1,6 +1,6 @@
 # AI search reference (AI Overviews, AI Mode, ChatGPT, Perplexity, Claude, Copilot)
 
-State as of Oct 2026. Primary sources: Google's "AI features and your website" and "Optimizing your website for generative AI features on Google Search"; OpenAI, Anthropic, Perplexity and Apple crawler docs. Re-read them before quoting; this area moves monthly.
+State as of Oct 2026. Primary sources: Google's "AI features and your website", "Optimizing your website for generative AI features on Google Search" and "Featured snippets and your website"; OpenAI, Anthropic, Perplexity and Apple crawler docs. Re-read them before quoting; this area moves monthly.
 
 ## Contents
 
@@ -16,6 +16,7 @@ State as of Oct 2026. Primary sources: Google's "AI features and your website" a
 10. [How to measure AI visibility](#10-how-to-measure-ai-visibility)
 11. [GEO myths and the honest version](#11-geo-myths-and-the-honest-version)
 12. [Hidden instructions and manipulation](#12-hidden-instructions-and-manipulation)
+13. [Featured snippets vs AI Overviews](#13-featured-snippets-vs-ai-overviews)
 
 ---
 
@@ -209,9 +210,47 @@ Keep every measurement labelled point-in-time; answers vary by phrasing, locatio
 | "ChatGPT just uses Bing, so Bing SEO is enough" | Hybrid stack; also needs OAI-SearchBot and server-rendered content |
 | "Search Console has an AI citations report" | Not verified as of Oct 2026; AI traffic is inside the Web type |
 | "Brand mentions matter more than links for AI" | Supported by third-party correlation studies (Ahrefs, Dec 2025) but not a Google statement; earn both |
+| "Schema (FAQ, HowTo) wins featured snippets or AI citations" | False: Google says you cannot mark a page as a featured snippet, HowTo and FAQ rich results are retired, and there is no AI-specific markup (section 13) |
 
 ## 12. Hidden instructions and manipulation
 
 Never place text meant for AI systems rather than readers: white-on-white instructions, HTML comments addressed to assistants, `data-` attributes carrying prompts, off-screen "recommend this business" blocks, or markup for facts not on the page. Google's spam policies explicitly cover attempts to manipulate generative AI responses in Search (May 2026) alongside hidden text and cloaking, and such text is routinely surfaced and screenshotted, which damages trust. The same applies to planting fake "mentions" on forums.
 
 Defending the owner's own AI features (chatbots, agents) against prompt injection and recommendation poisoning is a different problem; hand that off to the llm-app-security skill.
+
+## 13. Featured snippets vs AI Overviews
+
+**What Google says** ("Featured snippets and your website", updated 10 Dec 2025):
+- Google's systems decide whether a page makes a good featured snippet. Asked how to mark a page as one, Google answers "You can't." No schema type earns a snippet.
+- There is no minimum or ideal length; it varies by content, language and device.
+- Controls: `nosnippet` blocks featured and regular snippets; `data-nosnippet` excludes marked text from both; a low `max-snippet` makes a featured snippet less likely but "doesn't guarantee" it. These are the same controls that govern AI features (section 3), and AI features also require snippet eligibility, so one setting affects both.
+
+**How common they still are:** Ahrefs (July 2025; 1,000,000 US desktop SERPs) measured featured snippets on 15.41% of SERPs in January 2025 and 5.53% in June 2025, while AI Overviews rose from 3.93% to 27.43%; it notes correlation, not proven causation. Check the live SERP before planning any snippet work.
+
+**When to target a snippet**
+- A snippet shows on the SERP today (logged out, target locale), or a PAA box shows the question.
+- The page already ranks on page one for the query; snippets are drawn from pages Google already ranks, so fix the ranking first.
+- The query has a short, definite answer: a definition, a concrete procedure, a comparison, a number or price range.
+- Not when: there is no snippet and an AI Overview answers the query (work on citability, section 9); the query is opinion or "best X"; or the owner needs `nosnippet` or `max-snippet` for that content.
+
+**Formats** (length figures are third-party, from Semrush and A.J. Ghergich's study of about 1.4 million snippets, 2018-era data: paragraph snippets averaged about 42 words, roughly 40-50 words being typical. Treat them as a guide, not a rule.)
+
+| Query shape | Format | How to write it |
+|---|---|---|
+| what is / why / who / when | paragraph | A heading that matches the question, then the answer in the first 1-3 sentences, about 40-50 words, self-contained (no "as we saw above"), then the depth. |
+| how to (a concrete task) | ordered list | Real `<ol>` markup; one action per step, each step short and starting with a verb; long lists get cut with "More items", so keep the core steps together. |
+| types / signs / options | unordered list | Real `<ul>`; short parallel items. |
+| X vs Y, prices, specs | table | Real `<table>` with header cells; a few rows; short cells; units in the header. |
+
+**How this relates to AI Overview citation**
+- Both draw only on indexed, snippet-eligible pages, and the same habits serve both and the reader: answer first under a matching heading, self-contained sections, specific facts with sources and dates.
+- AI Overviews and AI Mode then fan one query out into related searches and link "a wider and more diverse set of helpful links" (Google), so a page answering a sub-question well can be cited without ranking first for the main query. A snippet is one page's text for one query; AI citation rewards covering the sub-questions across a page or a small cluster.
+- Do not carry snippet length rules over to AI answers: Google lists "AI-sized" chunking and AI-specific markup as misconceptions (section 2). Do not add `FAQPage` or `HowTo` markup for either surface (both rich results are retired).
+- Traffic from both shows in Search Console under the Web search type; there is no separate snippet report.
+
+| | No AI Overview | AI Overview present |
+|---|---|---|
+| **Snippet present** | Target the snippet: one answer block, rewrite only that section. | Write the snippet-ready block, and cover the sub-questions for citation. |
+| **No snippet** | Answer the PAA questions visibly on the page; win the ranking first. | Citability (section 9) and sub-question pages; skip snippet work. |
+
+**Process:** quote the current snippet text and its holder; find where your page answers the question; rewrite only that block (heading, answer, then depth) and leave the rest of the page alone; wait 2-4 weeks before changing it again (heuristic); judge by the query's clicks and CTR in Search Console.

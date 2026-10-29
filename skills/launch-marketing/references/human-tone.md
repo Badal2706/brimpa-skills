@@ -7,10 +7,10 @@ Test for every piece: "Would a good founder who knows the product and the reader
 1. Read the whole input first. Do not start fixing sentence one.
 2. Identify the format (landing page, cold email, launch post, carousel, newsletter) because each has its own tells.
 3. Identify the target reader: developer, founder, buyer, patient, general public. The same sentence can be fine for one and slop for another.
-4. Scan for all 18 patterns below and mark every hit.
+4. Scan for all 18 patterns below and the tiered word lists, mark every hit, and score it (pass 1 in [Tiered slop score](#tiered-slop-score-two-passes)).
 5. Rewrite: specifics replace vague claims; active replaces passive; direct replaces hype; one purpose per sentence.
-6. Final audit question: "What still reads like AI or generic marketing copy?" Fix it.
-7. Present in three parts: **Rewrite**, **Audit notes** (bullets: what changed and why), **What to fill in** (placeholders needing a real number, name or quote, e.g. `[fill in: actual customer name]`).
+6. Pass 2: rescore the rewritten text from scratch, then run the Horoscope Test. Ask "What still reads like AI or generic marketing copy?" and fix it. Do not present copy that fails the threshold.
+7. Present in three parts: **Rewrite**, **Audit notes** (bullets: what changed and why, plus the score before and after, e.g. "Slop score 17 -> 2, pass (short asset)"), **What to fill in** (placeholders needing a real number, name or quote, e.g. `[fill in: actual customer name]`).
 
 ### Voice calibration (optional, when a sample of the person's writing exists)
 
@@ -142,6 +142,52 @@ The active-voice version of the same hiding is an abstract noun given agency: "t
 streamline, empower, transform, revolutionize, reimagine, unlock, elevate, supercharge, next-generation, next-level, cutting-edge, state-of-the-art, world-class, best-in-class, industry-leading, enterprise-grade, seamless, robust, powerful, innovative, game-changing, game-changer, groundbreaking, remarkable, transformative, disruptive, leverage, utilize, harness, synergy, synergize, delve, deep dive, dive deep, holistic, comprehensive, actionable, crucial, vital, pivotal, paradigm, journey, landscape, testament, tapestry, delightful, illuminate, unveil, elucidate, skyrocket, realm, embark, navigating, ever-evolving, scalable (as filler), end-to-end, best-of-breed, solution (noun for the product), thrilled / excited / pleased to announce, touch base, circle back, move the needle, low-hanging fruit, bandwidth.
 
 Words that are fine in normal prose but that the X and LinkedIn source rules also flag as padding: can, may, just, very, really, literally, actually, certainly, probably, basically, could, maybe. Treat these as a prompt to check whether the sentence says anything, not as an automatic ban.
+
+## Tiered slop score (two passes)
+
+A score makes reviews consistent between drafts and between reviewers. It is a review heuristic, not an AI detector, and a low score does not prove anything about who wrote the text. The lists above stay the source of truth; this section only says how much each hit weighs. Count each phrase once per occurrence and never score the same words under two rows.
+
+| Tier | What counts | Points |
+|---|---|---|
+| 1. Always cut | every word in the union banned-word list; the pattern 11 vocabulary; the phrase lists in patterns 1, 6, 9 and 17; the launch openers, outreach pleasantries, instant-delete community sentences, hedge phrases, structural tells and throat-clearing connectors in the scrub lists (except "however"); plus the additions below | +3 per hit |
+| 2. Cut when clustered | the Tier 2 list below | +2 per hit, counted only once the asset has 3 or more Tier 2 hits |
+| 3. Density | filler intensifiers, the padding words above, qualifiers (quite, rather, somewhat, fairly, relatively), hedges (perhaps, might, could potentially, to some extent), stacked transitions (therefore, consequently, meanwhile) | +2 per paragraph holding 3 or more |
+| Patterns | each instance of patterns 2, 3, 4, 5, 7, 8, 10, 13, 14 and 18 | +3 |
+| | each instance of pattern 12 (copula avoidance) or 16 (hedging stack) | +2 |
+| | each em dash (pattern 15) | +1 |
+| Extra structural tells | listed below | +2 or +3 each |
+| Horoscope Test | each failing sentence (short assets) or paragraph (long-form) | +5 |
+
+**Tier 1 additions** (not already in the lists above): multifaceted, compelling, meticulous, facilitate, commence, paramount, plethora, myriad, culminate, bolster, spearhead, endeavour; "it's important to note that", "plays a vital / crucial / pivotal role", "it goes without saying", "without further ado", "in essence", "in this article we'll cover". Plain replacements: facilitate -> help; commence -> start; paramount -> most important; plethora / myriad -> many, or the number; culminate in -> end with; bolster -> support, or say how.
+
+**Tier 2** (fine alone, a tell in a cluster): at the end of the day, moving forward, arguably, notably, that said, it's no secret that, firstly / secondly / thirdly, "however" more than twice, paired adjectives doing one job ("fast and reliable", "simple and intuitive").
+
+**Extra structural tells** (not among the 18 patterns):
+- Uniform rhythm: three or more consecutive sentences within about three words of each other in length (+3). Vary them; mix a short sentence with a long one.
+- Staccato fragments used for drama ("Short. Punchy. Done.") (+3). Keep a fragment only where it carries real emphasis.
+- Recap at the end of every section (+2). Summarise only a section that genuinely needs it.
+- Synonym cycling: "customers", "clients", "users" and "patrons" for one group in adjacent sentences (+2). Repeat the clearest word.
+- Participial tack-ons: "..., highlighting the importance of X", "..., underscoring the need for Y" (+2). Delete, or make it its own sentence with a fact.
+- Even coverage: every section the same length whatever its importance (+2). Spend words where the reader's decision is.
+
+**The Horoscope Test.** For every sentence of a short asset (hero, tagline, subhead, email, social post, app-store text) and every paragraph of long-form copy, ask: "Could this sit, unchanged, on any company's site, for any customer, in any year?" If yes, cut it, or replace it with something specific to this product, this reader and this moment: a number, a name, a place, a mechanism, a real constraint. Rephrasing is not a fix. This is the named form of the "specific beats vivid" and fluff-test rules in SKILL.md, so apply it once, here.
+
+**Pass threshold**
+
+| Score | Long-form (about 500+ words) | Short asset (under about 300 words) |
+|---|---|---|
+| Pass | 0-5 | 0-2 |
+| Review the flagged lines | 6-12 | 3-6 |
+| Rewrite the flagged sections | 13-20 | 7+ (rewrite the asset) |
+| Full rewrite | 21+ | |
+
+Between 300 and 500 words, use the long-form bands. Hard gates regardless of score: zero Tier 1 hits, zero Horoscope Test failures, zero em dashes in social copy, zero invented specifics. A draft that misses a gate fails even at a low score.
+
+**Two passes**
+1. **Detect and rewrite.** Quote each hit, name its tier or pattern, write the replacement, apply all of them, and note the score.
+2. **Rescore from scratch.** Rewrites reintroduce tells, so scan the new text as if seeing it for the first time. Look for banned-for-banned swaps (leverage -> harness: both are banned; write "use"), transitions that survived, copulas creeping back, a new rule of three, the rhythm going uniform again, and overcorrection (every sentence a fragment, every paragraph opening "Look,"; one technique repeated becomes its own tell). Run the Horoscope Test last, record the final score, and show "before -> after" in the audit notes and the self-QA block.
+
+Removing tells without adding specifics produces sterile copy. If pass 2 leaves only safe, empty sentences, the problem is missing input: go back to the intake for numbers, names and proof, or leave `[fill in: ...]` placeholders.
 
 ## Worked example: cold email rewrite
 

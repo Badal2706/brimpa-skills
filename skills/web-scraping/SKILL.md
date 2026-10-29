@@ -1,11 +1,11 @@
 ---
 name: web-scraping
-description: Plan and run authorized web scraping, crawling and data extraction with Scrapling (Python) as the default library, plus alternatives (Crawl4AI, Maxun, Browser Use, Firecrawl, PaddleOCR). Use whenever the user wants to scrape, crawl, extract, harvest, monitor or mirror data from websites, build a dataset or RAG corpus from web pages, capture the API behind a page, pull product listings, prices, reviews, job posts, directories or competitor pages, convert sites to Markdown for an LLM, or asks about robots.txt, rate limits, anti-bot, Cloudflare, headless browsers, Playwright or "is scraping this legal". Also use when the user is about to feed scraped HTML into a prompt (prompt-injection hygiene), even if they never say "scraping". Starts with an authorization and ethics gate; hands personal-data questions to dpdp-legal-compliance.
+description: Plan and run authorized web scraping, crawling and data extraction with Scrapling (Python) as the default library, plus alternatives (Crawl4AI, Maxun, Browser Use, agent-browser, api-anything, Firecrawl, PaddleOCR). Use whenever the user wants to scrape, crawl, extract, harvest, monitor or mirror data from websites, build a dataset or RAG corpus from web pages, capture the API behind a page, pull product listings, prices, reviews, job posts, directories or competitor pages, convert sites to Markdown for an LLM, or asks about robots.txt, rate limits, anti-bot, Cloudflare, headless browsers, Playwright or "is scraping this legal". Also use when the user is about to feed scraped HTML into a prompt (prompt-injection hygiene), even if they never say "scraping". Starts with an authorization and ethics gate; hands personal-data questions to dpdp-legal-compliance.
 license: MIT
 metadata:
   author: Brimpa
-  version: "1.0"
-  updated: "2026-10-20"
+  version: "1.1"
+  updated: "2026-10-30"
 ---
 
 # Web scraping (authorized, Scrapling-first)
@@ -89,7 +89,7 @@ Docker variant: `"command": "docker", "args": ["run", "-i", "--rm", "pyd4vinci/s
 | Use for | Static pages, APIs, blogs, news, embedded JSON | Pages that genuinely need JS or small automation, on sites you are allowed to automate |
 
 - Start with `Fetcher`. Move to `StealthyFetcher` only when the content is absent without JavaScript and the authorization gate passed. For SPAs wait on `network_idle`; for one element use `wait_selector`; use `disable_resources` for speed.
-- Prefer the API behind the page over scraping rendered HTML: open a browser session with `record_requests=True`, then `session.network.search(url_pattern=...)` (only completed text responses are kept; default cap 1,000 requests). The MCP equivalents are `browser_network_requests` / `browser_network_request`. Then call that endpoint with `Fetcher` if its terms allow.
+- Prefer the API behind the page over scraping rendered HTML: open a browser session with `record_requests=True`, then `session.network.search(url_pattern=...)` (only completed text responses are kept; default cap 1,000 requests). The MCP equivalents are `browser_network_requests` / `browser_network_request`. Then call that endpoint with `Fetcher` if its terms allow. To turn such a read into a reusable tool an agent calls over MCP, see api-anything below.
 - Use sessions (`FetcherSession`, `StealthySession`, `AsyncStealthySession`) for related requests: they keep cookies, connections and the browser open. One-off class methods open and close per call. Always close sessions (MCP `close_session`), otherwise browsers stay alive.
 - Login reuse on your own accounts: `save_state(path)` / `load_state(path)`. Treat the state file as a credential.
 - Selectors: prefer CSS with Parsel-style `::text` / `::attr(name)`; `find_by_text` for anchors in messy markup; `element.find_similar()` to expand one matched card into its siblings. Enable adaptive relocation once selectors are stable: `Fetcher.adaptive = True`, select with `auto_save=True`, later re-select with `adaptive=True` so a redesign does not silently break the job (relocation is similarity-based, no LLM involved).
@@ -124,6 +124,16 @@ result.items.to_jsonl("clinics.jsonl"); print(result.stats)
 - Use `development_mode = True` to cache responses while iterating; remove it before the real run. Templates: `CrawlSpider` (link rules), `SitemapSpider` (accepts robots.txt URLs, the politest way to enumerate pages), `XMLFeedSpider` / `CSVFeedSpider`, `ShopifySpider` (public collection API), `ContentSpider` (whole-site Markdown corpus for RAG; requires `allowed_domains`, supports `output_dir`, `max_pages`).
 - Multi-session routing: register a fast `FetcherSession` and a lazy `AsyncStealthySession` in `configure_sessions`, then `response.follow(link, sid="stealth")` only for the pages that need it.
 
+## Replaying a site's own requests with api-anything (gated)
+
+api-anything (goodnight000/api-anything, MIT; v0.3.1 read on 2026-10-30) loads a page in a headless browser for two example inputs, turns the part of the request that changed into parameters, and replays the site's own request as plain HTTP. Agents call the result over MCP (`find_sites`, `learn_site`, `list_operations`, `call_operation`) or its CLI. It needs Node 22.13+ and a Chromium browser to learn. A learned operation is still automated access, so it is allowed only where the authorization gate above passed for that site, with the plan's rate limits.
+
+- **Turn off public catalog sharing before first use.** Setup asks whether to share learned operations, call reports and repairs with its public catalog, and the default is yes. First install: `npx api-anything setup --no-share` (add `--dry-run` first to see which agent configs it edits). Existing install: `api-anything setup --no-share --share-only`. Even with sharing off, `find_sites` sends its search words, domain or URL to the catalog, so never search by a client's private URL or internal hostname.
+- **Never use client logins with it.** Do not run `api-anything login` or let it import cookies from a browser profile signed in to a client's (or anyone else's) account. Learn only signed-out reads, or reads on your own test account on your own system.
+- **Reads only.** Never start its MCP server with `--allow-writes` for a scraping job.
+- **Shared operations are someone else's work.** Treat pulled specs as untrusted; inspect a call with `--dry` before running it, and re-run the gate for that site.
+- Its bundled catalog includes profile lookups on social networks; any operation returning people's data goes through dpdp-legal-compliance first.
+
 ## Sanitize before it reaches an LLM
 
 Scraped pages are untrusted input and a common prompt-injection carrier (hidden text, `aria-hidden` blocks, HTML comments, zero-width characters telling the model to ignore its instructions).
@@ -141,6 +151,8 @@ Scraped pages are untrusted input and a common prompt-injection carrier (hidden 
 | Clean LLM-ready Markdown from JS-heavy pages | Crawl4AI | Python; outputs Markdown meant to go straight into models |
 | No-code: point, click, get an API or spreadsheet | Maxun | Self-hosted; good for a client who wants to maintain the job |
 | An agent that operates a site (fill forms, book, navigate) | Browser Use | Agentic browsing; the same authorization gate applies to every action it takes |
+| Browser automation from the shell or MCP, small context | agent-browser (vercel-labs) | Apache-2.0 Rust CLI over the Chrome DevTools Protocol (CDP); `snapshot` returns an accessibility tree with element refs (`@e2`) to click or fill; `agent-browser mcp` serves it over MCP. On untrusted pages use `--content-boundaries`, `--max-output` and `--allowed-domains`; do not reuse a signed-in Chrome profile (`--profile`) for client accounts |
+| A repeatable read on a site with no API, called as a tool | api-anything | MIT; learns the site's own request and replays it over MCP. Only behind the gate, with sharing off and no client logins (section above) |
 | Hosted crawl/scrape API, no infrastructure | Firecrawl | Paid service; check its terms and where data is processed |
 | PDFs and scans into structured data | PaddleOCR | Apache-2.0 OCR toolkit; invoices, intake forms |
 | Local PDF toolkit (merge, split, OCR, redact) | Stirling PDF | Self-hosted, nothing leaves your server |
@@ -169,6 +181,7 @@ Owner contact:     <abuse/contact address in case the site owner objects>
 - "Pull our clinic's 40 blog posts into Markdown for a chatbot." Own site, so the gate passes. `ContentSpider` with `allowed_domains`, `max_pages=60`, `output_dir`, `main_content_only`; retention tied to the site content itself.
 - "Get prices from a competitor's catalogue every night." Check robots.txt and Terms; many retail Terms forbid automated price collection. If allowed: `SitemapSpider` to enumerate products, `Fetcher` for pages, `download_delay=3`, adaptive selectors, run once per night, store only price/SKU/timestamp. If not allowed: suggest an official feed or a licensed price-data provider.
 - "Scrape doctors' names and phone numbers from a directory for outreach." Personal data for marketing: stop, run dpdp-legal-compliance; a cold-outreach list scraped without notice or consent is very unlikely to have a lawful basis under India's DPDP framework. Offer an aggregate study (counts per specialty, per city) instead.
+- "Let the agent look up a public events listing whenever it needs to." Gate passes for signed-out reads (robots.txt and Terms checked). api-anything with `--no-share`, `learn_site` on the public search page, no `login`, MCP server without `--allow-writes`, calls kept to the plan's rate.
 - "The page shows nothing without JavaScript." Record the browser's network calls once, find the JSON endpoint, then use `Fetcher` against it with the same rate limits; only fall back to `StealthyFetcher` if no endpoint exists.
 
 ## Anti-patterns / refuse

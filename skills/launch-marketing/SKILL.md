@@ -4,8 +4,8 @@ description: Positioning, messaging and launch copy for products and client webs
 license: MIT
 metadata:
   author: Brimpa
-  version: "1.1"
-  updated: "2026-10-22"
+  version: "1.2"
+  updated: "2026-10-30"
 ---
 
 # Launch marketing: positioning, messaging and launch copy
@@ -13,7 +13,7 @@ metadata:
 Copy that works is specific, written to one person, and traceable to something true. Most marketing copy fails before the first word because nobody decided who it is for and what the alternative is. So this skill runs positioning first and only then writes words. It serves two jobs: a solo developer or small team launching a product, and a developer writing the words for a client's website (clinic, salon, agency, local shop). The same rules apply; the channels differ.
 
 Reference files (open only the one you need):
-- `references/human-tone.md`: read when rewriting or auditing copy that sounds generic or AI-written; holds all 18 slop patterns with before/after, the full banned-word list and the audit process.
+- `references/human-tone.md`: read when rewriting or auditing copy that sounds generic or AI-written; holds all 18 slop patterns with before/after, the full banned-word list, the audit process, and the tiered slop score (two passes, pass threshold, Horoscope Test).
 - `references/positioning-and-naming.md`: read when the user has no positioning yet, says "people don't get what we do", or needs a product/brand name; also the three-question homepage test, "repel the wrong customers" and the About-page rule.
 - `references/landing-and-pricing-copy.md`: read when writing or reviewing a homepage, landing page, service page or pricing page; PAS, LIFT, section-by-section copy, readability check, the five awareness levels, the 12 pricing-psychology principles plus anchoring, price endings and discount rules.
 - `references/launch-channels.md`: read when preparing Product Hunt, Show HN, Reddit, LinkedIn, X, a carousel, a changelog or an app-store listing; limits, timelines and benchmarks per channel.
@@ -26,12 +26,12 @@ Reference files (open only the one you need):
 2. **Positioning before words.** Work Dunford's five components in order: competitive alternatives, unique provable attributes, value (feature to benefit to value), target customer triggers, market category. Output the positioning doc (template below). For a local-business client this takes ten minutes and still matters: the alternative is usually "the clinic down the road" or "putting it off". Then run the three-question homepage test (who is the ideal client, what is their most pressing problem, how do you solve it) and check the positioning repels the wrong customer as deliberately as it attracts the right one; see `references/positioning-and-naming.md`.
 3. **Messaging hierarchy.** Write the four levels: one-liner (7-12 words, names the outcome), elevator pitch (3-4 sentences; this becomes the homepage headline and subhead), proof narrative, deep dive. Define voice as IS / IS NOT pairs.
 4. **Page copy.** Hero by PAS (headline says what it is and who it is for; subhead agitates one specific pain; CTA says what happens next). Then sections, proof, pricing, FAQ. Pricing: show prices or "starting at", anchor with a real tier or reference price, pick 9-endings or round numbers by the market you want to be read as, and avoid dead points like $69/$79. Use `references/landing-and-pricing-copy.md`.
-5. **De-slop pass.** Run every asset through the 18 patterns and the banned-word list in `references/human-tone.md`. Replace every vague claim with a specific or a `[fill in: ...]` placeholder. Check readability (grade 5-8 on Hemingway or a Flesch-Kincaid check) unless the audience reads jargon for a living. Count characters and words where a channel has limits.
+5. **De-slop pass.** Run every asset through the 18 patterns and the banned-word list in `references/human-tone.md`, score it with the tiered slop score in two passes, and cut every sentence that fails the Horoscope Test (it would fit any company). Ship only below the pass threshold (0-2 for a short asset, 0-5 for long-form) with zero Tier 1 hits. Replace every vague claim with a specific or a `[fill in: ...]` placeholder. Check readability (grade 5-8 on Hemingway or a Flesch-Kincaid check) unless the audience reads jargon for a living. Count characters and words where a channel has limits.
 6. **Channel assets.** One asset per channel, each native to that channel's norms (a Show HN body is not a LinkedIn post). Use `references/launch-channels.md` and `references/email-and-outreach.md`.
 7. **Launch calendar.** Lay the assets on a 30-day plan (teaser, assets, final prep, launch day, day 2). Stagger channels; Hacker News and Reddit penalise vote rings and same-day cross-posting.
 8. **Post-launch loop.** Changelog entry and "what shipped" pack after each release; results post on day 2; outreach triggered by real buying signals; revise the hero after reading what real users said in comments and support tickets.
 
-Present each deliverable with a short self-QA block (limits met, banned words zero, placeholders listed). Do not present drafts that fail their own checklist.
+Present each deliverable with a short self-QA block (limits met, banned words zero, slop score before -> after, placeholders listed). Do not present drafts that fail their own checklist.
 
 ## Universal copy rules
 
@@ -139,7 +139,7 @@ H2: ...   Body: ...   (visual direction if any)
 ## Pricing (if any): tiers, names, anchor, recommended plan, CTA per tier, guarantee line
 ## FAQ (3-6; phrased the way a person would ask, factual 2-4 sentence answers)
 ## Meta: <title tag <=60 chars> / <meta description 140-160 chars>
-## Self-QA: banned words 0 | em dashes 0 | CTAs consistent | placeholders: [...]
+## Self-QA: banned words 0 | em dashes 0 | slop score NN -> N (pass) | CTAs consistent | placeholders: [...]
 ```
 
 ### Launch kit checklist (save as `docs/launch/kit-<date>.md`)

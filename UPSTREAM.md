@@ -25,6 +25,11 @@ The projects this collection was distilled from live under `upstream/` as **git 
 | upstream/img2threejs | img2threejs/img2threejs | Apache-2.0 | mascot-3d (reconstructing an object from one reference image as procedural three.js, with quality gates) | `npx skills add img2threejs/img2threejs` |
 | upstream/playwright-cli | microsoft/playwright-cli | Apache-2.0 | screenshot and check tooling for web-design pre-flight, launch-video captures, mascot stills (checked during the Brimpa build; own scripts were enough) | `npx skills add microsoft/playwright-cli` |
 | (not pinned) | DavidHDev/react-bits | MIT + Commons Clause (no selling the library) | ideas only for animated components; 373 MB, so referenced, not pinned | browse https://github.com/DavidHDev/react-bits |
+| upstream/superseo-skills | inhouseseo/superseo-skills | Apache-2.0 (NOTICE) | seo-geo-audit content audit, semantic gaps, keyword deep-dive, link building, snippets; launch-marketing anti-slop tiers (verified; stale FAQ/HowTo/char-cap advice not merged) | `/plugin install superseo@brimpa` (content skills; its FAQ-for-AI and HowTo advice is outdated) |
+| upstream/mattpocock-skills | mattpocock/skills | MIT | grill-plan (the grilling method) | do not install the whole plugin alongside ours: some skill names clash with built-ins |
+| (linked) | vercel-labs/agent-browser | Apache-2.0 | browser automation CLI for web-scraping and QA screenshots; skills ship inside its binary, so not pinned | `/plugin install agent-browser@brimpa` or see its README |
+| (linked) | goodnight000/api-anything | MIT | web-scraping option behind the authorization gate, with public sharing turned off | see web-scraping skill |
+| (merged, not pinned) | Motionsites-AI/claude-skill | MIT for instructions/references/scripts; examples and media proprietary | web-design video recipes, first-paint check, scored review, builder prompts (MIT parts only; promo block and house-rule-breaking styles rejected) | not listed: its skill requires a paid-upsell block in every delivery |
 
 ## Used in real builds
 

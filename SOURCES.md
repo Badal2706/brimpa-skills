@@ -23,7 +23,7 @@ Compiled 2026-10-20. "Merged" means the content was read, deduplicated against o
 |---|---|---|
 | [mavek.ai – AI recommendation poisoning](https://mavek.ai/blog/ai-recommendation-poisoning/) | **Merged** in full (definition, Microsoft Defender findings, "Injection Paradox" results table, spillover effect, user and brand defenses) | llm-app-security (references/recommendation-poisoning.md), seo-geo-audit (one rule) |
 | [tasteskill.dev](https://www.tasteskill.dev/) | Used for the skill inventory and install commands only; content is the repo above | web-design |
-| [motionsites.ai](https://motionsites.ai/) | **Dropped.** The page is a paid prompt library with no reusable design rules; nothing to merge beyond "animated backgrounds exist". Not referenced in any skill | — |
+| [motionsites.ai](https://motionsites.ai/) and [Motionsites-AI/claude-skill](https://github.com/Motionsites-AI/claude-skill) | Website: dropped (paid prompt library). The skill repo (Oct 2026): **merged MIT parts only** (video recipes, first-paint check, scored review, builder prompts), rewritten and verified against MDN/WebKit/hls.js docs; promo block, proprietary examples/media and house-rule-breaking styles rejected | web-design |
 
 ## PDFs in `PDFs/`
 
@@ -71,3 +71,14 @@ Dropped as irrelevant: Kangen water reel, DoctorC order confirmation, DigitalOce
 | Screenshot facts that are knowledge rather than procedure (rental-yield formula, Cloudflare free tier, NVIDIA inference endpoint, hospital-system modules, cache TTL jitter, tool roundups) | **Rewritten as notes** with source and confidence | knowledge/ |
 | Research notes produced while building the skills (Oct 2026 SEO/DPDP facts, security and Claude-skills facts, web-psychology evidence) and the video summaries | **Copied as dated research notes** for local-model use | knowledge/research/, knowledge/web-psychology/ |
 | The raw `PDFs/` and `photoes/` folders | Every item was either merged into a skill, filed as a note, or recorded as dropped (see the screenshot table above). The raw files were **archived to a zip next to the repo and removed** from the working folder on 2026-10-26; nothing in them was usable on its own except as a reading copy | `_raw-sources-archive-2026-10-26.zip` (outside the repo) |
+
+## Added 2026-10-30
+
+| Source | Treatment | Lands in |
+|---|---|---|
+| inhouseseo/superseo-skills (Apache-2.0) | Pinned; content-audit, semantic-gap, keyword, link-building and snippet methods merged after checking against Google docs; stale advice rejected | seo-geo-audit, launch-marketing |
+| mattpocock/skills (MIT) | Pinned; grilling method rewritten as grill-plan with option-based questions | grill-plan |
+| vercel-labs/agent-browser, goodnight000/api-anything, vercel-labs/skills | Linked as tools (api-anything behind the authorization gate, sharing off) | web-scraping, knowledge/dev-tools |
+| 666ghj/MiroFish | Skipped as a skill (AGPL app); knowledge note only | knowledge/ai |
+| Instagram screenshots (Oct 2026): upadacitinib post, page blueprints, founder post ideas, 18-point SEO list, top-skills reel | Notes; the health claim verified and corrected (alopecia areata, not pattern baldness) | knowledge/ |
+| 60 downloaded Instagram videos | Transcribed locally (Whisper large-v3) with keyframes; knowledge extracted and verified; raw videos deleted after capture | knowledge/, skills |

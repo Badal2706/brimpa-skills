@@ -1,11 +1,11 @@
 ---
 name: seo-geo-audit
-description: "Audit and improve a website for Google Search, local/Maps visibility and AI search (AI Overviews, AI Mode, ChatGPT, Perplexity, Claude): technical SEO, on-page, structured data/JSON-LD, Google Business Profile, NAP, reviews, Core Web Vitals, E-E-A-T, GEO/AEO, robots.txt and AI crawlers, sitemaps, launch checklist, scored report. Use whenever the user asks for an SEO audit, 'why am I not ranking', 'get found on Google/Maps', schema markup, rich results, local SEO for a clinic, shop or service business, service or location pages, GBP setup, llms.txt, 'show up in ChatGPT/AI Overviews', Search Console errors, indexing problems, slow pages, or is about to launch, redesign or migrate a site, even if they never say 'SEO'. Audits first (KEEP / MODIFY / REMOVE / DO NOT TOUCH) and edits only after sign-off."
+description: "Audit and improve a website for Google Search, local/Maps visibility and AI search (AI Overviews, AI Mode, ChatGPT, Perplexity, Claude): technical SEO, on-page, structured data/JSON-LD, Google Business Profile, NAP, reviews, Core Web Vitals, E-E-A-T, GEO/AEO, robots.txt and AI crawlers, sitemaps, page content audits, keyword research, featured snippets, link building, launch checklist, scored report. Use whenever the user asks for an SEO audit, 'why am I not ranking', 'get found on Google/Maps', schema markup, rich results, local SEO for a clinic, shop or service business, service or location pages, GBP setup, llms.txt, 'show up in ChatGPT/AI Overviews', Search Console errors, indexing problems, slow pages, or is about to launch, redesign or migrate a site, even if they never say 'SEO'. Audits first (KEEP / MODIFY / REMOVE / DO NOT TOUCH) and edits only after sign-off."
 license: MIT
 metadata:
   author: Brimpa
-  version: "1.1"
-  updated: "2026-10-26"
+  version: "1.2"
+  updated: "2026-10-30"
 ---
 
 # SEO + GEO Audit
@@ -15,6 +15,7 @@ Audit first, report, then change only what needs changing. The goal is the stron
 ## How to run this
 
 1. **Gather inputs.** Live URL (or repo + staging URL), business type (local brick-and-mortar / service-area / online / publisher / SaaS / e-commerce), locations and languages, the 5-10 queries the owner wants to win, CMS or framework, and what access exists: Search Console, GA4, Google Business Profile ownership, hosting. Ask for missing items once; proceed with what you have.
+   **Keyword step:** before recommending a page for any query, run the keyword deep-dive in `references/content-eeat.md` section 16 (intent, difficulty read from the SERP, volatility, zero-click impact, a 90-day plan) and keep only realistic targets.
 2. **Declare depth.** Say which of these you can actually use: page fetch only; headless browser (rendered DOM, screenshots); PageSpeed Insights / CrUX; Search Console data; paid rank/backlink tools. Anything you cannot measure is reported as "not measured", never scored.
 3. **Audit, do not edit.** Inspect the homepage and one page per template (service, location, article, product, contact), plus `robots.txt`, the sitemap(s), JSON-LD, `llms.txt` if present, and the GBP listing for local businesses. Respect robots.txt and rate limits when crawling (see the web-scraping skill for polite crawling). Work through `references/technical-checklist.md` first.
 4. **Score.** One score per category with the weights in `references/report-template.md`, over measured categories only (an unmeasured category is left out of the total, never estimated into it), with the arithmetic printed. Scores are heuristics, not Google-internal signals.
@@ -51,6 +52,8 @@ Full detail with thresholds lives in `references/technical-checklist.md` (read i
 - **Structured data:** JSON-LD, the most specific type, only facts visible on the page, no retired types, validated.
 - **Security and page experience:** HTTPS everywhere, no mixed content, no intrusive interstitials, no back-button hijacking, no hidden text or links.
 - **Hygiene:** remove `meta keywords` (ignored by Google), placeholder URLs, staging hostnames, duplicate pages, orphan files.
+- **Realistic keywords:** each target query has low difficulty for this site (read from the SERP, not a tool score), a clear intent the business can satisfy, and real demand (Keyword Planner ranges, Search Console impressions, the owner's enquiry log). Pivot from head terms the site cannot win to longer-tail and local variants.
+- **Consolidation:** merge overlapping thin pages that chase the same intent into one stronger page; 301 each retired URL to it in one hop, update internal links and the sitemap (irreversible, so it needs sign-off; method in `references/content-eeat.md` section 10).
 - **Surface checks** (one line each, detail in the technical checklist):
   - `<html lang>` present and matching the content language (Bing hint, WCAG 3.1.1).
   - Viewport meta present; `user-scalable=no` or `maximum-scale` below 5 blocks zoom, an accessibility fail as well as a mobile one.
@@ -80,6 +83,7 @@ Open `references/ai-search.md` for the crawler table, the robots.txt template, l
 - Google's position: optimising for AI Overviews and AI Mode "is still SEO". The eligibility floor is indexed + snippet-eligible. Both features fan out one query into many related searches, so pages that answer a specific sub-question well get cited even when they do not rank first.
 - What helps: non-commodity, first-hand content that could not have come from anyone else; clear facts stated early in each section; visible author, dates and sources; good page experience; an accurate Business Profile and Merchant Center where relevant.
 - What does not help: `llms.txt` (optional, harmless, not used by Google), AI-specific markup, chunked "answer blocks" for their own sake, keyword variants, fake brand mentions on forums.
+- Featured snippets: no markup earns one; target one only when it shows on today's SERP and the page already ranks on page one. Formats, lengths and how snippets relate to AI Overview citation: `references/ai-search.md` section 13.
 - Crawler policy, decided per purpose: allow `Googlebot` (Search + AI features), `OAI-SearchBot`, `Claude-SearchBot`, `PerplexityBot` for AI search visibility; `GPTBot`, `ClaudeBot`, `Google-Extended`, `Applebot-Extended`, `CCBot` are training/licensing decisions the owner makes; blocking them does not affect Google Search. Because of robots.txt group selection, a dedicated `User-agent:` group overrides `*`, so repeat the `Disallow` lines in every group. Many AI crawlers do not run JavaScript: serve content server-side.
 - Measure with Search Console (AI-feature traffic is reported inside the "Web" search type; no separate verified AI report as of Oct 2026), Bing Webmaster Tools AI Performance, and a monthly share-of-voice probe: ask ChatGPT, Perplexity, Gemini and Claude the owner's 10-20 buyer prompts and log mentions and cited domains.
 - Never hide instructions or text for AI systems inside pages (white text, HTML comments, `data-` attributes). Google's spam policy covers manipulating generative AI, and it backfires when surfaced. Prompt-injection defences for the owner's own AI products belong to the llm-app-security skill.
@@ -98,17 +102,19 @@ Open `references/structured-data.md` for the supported/retired tables, required 
 
 ## Content, E-E-A-T and YMYL
 
-Open `references/content-eeat.md` for the E-E-A-T model, helpful-content signals, AI-content policy, spam policies, topic clusters, internal linking, and the conversion/copy lens.
+Open `references/content-eeat.md` for the E-E-A-T model, helpful-content signals, AI-content policy, spam policies, topic clusters, internal linking, links and authority, the conversion/copy lens, the page content audit mode, semantic gap analysis, the keyword deep-dive and the expert interview.
 
 - Apply Google's Who / How / Why test: a visible author with credentials, how the content was produced (disclose AI assistance where readers would want to know), and whether it exists to help people rather than to attract clicks.
 - Information gain is non-negotiable: first-hand photos, data, cases, process. "7 tips" that anyone could write is commodity content.
 - Word counts are coverage floors, not targets: service page 800, blog post 1,500, location page 600, product 400, homepage 500. There is no ideal length; Google says so.
 - **YMYL (health, legal, finance, safety):** accuracy outranks volume. Surface credentials, registration numbers, address, phone, hours, real photographs and a medical/legal disclaimer. Every clinical claim is reviewed by the practitioner before publishing. Refuse superlatives ("best", "No. 1", "guaranteed", "painless") unless independently verifiable; in India, medical advertising rules also restrict them. Never invent testimonials or attribute words to real named people.
 - Freshness: show publish and last-updated dates; review evergreen pages at least yearly and YMYL pages when guidance changes. Do not fake dates; Google rewrites titles with stale dates and raters mark fake freshness down.
+- **Page content audit mode** (one URL, "why does this page not rank"): read `references/content-eeat.md` sections 14-15. Fetch and read the top 3 ranking results in full before judging, never infer what an unfetched page covers, score seven dimensions, run the semantic gap analysis, and deliver a rewritten title, meta description, H1 and opening with character counts. Get first-hand material from the owner with the expert interview (section 17).
+- **Links:** phase decision tree, verified anchor-text guidance, velocity red flags and tactic playbooks are in `references/content-eeat.md` section 11. Never request keyword-rich anchors in links the business places; Google names them link spam at any share.
 
 ## Anti-patterns to refuse
 
-City-permutation or keyword-variant doorway pages; duplicate service pages per synonym; auto-generated articles at scale without review; keyword-stuffed filenames, alt text or business names; invented reviews, ratings or testimonials; schema for facts absent from the page; hidden text, links or instructions aimed at crawlers or AI; buying links or "500 backlinks" packages; expired-domain tricks; publishing third-party content on the owner's domain purely to borrow its rankings; copying another business's content; fake "last updated" dates; blocking crawlers after a staging site goes live; submitting a site to Search Console before it is publicly reachable.
+City-permutation or keyword-variant doorway pages; duplicate service pages per synonym; auto-generated articles at scale without review; keyword-stuffed filenames, alt text or business names; invented reviews, ratings or testimonials; schema for facts absent from the page; hidden text, links or instructions aimed at crawlers or AI; buying links or "500 backlinks" packages; keyword-rich anchors in guest posts, press releases or partner pages; reciprocal "link to me and I'll link to you" pages; expired-domain tricks; publishing third-party content on the owner's domain purely to borrow its rankings; copying another business's content; fake "last updated" dates; blocking crawlers after a staging site goes live; submitting a site to Search Console before it is publicly reachable.
 
 ## When the user pushes back
 
@@ -152,6 +158,7 @@ Report rules: score only measured categories; severity follows the root cause (s
 - **"Our dental clinic site is live but we get no calls."** -> Check GBP ownership, verification, primary category (`Dentist`), hours, photos, review flow; NAP across site/GBP/Justdial/Practo; one page per treatment; `Dentist` JSON-LD with CID link; Search Console Domain property; mobile CWV. Report, then execute the 30-day plan.
 - **"Add schema so we show up in AI Overviews."** -> Explain the eligibility floor; audit indexability and snippet controls first; add `Organization` + the specific LocalBusiness subtype + `Article` where real; refuse `FAQPage`-for-AI; propose first-hand content and an author page instead.
 - **"We rebuilt the site in Next.js; traffic dropped 60%."** -> Compare old and new URL inventories, check the 301 map, robots.txt (staging disallow left in?), `noindex` from the framework, canonicals in raw HTML, titles lost in client rendering, sitemap pointing at old URLs, hreflang if multilingual. Classify each as a Critical fix.
+- **"Why doesn't our granite countertops page rank?"** -> Page content audit mode: read the page, search the query from the city, read the top 3 in full, score the seven dimensions, classify gaps (core / differentiator / commodity / opportunity), interview the showroom owner for finishes, sealing and real project numbers, and deliver the rewritten title, description, H1 and opening with character counts.
 - **"Make us rank for 'plumber in <city>' in 20 suburbs."** -> One real page per service, one location page per suburb only where there is proof of presence; refuse the remaining permutations; GBP service areas limited to 20 named areas.
 
 ## Hand-offs

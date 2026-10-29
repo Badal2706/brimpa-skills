@@ -36,3 +36,25 @@ Privately held guides summarized or adapted (no wholesale reproduction)
   - "Local SEO Guide for Clinics" (HealersHype)
   - "12 Landing Page Animations Guide" (MadeToScale)
   - Assorted short checklists shared on social media, rewritten as checklists.
+
+Apache License 2.0: inhouseseo/superseo-skills  https://github.com/inhouseseo/superseo-skills
+  (v0.2.1; methods adapted and rewritten in seo-geo-audit and launch-marketing,
+  see each skill's references/sources.md). Its NOTICE file reads:
+
+    SuperSEO Skills
+    Copyright 2026 InhouseSEO
+
+    This product includes prompt-engineering and documentation content
+    developed by InhouseSEO (https://inhouseseo.ai).
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        https://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+    implied. See the License for the specific language governing
+    permissions and limitations under the License.

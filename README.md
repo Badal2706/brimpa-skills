@@ -2,7 +2,7 @@
 
 _By Brimpa. Previously published as `badal-skills`; this repo replaces it._
 
-Fourteen reusable [Agent Skills](https://agentskills.io/specification) for shipping websites and software, distilled from a year of collected security checklists, design systems, SEO playbooks, compliance guides and launch prompts, then re-verified against primary sources as of **October 2026**.
+Fifteen reusable [Agent Skills](https://agentskills.io/specification) for shipping websites and software, distilled from a year of collected security checklists, design systems, SEO playbooks, compliance guides and launch prompts, then re-verified against primary sources as of **October 2026**.
 
 Works with Claude Code, Claude Desktop / claude.ai (including Cowork), and any agent that reads `SKILL.md` files (Codex, Cursor, Gemini CLI, OpenCode and others via `npx skills add`).
 
@@ -23,6 +23,7 @@ Works with Claude Code, Claude Desktop / claude.ai (including Cowork), and any a
 | [mascot-3d](skills/mascot-3d/) | design and ship an original 3D brand mascot from a logo: concept sheets, procedural three.js modelling, states, page integration, stills and fallbacks | the method proven on Brimpa's own mascot (kept private; logic and fresh templates only), img2threejs, threejs-skills |
 | [web-scraping](skills/web-scraping/) | collect web data you are authorized to collect; choose fetchers, spiders, sanitize for LLMs | Scrapling official skill (linked, not vendored) + alternatives |
 | [reverse-engineering](skills/reverse-engineering/) | understand how a shipped artifact works, with evidence, within legal limits | REA (linked, not vendored) |
+| [grill-plan](skills/grill-plan/) | want a plan, brief or feature questioned until no gaps remain, with clickable answers, before building | mattpocock/skills (grill-me), rewritten to ask with options |
 | [knowledge-base](skills/knowledge-base/) | ask a factual question the notes may answer, add a screenshot / link / PDF "for later", process the knowledge inbox, or feed a local AI with curated notes | the `knowledge/` folder: formulas, free-tier maps, tool catalogs, domain checklists, dated research with citations |
 
 `web-design` and `luxury-web-design` are a pair: the first builds normal-to-premium sites and carries the cheap, always-on conversion basics; the second adds the premium-to-luxury strategy, attention psychology, proof and pricing rules for high-budget work. Load both for a luxury build; either works alone.
@@ -66,6 +67,7 @@ Option C — the cross-agent installer (Codex, Cursor, Gemini CLI, OpenCode, 70+
 ```bash
 npx skills add Badal2706/brimpa-skills            # pick skills interactively
 npx skills add Badal2706/brimpa-skills --skill ui-ux -g   # one skill, user-wide
+# the skills CLI sends anonymous telemetry by default; set DISABLE_TELEMETRY=1 to turn it off
 ```
 
 Then just describe the task ("review this API before launch", "make this clinic site look premium", "audit SEO for example.com"); Claude picks the skill from its description. You can also type `/security-review` etc.
