@@ -48,6 +48,8 @@ Read the brief for four things: industry, audience (who, where, what light they 
 
 Mood words map too: "calm, trustworthy" pulls toward 1, 2, 8; "bold, loud, young" toward 4, 16, 9; "premium, exclusive" toward 6, 1, 12; "technical, precise" toward 3, 14, 10; "warm, handmade" toward 7, 16.
 
+Style names map too. When the client names a style ("make it bento", "something Y2K", "glassmorphism"), translate the word into a direction before shortlisting, then confirm with one reference screenshot, because the word means different things to different people. Common ones: minimalism to 1; Swiss or brutalism to 3; neo-brutalism to 4; luxury typography or neo-classical to 6 (with luxury-web-design); editorial to 1 or 13; scrapbook, bohemian or wabi sabi to 7; ethereal to 2; Y2K, synthwave or cyberpunk to 10 or 16; maximalism or graffiti to 16; bento is a features-block layout inside 14, not a whole page; claymorphism and anthropomorphic styles are an illustration or mascot layer (brand-identity), not the layout. The full table (29 style names) is the repo's `knowledge/web/design-style-vocabulary.md`, reachable through the knowledge-base skill. Decline neumorphism, and glass as the whole system, for forms and for healthcare even when the client names them: both cut contrast below the WCAG floors in §2 of the pre-flight, which hits older patients first; offer the nearest direction (2 or 11 at one fixed element) and keep the named style as one accent. This is the one exception to "the brief wins" below, because it is an accessibility floor, not taste.
+
 ## Composition rule and the "roll" rule
 
 - **The brief wins.** If the client pins a look ("make it look like a terminal", "we are cream and terracotta"), build that at full fidelity even where this catalog warns against it. Redirecting a clear brief toward your own taste is failure.
@@ -81,7 +83,7 @@ Mood words map too: "calm, trustworthy" pulls toward 1, 2, 8; "bold, loud, young
 
 **Imagery:** one dominant picture per screen rather than six small; same two crop ratios throughout; untouched or all-greyscale; captions one short line in the small size. Hero media covering half the first screen is the norm, or a deliberate typographic statement.
 
-**Motion depth:** low. One masked line reveal on load (settled by 1.2 s), reveals once on two or three sections only, link underline that fills on hover. No hover lift, no parallax.
+**Motion depth:** low. One masked line reveal on the first section heading below the fold (the hero headline is already readable on the first frame; load sequence settled by 1.2 s), reveals once on two or three sections only, link underline that fills on hover. No hover lift, no parallax.
 
 **Signature move:** the index with preview (rows of work names; the pointed-at row shows its picture in a frame anchored to the row, other rows dimmed to 0.4), or a slow crossfade through three or four photographs at 5-6 s each.
 
@@ -113,7 +115,7 @@ Mood words map too: "calm, trustworthy" pulls toward 1, 2, 8; "bold, loud, young
 
 **Imagery:** real photographs of the actual premises, staff and equipment beat everything; ask for them. If none exist, show the neighbourhood (found and credited) and draw the clinic's own things (the chair, the door, the logo) in one flat language. Never a stock smiling patient that could be mistaken for the clinic's own. Doctor portraits large, square-cropped, same ratio.
 
-**Motion depth:** low to medium. One soft load sequence (headline lines rise, picture settles from 1.08 scale), hover on cards limited to a tone shift, press feedback on the booking button. No pulsing "we are open" dots unless the status is live from real data.
+**Motion depth:** low to medium. One soft load sequence (headline readable from the first frame, picture settles from 1.08 scale; masked lines only on a section heading below the fold), hover on cards limited to a tone shift, press feedback on the booking button. No pulsing "we are open" dots unless the status is live from real data.
 
 **Signature move:** the live thing is the booking: real open slots, or a "call / WhatsApp / directions" trio that works on a thumb, or an opening-hours block that says whether the clinic is open right now computed from real hours. Secondary: a held picture with passing captions for the treatment journey (consult, plan, treatment, review).
 

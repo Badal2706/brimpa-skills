@@ -153,8 +153,17 @@ No zebra. Either no row dividers (rely on pitch or 2-8px gaps between filled row
 - Status pills 16-24px tall, text 11-12px/500, a pale tint with dark text of the same hue (positive #dcfae5/#04250e, negative #ffedea/#831c1e, notice #fffbeb with #fde68a border and #92400e text); neutral states as monochrome chips with a glyph; one status mark per row; `flex: none; white-space: nowrap` so a chip is never squeezed. A saturated fill with white text only for the one call to action and only while under about a fifth of visible rows carry it.
 - Media: 16px logos in dense rows; 24-32px avatars; one fixed media slot so text starts on one edge; circles for people, small radius for artwork.
 - Row actions: none, or one kebab at the far right; a trailing action column only when most rows carry the action; when a row needs doing, its action is a visible ghost button or ink text action in one fixed trailing column at the same pitch for every row. Hover and selected: a 1px outline at 6px radius, or in a list that drives a detail pane the `--active` fill of the nav pill so it cannot be confused with focus.
-- Overview lists: no pagination; cap rows, "View all", state the total. Full list screens: total above the table, header kept in view, page or load more with the range shown ("1-50 of 1,284"); virtualise past a few hundred rows.
+- Overview lists: no pagination; cap rows, "View all", state the total. Full list screens: total above the table, header kept in view, page or load more with the range shown ("1-50 of 1,284"); virtualise past a few hundred rows (§6.6).
 - Lists that carry data: row fill as the bar only in one-figure ranking lists; inline bars thin and grey unless they are the main series; a key-value well for details; a feed as row cards with a relative date on the right.
+
+### 6.6 Long lists and virtualisation
+
+- Over about 200 rich rows (avatars, chips, inline bars), try `content-visibility: auto` with `contain-intrinsic-size: auto <row height>px` on each row or row group first: the browser skips rendering off-screen rows while they stay in the DOM, so find-in-page, anchors and screen readers still work (Baseline across current browsers as of Oct 2026).
+- Thousands of rows: virtualise (TanStack Virtual, react-virtuoso) with an overscan of a few rows each side so fast scrolling does not show blanks; fixed or measured row heights so the scrollbar does not jump.
+- Keep the focused row mounted while it scrolls out of view, so keyboard focus and screen-reader position are not lost; restore scroll position on back navigation.
+- Tell assistive technology the true size: `aria-rowcount` on the grid or table and `aria-rowindex` on rows, or `aria-setsize` and `aria-posinset` on list items.
+- Offer in-app search or filter on a virtualised list, because Ctrl+F only finds rows that are mounted.
+- Never virtualise public content that must be indexed (catalogues, articles, directories): unmounted rows are invisible to crawlers; paginate with real links instead (seo-geo-audit).
 
 ## 7. Filters, search, bulk actions, selection
 
@@ -180,14 +189,23 @@ No zebra. Either no row dividers (rely on pitch or 2-8px gaps between filled row
 - Submit: disable while in flight, show loading in place, then the result; keep the button label while loading ("Saving...").
 - Password: show/hide toggle, paste allowed, password managers allowed, the rules shown before typing and ticked as met; passkeys or OAuth offered.
 
-### 8.2 Wizards
+### 8.2 File uploads
+
+- Before the drop, the zone gives three signals while a file is dragged over it: the border changes (dashed to solid, or the accent colour), the area highlights, and the copy changes to "Release to upload". A visible "Choose file" button always sits inside the zone, because dragging is not available to everyone (keyboard, touch, switch users).
+- After selection, each file shows a thumbnail (images) or type icon, its name, type and size, and a remove control, before anything is sent; reject wrong types and oversize files here with the limit in the message ("PDF or JPG, up to 10 MB; this file is 18 MB").
+- Progress is determinate per file: a percent plus time or size left ("62% - 3.1 of 5 MB"), driven by `XMLHttpRequest.upload.onprogress` (fetch has no upload-progress event in most browsers as of Oct 2026); never a spinner alone.
+- Per-file progress and retry: one failed file never blocks or cancels the rest; its row shows what failed and an inline Retry that keeps the file, so the user never re-picks it.
+- Large files (tens of MB and up, or patchy mobile networks): resumable, chunked upload (the tus protocol, or S3 / Cloudflare R2 multipart upload with presigned part URLs) so a dropped connection resumes from the last part instead of restarting.
+- Validate on the client for speed and again on the server for safety (type by content, not extension; size; malware scanning where the files are shared); security-review owns the server-side rules.
+
+### 8.3 Wizards
 
 - Only when steps are genuinely sequential or long; otherwise one page with sections.
 - "Step 2 of 4" with step names; Back never loses input; the context chosen earlier stays visible; a review step before anything irreversible; save-and-exit for long flows; the primary button names the next step ("Next: payment") and the last names the outcome ("Place order").
 - Each step one decision or one group of related fields; progress at its true ratio.
 - The last step is the memory (peak-end): the final form, the pay button and the confirmation decide how the whole flow is remembered. Test the final step first on a phone and on desktop; its confirmation names what was received and what happens next and when ("Order 1042 confirmed. Ships Tuesday; tracking by email.").
 
-### 8.3 Settings
+### 8.4 Settings
 
 - One view per area (General, Members, Billing, Notifications), each with the area's name as `h1`; never one long page scroll-spied from the sidebar.
 - Layout: a label column (about 450px: 16px/500 title and 14px grey description) beside a panel (about 700px, tinted #fafafa, radius 16, padding 16, no border, no shadow); sections split by a full-width 1px rule with 32px above and below; narrow containers stack label over field.
@@ -197,7 +215,7 @@ No zebra. Either no row dividers (rely on pitch or 2-8px gaps between filled row
 - Destructive actions last, in their own section, as text or outlined button in the negative colour, consequence in words, confirmation naming the object.
 - Plan-gated features: readable panel plus a 48px strip with the upgrade action; the control never silently missing.
 
-### 8.4 Pricing table and plan picker
+### 8.5 Pricing table and plan picker
 
 Applies to the public pricing page (Persuade) and to the plan picker in Billing settings (Operate); the rules are the same.
 - Three tiers, four at most; more is a comparison task nobody finishes (Hick). Order them by price so the first number anchors the rest; the recommended tier is the one most buyers should choose, usually the middle.
@@ -261,6 +279,7 @@ Offer a density toggle (comfortable/compact) on list-heavy tools. Placed space r
 
 - Extremes: very long and very short text, emoji, RTL, accents, large numbers, 0 and 1 and 1000+ items, 50+ options in a select, no data at all. CSS: `.truncate` (overflow hidden, ellipsis, nowrap), `.line-clamp` (`-webkit-line-clamp: 3`), `overflow-wrap: anywhere` for long tokens, `min-width: 0` on flex/grid children, `hyphens: auto` for narrow columns.
 - Errors: offline, slow, timeout; 400/401/403/404/429/500; validation; permission; rate limit. Core content visible without JS where feasible; a failed script must never hide the page (no content at opacity 0 waiting for a reveal). One failing component never blocks the whole interface (error boundaries per block).
+- Offline (clinic front desks, field staff, patchy 4G): a persistent offline banner that counts what is waiting ("Offline - 3 changes will sync when you reconnect"); queue writes in IndexedDB with a request id each so replays are idempotent; replay them on the `online` event and when the app regains focus (Background Sync is Chromium-only as of Oct 2026, so never rely on it alone); show each queued item as pending until the server confirms. Never serve live slot availability, payments or stock levels from cache: show them as unavailable offline rather than stale. Clear locally stored patient or personal data on logout and on session expiry (dpdp-legal-compliance).
 - Concurrency: disable the button while loading; idempotent submits (a request id) so a retry does not duplicate; optimistic updates with rollback and a visible failure; conflict handling when two tabs or two people edit (last-writer-wins with a notice, or a merge prompt); refresh mid-flow keeps drafts (local storage or server drafts); multiple tabs do not corrupt state.
 - Interrupted gestures on custom sliders, drag surfaces and scroll strips: a second pointer mid-drag keeps the first or ends cleanly; on `pointercancel`, `lostpointercapture`, release outside, or `blur` clear drag state and release capture; set `touch-action` on pointer drag surfaces; the next tap works without reload.
 - Memory and timers: clean listeners, cancel subscriptions, clear timers, abort requests on unmount; debounce search about 300ms, throttle scroll about 100ms.

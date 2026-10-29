@@ -66,7 +66,7 @@ Score each field 2 (optimised), 1 (present), 0 (missing); 50 points normalised t
 22. Cover photo chosen deliberately.
 23. At least one short video.
 24. Owner responses to 80%+ of reviews, all recent ones within 48 hours.
-25. Contact options: WhatsApp or SMS link where available (native GBP chat ended in July 2024; if both are added, only the text option shows). **Q&A is no longer a field**: public Q&A was removed and replaced by an AI "Ask" answer built from the profile, reviews, photos and website, so answers now come from items 9-13 and from FAQ content on the site.
+25. Contact options: WhatsApp or SMS link where available (native GBP chat ended in July 2024; if both are added, only the text option shows). **Q&A is no longer a field to invest in**: the Q&A API ended on 3 Nov 2025 and public Q&A is being replaced by an AI "Ask" answer built from the profile, reviews, photos and website. Sources disagree on what still shows (a Dec 2025 Google forum note said existing Q&A may still appear on some surfaces; it went off in India earlier; Aug 2026 reports describe it as switched off), so as of Oct 2026 do not seed or answer profile questions: answers now come from items 9-13 and from FAQ content on the site.
 
 Vertical weighting (heuristic): restaurants double the menu field; healthcare doubles services and weights hours and attributes 1.5x; home services double service areas; retail doubles products and photos.
 
@@ -74,7 +74,7 @@ Things to flag: duplicate listings at the same address (merge them; a strong neg
 
 ## 3. Categories, service areas, attributes
 
-- Find the right primary category by searching the target query in Maps and reading the categories the top three listings use; pick the most specific true one. Change categories only with sign-off; they can trigger re-verification.
+- Find the right primary category by searching the target query in Maps and reading the categories the top three listings use (the free GMBspy Chrome extension shows the primary and secondary categories of a selected listing or of the local pack; run it on a category search, not a business-name search; as of Oct 2026); pick the most specific true one. Change categories only with sign-off; they can trigger re-verification.
 - Secondary categories broaden eligibility but dilute nothing; do not add categories for services the business does not offer.
 - Service-area businesses (SAB): hide the address if customers are not received there; up to 20 named areas; the website should still show the registered address for trust and schema, or omit `streetAddress` in schema if it is hidden on GBP.
 - Attributes: identity attributes have a small targeted effect; general attributes are informational but feed the AI "Ask" answers, so fill them truthfully.

@@ -1,8 +1,8 @@
 {
   "name": "brimpa-skills",
   "displayName": "Brimpa Skills",
-  "version": "1.6.0",
-  "description": "Reusable skills for shipping websites and software: pre-launch security review, LLM/agent app security, India DPDP + legal compliance, UI/UX for web and apps, distinctive web design, premium-to-luxury web strategy and attention psychology, SEO + AI-search audit, launch marketing copy, brand identity, launch videos, procedural three.js brand mascots, authorized web scraping, evidence-based reverse engineering. Includes plan grilling (grill-plan) and a knowledge-base skill over the repo's curated notes.",
+  "version": "1.7.0",
+  "description": "Reusable skills for shipping websites and software: pre-launch security review, LLM/agent app security, India DPDP + legal compliance, UI/UX for web and apps, distinctive web design, premium-to-luxury web strategy and attention psychology, SEO + AI-search audit, launch marketing copy, brand identity, launch videos, procedural three.js brand mascots, authorized web scraping, evidence-based reverse engineering. Includes an Indian money and tax guide, plan grilling (grill-plan) and a knowledge-base skill over the repo's curated notes.",
   "author": {
     "name": "Brimpa",
     "url": "https://github.com/Badal2706"
@@ -23,6 +23,7 @@
     "brand",
     "scraping",
     "knowledge",
-    "mascot"
+    "mascot",
+    "finance"
   ]
 }

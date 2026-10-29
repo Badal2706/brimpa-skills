@@ -92,6 +92,8 @@ All of these are scheduled to be enforceable from 13 May 2027 unless accelerated
 | Nominate | s.14 | Field or process to record a nominee who may exercise rights on death or incapacity |
 | Withdraw consent | s.6(4) | Equal-ease control; triggers processing stop and processor notification |
 
+No data-portability right: the Act's rights are the five above (ss.11-14 and s.6(4)); nothing like GDPR Article 20's right to receive data in a machine-readable format and move it to another provider. A downloadable export is good practice and makes the s.11 access response easy, but it is not a DPDP legal duty: never list it as a compliance item or promise it in a notice as "your right under the DPDP Act" (as of Oct 2026; other laws or a sector regulator may still require one).
+
 Duties of the Data Principal (s.15): comply with law, not impersonate, not suppress material information, not file false or frivolous complaints, provide only verifiably authentic information for correction or erasure. Penalty for breach up to Rs 10,000. Useful to cite in the rights form's declaration line.
 
 ## 5. Children and persons with disabilities
@@ -171,6 +173,8 @@ A clinic, agency or small SaaS is below these thresholds. It should publish its 
 - SDF localisation (Rule 13(4)): the Central Government may specify categories of personal data, including traffic data, that an SDF must not transfer outside India. Not relevant until notified as an SDF and until categories are specified.
 
 Engineering checklist: vendor table with country of processing; DPA or contract link per vendor; deletion-on-instruction confirmed; Indian region selected where offered.
+
+WhatsApp messaging to clients or patients (reminders, reports, OTPs) goes only through Meta's WhatsApp Business Platform (the Cloud API) or an official Business Solution Provider, with the provider listed as a processor in the vendor table. Unofficial gateways that drive a WhatsApp account through the web client (whatsmeow, Baileys, Evolution API in its Baileys mode, "WhatsApp API" panels built on them) break WhatsApp's terms, which bar access "through automated or other means" and allow the account to be disabled (WhatsApp Terms of Service, checked Oct 2026), so the clinic can lose its number overnight; they also route personal and health data through an unvetted processor with no contract, which fails s.8(2) and Rule 6(1)(f). Refuse them in a build; flag them as a finding in an audit.
 
 ## 10. Significant Data Fiduciary extras
 

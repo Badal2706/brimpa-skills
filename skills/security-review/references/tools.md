@@ -12,8 +12,9 @@ Run scanners in a clean working copy or CI, never with production credentials in
 4. [Static analysis: Semgrep](#4-static-analysis-semgrep)
 5. [Static analysis: CodeQL](#5-static-analysis-codeql)
 6. [Putting it in CI](#6-putting-it-in-ci)
-7. [OWASP Top 10:2025 mapping](#7-owasp-top-102025-mapping)
-8. [OWASP API Security Top 10 (2023) mapping](#8-owasp-api-security-top-10-2023-mapping)
+7. [Deep scan: Claude Security plugin, optional dynamic test](#7-deep-scan-claude-security-plugin-optional-dynamic-test)
+8. [OWASP Top 10:2025 mapping](#8-owasp-top-102025-mapping)
+9. [OWASP API Security Top 10 (2023) mapping](#9-owasp-api-security-top-10-2023-mapping)
 
 ## 1. Secret scanning
 
@@ -159,7 +160,26 @@ Minimum pipeline for a small team (run on every PR; fail the build on new Highs)
 5. A header/cookie assertion test against a built preview (session cookie flags, CSP present, CORS not reflecting).
 6. Pin every CI action to a commit SHA; give PR-triggered workflows read-only tokens and no deploy secrets.
 
-## 7. OWASP Top 10:2025 mapping
+## 7. Deep scan: Claude Security plugin, optional dynamic test
+
+After the pattern scanners above (they are fast and cheap), a model-driven deep scan finds logic and authorization flaws they miss. As of Oct 2026 Anthropic's `claude-security` plugin is listed in the official `claude-plugins-official` marketplace as "deep vulnerability scanning of your own code, run entirely inside your Claude Code session at a chosen effort tier" (beta; it is a different plugin from `security-guidance`, which reviews Claude's own edits as it writes them). Check current docs before relying on these commands.
+
+```text
+/plugin install claude-security@claude-plugins-official
+/reload-plugins
+# if the marketplace is not found: /plugin marketplace add anthropics/claude-plugins-official, then install again
+/claude-security                     # menu: Scan codebase, Scan changes, Suggest patches
+# or in words: "run a Claude Security scan on src/auth and src/api at medium"
+```
+
+- Requirements per its README: Claude Code with the plugin, Python 3.9+ on PATH, a git checkout for change scans and patches. The README states no plan gate; a scan asks you to confirm its time and token cost first, which is billed to your Claude plan or API key. Eligibility and pricing for the beta differ between sources (the web product launched for Enterprise first), so check current docs for your plan.
+- Effort: `medium` for a whole-repo pass or one scoped to the auth and API folders; `high` for a feature-sized change or a risky branch. Re-run "Scan changes" on each risky branch before merge; it reports only flaws the change takes part in.
+- Output: `CLAUDE-SECURITY-<timestamp>/` with a Markdown report (CRITICAL to LOW), JSONL, SARIF 2.1.0 for code scanning, and a revision file. Treat each item as a candidate: it still needs this skill's source-to-sink trace, counter-evidence check and severity calibration before it becomes a finding.
+- Patches: "Suggest patches" writes one `patches/F<n>.patch` per finding, developed in a scratch copy, and applies nothing. Review each patch, then apply one per branch and PR with `git apply CLAUDE-SECURITY-<ts>/patches/F<n>.patch`, run the tests, and merge separately. Never auto-apply a batch.
+
+**Optional dynamic test (staging only, written authorisation first).** Strix (open source, Apache-2.0) runs AI agents that actively test a running target and validate findings with proofs of concept. It needs Docker running and an LLM API key (`STRIX_LLM`, `LLM_API_KEY`). Point it only at a staging copy you own or have explicit written permission to test, never at production or a third party, keep it inside the agreed scope, and use synthetic data (no real patient or customer records in staging). Its output is candidates too.
+
+## 8. OWASP Top 10:2025 mapping
 
 As of Oct 2026, OWASP Top 10:2025 (presented Nov 2025) is the current web edition. Use it unless the user needs the 2021 edition for a specific compliance checklist, and label the report with the edition used. Changes from 2021: SSRF folded into A01; A03 Software Supply Chain Failures expands the old Vulnerable and Outdated Components; A10 Mishandling of Exceptional Conditions is new; Security Misconfiguration moved from #5 to #2; A07 renamed to Authentication Failures; A09 renamed to emphasise alerting.
 
@@ -178,7 +198,7 @@ As of Oct 2026, OWASP Top 10:2025 (presented Nov 2025) is the current web editio
 
 Resource exhaustion and unbounded consumption are **not** A10, which covers fail-open branches, unhandled errors and missing cleanup on failure. Map unbounded consumption to A06 Insecure Design when the design has no bound, or A02 Security Misconfiguration when a bound exists but is mis-set or disabled, plus API4:2023 for APIs. A process crash on malformed input is A10.
 
-## 8. OWASP API Security Top 10 (2023) mapping
+## 9. OWASP API Security Top 10 (2023) mapping
 
 Apply in addition to the web list for any REST, GraphQL or gRPC API.
 

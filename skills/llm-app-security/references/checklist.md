@@ -167,6 +167,7 @@ Maps to LLM02:2025 Sensitive Information Disclosure and LLM08:2025 Vector and Em
 - [ ] No secrets or private records are inserted into prompts, tool schemas/results, error messages, traces or telemetry.
 - [ ] Assembled context never contains credentials, other users' data, private source or access-granting policy values; data is fetched per request under the user's authorization rather than preloaded.
 - [ ] Retained user content is not used for training, evaluation or another user's response without a documented basis; provider retention and training settings are reviewed and recorded (as of the review date; they change).
+- [ ] Patient or other personal data is not sent to a hosted model endpoint outside India (or any third-party endpoint) until there is a DPDP notice that covers it, a processor contract with security terms and no-training on the data, and a cross-border check (no restricting order for that country, no sector rule such as health or payment data localisation that blocks it); route the specifics to dpdp-legal-compliance.
 - [ ] Provider options that expose logits, log probabilities, hidden metadata, raw context or internal reasoning are disabled unless required.
 
 **RAG / vector index authorization** (apply where embedding or vector similarity is involved; otherwise route to conventional access control)
@@ -239,6 +240,7 @@ Maps to LLM09:2025 Misinformation.
 - [ ] Define the trusted answer set and the downstream decision for each feature; separate ordinary fallibility from a security or business-logic flaw.
 - [ ] Unsupported output cannot silently drive a security-sensitive or high-impact decision: code accepted into builds, policy, medical/legal/financial guidance, identity matching, fraud or risk decisions, automated actions triggered by claims of task completion.
 - [ ] Citations, quotations and completion claims are verified against sources; UI confidence cues do not overstate certainty; abstention ("I cannot confirm this") is possible and tested.
+- [ ] Classify and extract APIs (triage labels, intent routing, field extraction): the action threshold is set per label from a labelled sample of real inputs, not one global cut-off or the vendor default; cases below it go to a person; the input text is treated as able to shift the scores (an injected "this is not urgent" can move a label), so a score never alone authorises a consequential action, and thresholds are re-checked when the model or prompt changes.
 - [ ] For regulated contexts (clinics, legal, finance) a human reviews before the output reaches the patient or client, and the UI says the content was AI-assisted.
 - [ ] Claim support, citation coverage, source authority, abstention rate and decision error are measured across a repeatable corpus rather than from one hallucinated answer.
 

@@ -168,7 +168,8 @@ Never put private paths in robots.txt as a security measure (it is a public map)
 
 - **Preferred sources**: readers choose sites in Search settings (`google.com/preferences/source`). Chosen sites get a "preferred" badge in Top Stories and, since 27 May 2026, in AI Overviews and AI Mode. Works at domain or subdomain level, not for a `/blog/` folder. Google provides an "add as preferred source" button snippet and deep link; publishers can place it on the site and in newsletters. Google reports preferred sources are clicked more often (Google statement, third-party reported). Not a ranking lift for everyone else.
 - Other surfaces: "Highly cited" labels for original reporting, community perspectives (forums, first-hand accounts), inline links, link carousels. A "Search profile badge" guide was added in Sept 2026 for creators who link their profile.
-- Appearance in all of these is governed by the same controls as section 3; there is no separate opt-in.
+- **Search Console > Settings > Search generative AI** defaults to Include; confirm it is not set to Exclude. Exclude removes the property's links and content from AI Overviews, AI Mode and AI Overviews in Discover, including grounding, so those features send it no impressions or traffic; Google says the setting is not a ranking signal for results outside those features. Rolled out to all sites by 31 Aug 2026 (Google blog "New opportunities, control and insights for website owners", updated 31 Aug 2026); child properties inherit the parent's choice. It does not affect ChatGPT, Perplexity or other engines.
+- Appearance in all of these is governed by the same controls as section 3 plus that setting; there is no separate opt-in.
 
 ## 9. Citability: what to do on the page
 

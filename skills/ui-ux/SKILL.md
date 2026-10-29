@@ -4,8 +4,8 @@ description: Usability and interaction design for any screen - web apps, dashboa
 license: MIT
 metadata:
   author: Brimpa
-  version: "1.1"
-  updated: "2026-10-22"
+  version: "1.2"
+  updated: "2026-10-30"
 ---
 
 # UI/UX: usability, interaction and states for apps and pages
@@ -205,7 +205,7 @@ For a build, report: surface and mode; the screen's one question and most freque
 ## Reference files
 
 - `references/modes-and-surfaces.md` - read when deciding Persuade/Operate/Read/Experience for a surface, or when a product site and an app screen share one request.
-- `references/app-patterns.md` - read when building or reviewing any app screen: shells, tables, filters, bulk actions, forms, wizards, dashboards, settings, states, permissions, notifications, onboarding, keyboard, density, AI features.
+- `references/app-patterns.md` - read when building or reviewing any app screen: shells, tables, long lists and virtualisation, filters, bulk actions, forms, file uploads, wizards, dashboards, settings, states, offline queues, permissions, notifications, onboarding, keyboard, density, AI features.
 - `references/ux-laws.md` - read when you need the reason behind a rule or an example to show a stakeholder.
 - `references/critique-rubric.md` - read before any UX review: Nielsen check-for lists, scoring, cognitive-load checklist, personas, report template.
 - `references/accessibility-responsive.md` - read when auditing or implementing accessibility, responsive or native adaptation, and for the testing tools.

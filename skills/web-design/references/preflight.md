@@ -21,7 +21,7 @@ Run this on the built page before you call it done. It is hard and honest: every
 
 ## 1. How to run it
 
-1. Settle or disable entrance motion, then capture full-page screenshots from the top at 1440, 768 and 390 (plus the user's actual viewport). Open every capture and confirm it shows what its name claims.
+1. Settle entrance motion by emulating `prefers-reduced-motion: reduce` (Playwright `page.emulateMedia({ reducedMotion: 'reduce' })` or the DevTools Rendering panel); the house rules make the reduced page the finished page, so this is the settled state, not a workaround. Then capture full-page screenshots from the top at 1440, 768 and 390 (plus the user's actual viewport). Open every capture and confirm it shows what its name claims. Normal motion is kept only for the first-paint frame and the QA probes in step 2, which exist to catch what motion breaks.
 2. Capture the first-paint frame at about 0.35 s and run the QA probes (§13) at 1440 and 390; any probe failure is a blocking fail before the visual review starts.
 3. Batch the checks: fix everything one look shows before looking again. Two rounds is the ceiling for a build; a third means the plan was wrong.
 4. Review in a fresh context where possible (a second pass without the build thread's optimism); judge only the pictures: if a problem is visible in a screenshot it is real, whatever the code says.
@@ -43,13 +43,15 @@ Run this on the built page before you call it done. It is hard and honest: every
 
 Walk the page against this list. Each is a default, not a ban (except the kicker/eyebrow, which is banned outright), so a hit needs a reason written in the report or a fix.
 
-Structure: cards nested in cards; everything in cards; same-size icon + heading + text cards as page structure; rounded-square icon tile above headings; kicker or eyebrow above a heading; hero pill chip; numbered section labels (01/02/03) without a real sequence; hero-metric template; split hero with badge row; centred headline over a row of cards; hairline border plus wide soft shadow on every card ("ghost card"); thick coloured side-tab border on cards; stock section order (hero, logos, three features, testimonial, pricing, CTA); every section the same layout family; everything centred; one medium radius on everything; nine nearly equal font sizes; link-column footer as the only close.
+Structure: cards nested in cards; everything in cards; same-size icon + heading + text cards as page structure; rounded-square icon tile above headings; kicker or eyebrow above a heading; hero pill chip; numbered section labels (01/02/03) without a real sequence; hero-metric template; split hero with badge row; centred headline over a row of cards; hairline border plus wide soft shadow on every card ("ghost card"); thick coloured side-tab border on cards; stock section order (hero, logos, three features, testimonial, pricing, CTA); every section the same layout family; everything centred; a product page with no real product screenshot or demo; app pages that load to a blank area or a spinner where a skeleton of the coming layout belongs (a functional defect, fix before style); one medium radius on everything; nine nearly equal font sizes; link-column footer as the only close.
 
-Surfaces and colour: cream ground with terracotta or clay accent; violet/indigo or purple-to-blue gradients; near-black with one neon accent and glow; cyan on dark; gradient text; gradient buttons; glass panels and floating pill nav as decoration; coloured glow shadows; radial halo or spotlight behind the hero; repeating-gradient stripes; decorative grid-line backgrounds; `feTurbulence` grain; shape-assembled or sketch-style SVG illustration; many-vertex clip-path "organic" shapes; gray text on coloured backgrounds; pure black/grey neutrals without a decision; monospace as a technical costume; a system display face (Impact, Arial Black) as the display voice; emoji or Unicode glyphs as icons; tiny tracked uppercase labels; one word of a headline styled differently.
+Surfaces and colour: cream ground with terracotta or clay accent; violet/indigo or purple-to-blue gradients; near-black with one neon accent and glow; cyan on dark; gradient text; gradient buttons; glass panels and floating pill nav as decoration; coloured glow shadows; radial halo or spotlight behind the hero; repeating-gradient stripes; decorative grid-line backgrounds; `feTurbulence` grain; shape-assembled or sketch-style SVG illustration; many-vertex clip-path "organic" shapes; gray text on coloured backgrounds; pure black/grey neutrals without a decision; monospace as a technical costume; a system display face (Impact, Arial Black) as the display voice; emoji or Unicode glyphs as icons; Lucide (or any one set) left at its default size and stroke on every icon instead of tuned to the type; checkmark bullets by reflex on every list; sparkle icons standing for "AI"; tiny tracked uppercase labels; one word of a headline styled differently.
 
 Copy: buzzwords (streamline, empower, supercharge, unlock, unleash, elevate, seamless, effortless, robust, cutting-edge, next-generation, world-class, enterprise-grade, all-in-one, blazing fast); the correction ("Not a feature. A platform.") three or more times; tricolon headlines; "theater" framing; em-dash saturation (eight or more); oversized full-sentence h1; "Get started" / "Learn more" / "Submit" as labels; "Field notes" / "Quietly trusted by" labels; middle-dot meta strings; "WORD — fragment" labels; "→" on every link; furniture text (local time, coordinates, "Est. 2024", "Scroll to explore", "Available for work" with a dot); lorem ipsum; "John Doe" / "Acme Corp".
 
-Motion: fade-and-rise on every section; hover lift on every card; scattered scroll reveals; parallax as thesis; bounce or elastic easing; pulsing status dots; decorative blinking cursor; auto-scrolling marquee; page-load choreography on product UI; typewriter or scramble headlines; preloader or counter; custom cursor; scroll hijack.
+Motion: fade-and-rise on every section; hover lift on every card; hover animation on every element; animated arrows on every link; scattered scroll reveals; parallax as thesis; bounce or elastic easing; pulsing status dots; decorative blinking cursor; auto-scrolling marquee; page-load choreography on product UI; typewriter or scramble headlines; preloader or counter; custom cursor; scroll hijack.
+
+Optional automated pass: impeccable's CLI scans a folder, file or live URL without an LLM (`npx impeccable detect <url>`; URL scans need Puppeteer; exit code 2 means patterns were found, per its npm listing, Oct 2026). Treat its hits like this list (defaults needing a reason, not verdicts); it never replaces looking at the screenshots.
 
 Calibration question: could someone guess this aesthetic from the category alone, or from category plus the list of things to avoid? If yes, rework. A bookish subject does not soften the test ("cream plus serif for a book subject is the default wearing the subject's clothes").
 
@@ -81,7 +83,7 @@ Calibration question: could someone guess this aesthetic from the category alone
 
 - Checked at 320, 375, 414, 768, 1024 and 1440 widths with real copy; no horizontal scroll; no three-line headlines; no text at the edge.
 - The phone is its own composition: one dominant thing on the first screen; images re-cropped with `object-position`; headline breaks re-authored; margins 16-20px; body 16-18px.
-- Touch targets at least 44x44 CSS px (24x24 is the WCAG 2.2 minimum; 44 is the house floor), 8px between adjacent targets; no hover-dependent functionality (`@media (hover: hover)` guards hover styles).
+- Touch targets at least 44x44 CSS px (24x24 is the WCAG 2.2 minimum; 44 is the house floor), 8px between adjacent targets; links inside a sentence or paragraph of text are exempt from both floors (the WCAG 2.5.8 "inline" exception), but standalone links, nav items, buttons and icon controls are not; no hover-dependent functionality (`@media (hover: hover)` guards hover styles).
 - `width=device-width, initial-scale=1`; `100svh`/`dvh` instead of `100vh` for full-height sections; safe-area insets with `env()` where the page has fixed bars.
 - Fixed elements never cover content at any scroll position, especially the phone nav and sticky bars; `scroll-padding-top` set for the sticky header.
 - Tables reflow (horizontal scroll container or card rows with `data-label`); long tokens wrap (`overflow-wrap: anywhere` on URLs); chips wrap or expose a `+n` disclosure.
@@ -163,7 +165,7 @@ Pre-flight:
   Images: <count>, credits listed below; stand-ins to replace: <list>; photo slots: <list with the shot to take>
   Links and forms: <primary goes to wa.me / tel: / booking URL; form as second path; #checkout noted / mailto fallback>
   Structured data: <subtype, fields, validated with what, or not verified>
-  First paint and probes: <0.35 s frame composed / issues; failed requests; videos playing; fonts loaded; overflow at 390 and 1440>
+  First paint and probes: <0.35 s frame composed / issues / not verified (tool used); failed requests; videos playing; fonts loaded; overflow at 390 and 1440; hidden text after scroll>
 Scored review (optional): <average, lowest dimension and score, rounds run, fixes made per round, or "not run">
 Sample content to confirm: <list, each visibly tagged on the page>
 Image credits: <file, title, creator, licence, source, where credited>
@@ -186,6 +188,8 @@ Navigate, wait for `DOMContentLoaded`, wait 350 ms more, and capture the viewpor
 
 In Playwright: `await page.goto(url, { waitUntil: 'domcontentloaded' }); await page.waitForTimeout(350); await page.screenshot({ path: 'first-paint.png' });`. Without automation, the DevTools Performance panel's screenshot strip or a Lighthouse filmstrip shows the same frame.
 
+When the only tool available is a headless `msedge --screenshot` (or `chrome --headless --screenshot`), it captures after load and cannot be timed to 0.35 s, so its picture is not a first-paint frame. Drive the installed browser over the DevTools protocol instead with a short Playwright script (`chromium.launch({ channel: 'msedge' })` or `channel: 'chrome'`) or Puppeteer, using the lines above; if neither can run, write "first paint: not verified" in the report rather than passing it from a load-time screenshot.
+
 ### QA probes
 
 Run after the page settles (network idle plus about 2.5 s), at 1440 and 390.
@@ -193,21 +197,31 @@ Run after the page settles (network idle plus about 2.5 s), at 1440 and 390.
 1. **Failed network requests.** Collect `requestfailed` events and every response with status 400 or higher (Playwright `page.on('requestfailed')` and `page.on('response')`; or the DevTools Network panel sorted by status). Every failure is a fail: broken image, font, script or video URL. Media range requests the browser cancels itself (shown as aborted) are not failures.
 2. **Video actually playing.** For each `<video>` that should play: `readyState` at least 3, `paused` false, `error` null, and `currentTime` advancing between two reads about 500 ms apart. A video that should be a still under reduced motion is probed with reduced motion emulated and must show its poster with no video request.
 3. **Fonts loaded.** After `await document.fonts.ready` (resolves when font loading and layout are done; Baseline widely available, MDN), list the faces with `status === 'loaded'` and confirm the display and text faces named in the token plan are among them; the h1's computed `font-family` leads with the display face.
-4. **No horizontal overflow.** `document.documentElement.scrollWidth > document.documentElement.clientWidth` is a fail (MDN: when content fits, `scrollWidth` equals `clientWidth`). Name the culprits: elements whose `getBoundingClientRect().right` exceeds `clientWidth`, ignoring fixed-position ones.
-5. **Console.** No uncaught errors on load (§8).
+4. **No horizontal overflow.** `document.documentElement.scrollWidth > document.documentElement.clientWidth` is a fail (MDN: when content fits, `scrollWidth` equals `clientWidth`). Name the culprits: elements whose `getBoundingClientRect().right` exceeds `clientWidth`, ignoring fixed-position elements and anything inside one (decorative fixed layers such as grain, glows or a fixed backdrop report false positives because they do not scroll the page).
+5. **Hidden text.** After scrolling the whole page once (so every reveal observer has fired) and back to the top, no element that carries its own text may still be at computed opacity 0 or `visibility: hidden` through itself or an ancestor. Each hit is the `content-hidden-at-rest` failure (§11) and fails §13; closed menus, dialogs and `[hidden]` or `aria-hidden` content are not hits, so check each name before fixing.
+6. **Console.** No uncaught errors on load (§8).
 
 ```js
 // pass to page.evaluate(), or in DevTools wrap it as (…)() and await the result; returns a report object
 async () => {
   await document.fonts.ready;
-  const de = document.documentElement, vw = de.clientWidth;
+  const de = document.documentElement, vw = de.clientWidth, wait = (ms) => new Promise((r) => setTimeout(r, ms));
+  for (let y = 0, n = 0; y < de.scrollHeight && n < 200; y += innerHeight * 0.8, n++) { scrollTo(0, y); await wait(150); } // fire every reveal once (capped for infinite scroll)
+  scrollTo(0, 0); await wait(1000);
+  const up = (el, test) => { for (let a = el; a; a = a.parentElement) if (test(getComputedStyle(a), a)) return true; return false; };
+  const name = (el) => el.tagName.toLowerCase() + (el.id ? '#' + el.id : el.classList[0] ? '.' + el.classList[0] : '');
   const sample = () => [...document.querySelectorAll('video')].map((v) => v.currentTime);
-  const t0 = sample(); await new Promise((r) => setTimeout(r, 500)); const t1 = sample();
+  const t0 = sample(); await wait(500); const t1 = sample();
   return {
     overflowX: de.scrollWidth > vw, scrollWidth: de.scrollWidth, clientWidth: vw,
     wide: [...document.querySelectorAll('body *')]
-      .filter((el) => el.getBoundingClientRect().right > vw + 1 && getComputedStyle(el).position !== 'fixed')
-      .slice(0, 5).map((el) => el.tagName.toLowerCase() + (el.id ? '#' + el.id : el.classList[0] ? '.' + el.classList[0] : '')),
+      .filter((el) => el.getBoundingClientRect().right > vw + 1 && !up(el, (cs) => cs.position === 'fixed'))
+      .slice(0, 5).map(name),
+    hiddenText: [...document.querySelectorAll('body *')]
+      .filter((el) => [...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim()))
+      .filter((el) => !up(el, (cs, a) => cs.display === 'none' || a.hidden || a.getAttribute('aria-hidden') === 'true' || (a.tagName === 'DIALOG' && !a.open)))
+      .filter((el) => up(el, (cs) => +cs.opacity === 0 || cs.visibility === 'hidden'))
+      .slice(0, 10).map(name),
     videos: [...document.querySelectorAll('video')].map((v, i) => ({
       src: v.currentSrc, readyState: v.readyState, paused: v.paused, error: v.error?.code ?? null, advancing: t1[i] > t0[i] })),
     fontsLoaded: [...new Set([...document.fonts].filter((f) => f.status === 'loaded').map((f) => f.family.replace(/"/g, '')))],

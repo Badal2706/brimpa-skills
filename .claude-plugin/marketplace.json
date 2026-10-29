@@ -1,19 +1,19 @@
 {
   "name": "brimpa",
-  "description": "Brimpa's reusable Agent Skills (security review, LLM app security, DPDP legal compliance, UI/UX, web design, luxury web design, SEO/GEO audit, launch marketing, brand identity, launch video, web scraping, reverse engineering, knowledge base, 3D mascots, plan grilling) plus the upstream skill repos they were distilled from, installable as-is.",
+  "description": "Brimpa's reusable Agent Skills (security review, LLM app security, DPDP legal compliance, UI/UX, web design, luxury web design, SEO/GEO audit, launch marketing, brand identity, launch video, web scraping, reverse engineering, knowledge base, 3D mascots, plan grilling, money and tax guide) plus the upstream skill repos they were distilled from, installable as-is.",
   "owner": {
     "name": "Brimpa",
     "url": "https://github.com/Badal2706"
   },
   "metadata": {
-    "version": "1.6.0"
+    "version": "1.7.0"
   },
   "plugins": [
     {
       "name": "brimpa-skills",
       "source": "./",
-      "description": "All fifteen Brimpa skills in one plugin. Install this unless you want to cherry-pick with `npx skills add`.",
-      "version": "1.6.0",
+      "description": "All sixteen Brimpa skills in one plugin. Install this unless you want to cherry-pick with `npx skills add`.",
+      "version": "1.7.0",
       "category": "productivity",
       "tags": [
         "security",
@@ -24,7 +24,8 @@
         "marketing",
         "compliance",
         "scraping",
-        "knowledge"
+        "knowledge",
+        "finance"
       ]
     },
     {

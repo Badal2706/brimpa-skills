@@ -132,7 +132,7 @@ p + p { margin-top: 0.9em; }
 
 - Request only the weights you use (two or three in total). Subset with `unicode-range` for large scripts.
 - `font-display: swap` (or `optional` for the body face when layout shift matters more than brand); metric-compatible fallbacks (`size-adjust`, `ascent-override`) so the swap does not reflow; always a fallback stack of the same broad kind (sans for sans, serif for serif).
-- Preload the display face so the hero's masked lines rise in the real face. In a framework, use its loader (`next/font`) with the same family and weights.
+- Preload the display face so the hero headline paints in the real face on the first frame (and below-the-fold masked lines rise in it). In a framework, use its loader (`next/font`) with the same family and weights.
 - After building, verify the families that actually rendered (DevTools > Computed > Rendered Fonts). If a face did not load, nothing judged from the screenshots is real.
 
 ## 6. Palette method in OKLCH

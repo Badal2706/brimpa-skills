@@ -22,7 +22,7 @@ When the build uses GSAP or needs ready-made transitions, install the upstreams 
 ## 1. The one-moment rule and the budget
 
 - **One moving thing per screen.** If two animations are visible at the same time, cut one.
-- **One signature moment per page:** the thing a visitor would describe an hour later (a headline rising out of a mask, a picture opening to full-bleed, a product that configures itself). Only this move may be loud. Everything else is quiet so it lands.
+- **One signature moment per page:** the thing a visitor would describe an hour later (a section headline rising out of a mask below the fold, a picture opening to full-bleed, a product that configures itself; the first-screen headline, sentence and action are never the masked thing, see §7). Only this move may be loud. Everything else is quiet so it lands.
 - **One moving picture** (a muted loop with a poster frame, a slow drift on one photograph, or a scroll-linked move on the hero picture); **one marquee at most**, pausable.
 - **Feedback on every control:** press 140 ms, hover a tone shift, focus visible. Motion that answers a user action (open, expand, confirm) is always welcome when it shows what changed.
 - **Entrances choreographed per section, not stamped:** the parts of a section arrive in reading order (heading, text, picture), staggered 60-90 ms, rising 16-32px with opacity, once; a list arrives row by row, a picture settles from a slight scale, a figure counts once. The identical fade-and-rise on every block is the most cited motion tell.
@@ -117,7 +117,7 @@ GSAP equivalents: `power3.out` / `expo.out` for entrances, `power2.inOut` for tr
 
 ## 7. Load sequence in 1.2 seconds
 
-Everything is in the HTML and painted on the first frame; the sequence only adds arrival. Four elements at most: headline lines rise from behind their baselines (100-990 ms, expo-out, 90-110 ms apart), the hero picture opens from a clip and settles from 1.08 scale (150-1,150 ms), the sentence and the button rise 12px (420-980 ms). Nothing in the navigation animates. Preload the display font so the lines rise in the real face; give the hero image `fetchpriority="high"` and a ground colour sampled from it so a slow image opens onto its own colour. Reduced motion: everything is simply there.
+Everything is in the HTML and painted on the first frame; the sequence only adds arrival. The first-screen headline, sentence and action are fully visible and readable at frame 0: no line mask, no clip and no opacity below 1 on them at any point, because the first-paint check (`references/preflight.md` §13, about 0.35 s) fails a hero whose words are still behind a mask. Four moving elements at most, all of them pictures or decoration: the hero picture opens from a clip and settles from 1.08 scale (150-1,150 ms); a rule, underline or mark beside the headline draws or slides in (100-990 ms, expo-out, 90-110 ms apart when staggered). If the text must move at all, it settles by 8px or less with `transform` only, from full opacity. Masked headline lines are a below-the-fold move: they rise from behind their baselines as a section reveal on scroll (§6), never on load above the fold. Nothing in the navigation animates. Preload the display font so the headline paints in the real face; give the hero image `fetchpriority="high"` and a ground colour sampled from it so a slow image opens onto its own colour. Reduced motion: everything is simply there.
 
 ## 8. The twelve animation recipes
 
@@ -153,7 +153,7 @@ Pick by subject; if the move says nothing about the subject it is decoration.
 
 | Move | What happens | Suits |
 |---|---|---|
-| Masked headline | lines rise from behind their baselines on load | most directions |
+| Masked headline | lines of a section headline rise from behind their baselines as it scrolls into view; below the fold only (on load the first-screen text is already there, §7) | most directions |
 | Shutter image | hero image opens from an edge, settling from 1.12 scale | product pages, Dark Cinematic, Luxury |
 | Scaling wordmark | a giant wordmark shrinks a few percent as the hero scrolls out | Magazine, Quiet Editorial, name-led brands |
 | Held picture, passing captions | one picture holds while 3-5 captions pass with a visible count | clinics (journey), craft (process), 3D Showcase |

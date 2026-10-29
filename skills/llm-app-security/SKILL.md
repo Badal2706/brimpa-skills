@@ -4,8 +4,8 @@ description: Security review and secure-design guidance for anything that embeds
 license: MIT
 metadata:
   author: Brimpa
-  version: "1.0"
-  updated: "2026-10-20"
+  version: "1.1"
+  updated: "2026-10-30"
 ---
 
 # LLM and agent application security

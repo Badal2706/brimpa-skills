@@ -4,8 +4,8 @@ description: Look up and maintain Brimpa's curated knowledge notes (facts, formu
 license: MIT
 metadata:
   author: Brimpa
-  version: "1.1"
-  updated: "2026-10-26"
+  version: "1.2"
+  updated: "2026-10-30"
 compatibility: Video intake needs ffmpeg and faster-whisper (pip install faster-whisper); a CUDA GPU is used when present. YouTube/Instagram intake needs yt-dlp.
 ---
 
@@ -23,6 +23,11 @@ The `knowledge/` folder at the repo root holds facts, not procedures: formulas, 
 **Intake** (user shares material or says "process the inbox")
 1. Collect the raw items: files in `knowledge/inbox/`, links in the message, pasted text.
 2. Extract the content: screenshots and images with the Read tool; web pages with WebFetch; PDFs page by page; YouTube with yt-dlp auto-captions (`yt-dlp --skip-download --write-auto-subs --sub-langs en`; YouTube rate-limits after about 15 caption pulls in a row, so space them). For any local video file (mp4, mov, mkv, webm, downloaded reels and lectures), run `scripts/video_digest.py <file>`: it writes scene-change keyframes plus a timestamped Whisper transcript and `digest.md`; then read the digest, look at the frames, and read the transcript. Hindi, English and Hinglish are detected automatically; Hindi keeps its Devanagari transcript and also gets an English translation (`transcript_en.md`). Use `--model large-v3` for the best Hindi, `medium` (default) for speed, `--max-frames` to control how many frames to read. Instagram reels: `yt-dlp <reel url>` downloads public reels (some need `--cookies-from-browser chrome`), then run the digest; on-screen text in a reel is often clearer from a screenshot.
+   - If the digest says `Audio: no`, the frames are the whole source: capture the on-screen text from every keyframe and say in the note that there was no speech.
+   - If a name, repo, URL or number is unreadable in the keyframes, pull extra frames around its timestamp and tile them before guessing: `ffmpeg -ss <T> -t 8 -i <video> -vf fps=2,scale=540:-1 <out>/zoom_%02d.png`. A name that stays unreadable is written as unreadable, never inferred.
+   - If transcript segments look truncated or repeat, re-run Whisper on that span (cut it with `ffmpeg -ss <T> -t <len>` and digest the clip) rather than filling the gap.
+   - Hindi: Claude reads Devanagari directly, so `--no-translate` skips the English translation pass and saves time; the script already uses `condition_on_previous_text=False` and a short temperature ladder (0.0, 0.2, 0.4) for speed.
+   - On this Windows machine (checked 2026-10-30) faster-whisper is installed in the user site-packages, so `python -I` cannot import it: run the digest with `python -P scripts/video_digest.py <file>` (still keeps the current folder off the import path) or plain `python`, and set `PYTHONIOENCODING=utf-8` so Devanagari prints on the console.
 3. Classify each item: **procedure** (steps someone follows to produce something) -> extend the matching skill, or propose a new skill if it is a coherent, repeatable job; **knowledge** (facts, formulas, lists, tool pointers, research findings) -> a note; **mixed** -> split; **noise** (ads, personal receipts, unrelated) -> drop and say why.
 4. Write or extend the note using the format in `knowledge/README.md`: frontmatter with title, topic, tags, source, source_type, confidence, date; sections "The point in one line", details, example, caveats, related. Rewrite in plain words; never paste copyrighted paragraphs or account handles; label every number with its source.
 5. Prefer extending an existing note over creating a near-duplicate. One topic per file.

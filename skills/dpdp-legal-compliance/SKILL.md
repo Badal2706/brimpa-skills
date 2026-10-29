@@ -4,8 +4,8 @@ description: Audit and implement privacy and legal compliance for apps and websi
 license: MIT
 metadata:
   author: Brimpa
-  version: "1.0"
-  updated: "2026-10-20"
+  version: "1.1"
+  updated: "2026-10-30"
 ---
 
 # DPDP legal compliance
@@ -104,7 +104,7 @@ Implement:
 
 - A request form (or documented email route) that collects the identifier your system actually uses (customer ID, registered email or phone), the right being exercised, and free text. Verify the requester against the account (magic link or OTP to the registered contact) before releasing data.
 - A back-office queue with status, assignee, due date and audit trail. Publish a response period in the notice; the Rules cap it at 90 days. Aim for far less; a clinic or small app can answer in days.
-- Access response: export of the person's data categories, purposes, recipients and retention in a readable format, plus the contact person's details in every response (Rule 9).
+- Access response: export of the person's data categories, purposes, recipients and retention in a readable format, plus the contact person's details in every response (Rule 9). The Act has no data-portability right, so a machine-readable export is good practice, not a legal duty: never promise it as DPDP compliance (`references/dpdp-obligations.md` §4).
 - Erasure: delete or anonymise across primary DB, backups on their rotation, search indexes, analytics user IDs, CRM and email tools; keep what another law requires (tax, medical records) and say so in the response. Log the erasure.
 - Nomination: a settings field for nominee name and contact, or at least a documented manual process.
 - Grievance contact: name or role, email, and postal address of the business, in the footer, the notice page, and account settings. Exhausting this route is required before a person can go to the Board, so make it work.
@@ -141,6 +141,7 @@ Every breach is notifiable; there is no materiality threshold in Rule 7. As of O
 ## Processors and cross-border
 
 - List every vendor that touches personal data (hosting, DB, email/SMS, WhatsApp API, payment, CRM, analytics, error tracking, AI APIs, support desk). For each: data received, purpose, country, contract or DPA link, security terms present (yes/no), deletion on instruction (yes/no).
+- WhatsApp messaging to clients or patients only through Meta's Cloud API or an official Business Solution Provider; unofficial gateways (whatsmeow, Baileys, Evolution API in Baileys mode) break WhatsApp's terms, risk a number ban and put an uncontracted processor in the data path, so they are a finding (`references/dpdp-obligations.md` §9).
 - A vendor without a written contract covering security is a finding. Most SaaS vendors publish a DPA; link it and note it in `DPDP_PROGRESS.md` for the lawyer.
 - Cross-border transfer is allowed by default; no restricting orders exist as of Oct 2026. Still record the processing country so the owner can react if an order lands, and prefer an Indian region when the vendor offers one at no cost.
 

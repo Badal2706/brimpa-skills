@@ -4,8 +4,8 @@ description: Pre-production / pre-launch application security review for web app
 license: MIT
 metadata:
   author: Brimpa
-  version: "1.1"
-  updated: "2026-10-26"
+  version: "1.2"
+  updated: "2026-10-30"
 ---
 
 # Security Review (pre-production / pre-launch)
@@ -211,5 +211,5 @@ The finding template with all fields is in `references/severity-and-reporting.md
 - `references/checklist.md` - read when running FULL mode, or when a QUICK prompt surfaces a category you need to go deeper on; the complete per-category checkbox list with defensive phrasing and severity hints.
 - `references/severity-and-reporting.md` - read before writing any finding or assigning any severity; anchors, the three verdicts, the counter-evidence checklist, the finding template and the full report structure.
 - `references/fix-patterns.md` - read when fixing anything; class -> correct fix mapping, verification gates, secret rotation steps, password hashing parameters, header/cookie/CORS/CSP/rate-limit/RLS/webhook/cache baselines.
-- `references/tools.md` - read when you need an exact command; secret scanners, dependency audits per ecosystem, SBOM, Semgrep, CodeQL, and the OWASP Top 10:2025 and API Top 10 (2023) mapping to the categories above.
+- `references/tools.md` - read when you need an exact command; secret scanners, dependency audits per ecosystem, SBOM, Semgrep, CodeQL, the Claude Security plugin deep scan and an optional authorised dynamic test, and the OWASP Top 10:2025 and API Top 10 (2023) mapping to the categories above.
 - `references/sources.md` - attribution for the upstream material this skill adapts.

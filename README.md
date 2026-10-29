@@ -2,7 +2,7 @@
 
 _By Brimpa. Previously published as `badal-skills`; this repo replaces it._
 
-Fifteen reusable [Agent Skills](https://agentskills.io/specification) for shipping websites and software, distilled from a year of collected security checklists, design systems, SEO playbooks, compliance guides and launch prompts, then re-verified against primary sources as of **October 2026**.
+Sixteen reusable [Agent Skills](https://agentskills.io/specification) for shipping websites and software, distilled from a year of collected security checklists, design systems, SEO playbooks, compliance guides and launch prompts, then re-verified against primary sources as of **October 2026**.
 
 Works with Claude Code, Claude Desktop / claude.ai (including Cowork), and any agent that reads `SKILL.md` files (Codex, Cursor, Gemini CLI, OpenCode and others via `npx skills add`).
 
@@ -24,6 +24,7 @@ Works with Claude Code, Claude Desktop / claude.ai (including Cowork), and any a
 | [web-scraping](skills/web-scraping/) | collect web data you are authorized to collect; choose fetchers, spiders, sanitize for LLMs | Scrapling official skill (linked, not vendored) + alternatives |
 | [reverse-engineering](skills/reverse-engineering/) | understand how a shipped artifact works, with evidence, within legal limits | REA (linked, not vendored) |
 | [grill-plan](skills/grill-plan/) | want a plan, brief or feature questioned until no gaps remain, with clickable answers, before building | mattpocock/skills (grill-me), rewritten to ask with options |
+| [money-guide](skills/money-guide/) | ask about tax, ITR, GST, advance tax, presumptive income, old vs new regime, salary vs dividend, SIPs, emergency funds or managing irregular freelance income in India | Income-tax Act 2025 and Budget 2026 research with primary sources, verified money reels; includes a tax calculator |
 | [knowledge-base](skills/knowledge-base/) | ask a factual question the notes may answer, add a screenshot / link / PDF "for later", process the knowledge inbox, or feed a local AI with curated notes | the `knowledge/` folder: formulas, free-tier maps, tool catalogs, domain checklists, dated research with citations |
 
 `web-design` and `luxury-web-design` are a pair: the first builds normal-to-premium sites and carries the cheap, always-on conversion basics; the second adds the premium-to-luxury strategy, attention psychology, proof and pricing rules for high-budget work. Load both for a luxury build; either works alone.

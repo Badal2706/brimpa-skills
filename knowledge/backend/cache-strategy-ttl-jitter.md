@@ -29,3 +29,4 @@ A cache that expires all its keys at the same moment causes a thundering-herd on
 
 ## Related
 - skills/security-review (availability section; cache keys and tenant isolation)
+- backend/scaling-one-server-and-system-design-patterns.md (1-second Nginx microcache doubled a small VPS's capacity; when shared proxy caching is unsafe)
