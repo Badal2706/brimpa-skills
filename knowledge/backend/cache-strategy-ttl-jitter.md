@@ -2,7 +2,7 @@
 title: Redis is not a caching strategy: TTL jitter, stampede control and cache keys
 topic: backend/caching
 tags: [redis, caching, performance, reliability, backend]
-source: Backend-engineering reel (Aug 2026) plus standard practice
+source: Backend-engineering reel (Aug 2026) plus standard practice; a second Hindi reel on the same point (Aug 2026, "10 million users, same 12-hour TTL, outage at midnight") re-checked 2026-10-30 and added nothing new
 source_type: social
 confidence: high
 date: 2026-10-26

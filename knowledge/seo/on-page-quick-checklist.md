@@ -1,8 +1,8 @@
 ---
-title: 18-point on-page SEO quick checklist (and where our skill covers each), plus launch-week discovery setup, free SEO tools, long-tail regex in Search Console, parasite-SEO verdicts and 10 terms
+title: 18-point on-page SEO quick checklist (and where our skill covers each), plus launch-week discovery setup, free SEO tools, long-tail regex in Search Console, site-search internal linking to a target page, parasite-SEO verdicts and 10 terms
 topic: seo/on-page
-tags: [seo, on-page, checklist, search-console, core-web-vitals, schema, launch, bing, open-graph, search-generative-ai-control, preferred-sources, backlinks, gbp-categories, regex, long-tail, parasite-seo, site-reputation, scaled-content, glossary, hreflang, canonical, programmatic-seo, citation-share]
-source: Instagram reel "$100k of on-page SEO advice in 23 seconds" (Oct 2026), mapped against skills/seo-geo-audit; launch-week section added 2026-10-30 from four Aug 2026 reels (5 post-launch steps, Search generative AI setting, preferred-sources badge, 5 free SEO tools) checked against Google blog/docs, Bing docs and tool sites; long-tail regex, parasite-SEO and ten-terms sections added 2026-10-30 from three Oct 2026 reels (regex checked on screen, Zenodo policy page, Google spam policies via research note)
+tags: [seo, on-page, checklist, search-console, core-web-vitals, schema, launch, bing, open-graph, search-generative-ai-control, preferred-sources, backlinks, gbp-categories, regex, long-tail, parasite-seo, site-reputation, scaled-content, glossary, hreflang, canonical, programmatic-seo, citation-share, internal-linking, site-operator]
+source: Instagram reel "$100k of on-page SEO advice in 23 seconds" (Oct 2026), mapped against skills/seo-geo-audit; launch-week section added 2026-10-30 from four Aug 2026 reels (5 post-launch steps, Search generative AI setting, preferred-sources badge, 5 free SEO tools) checked against Google blog/docs, Bing docs and tool sites; long-tail regex, parasite-SEO and ten-terms sections added 2026-10-30 from three Oct 2026 reels (regex checked on screen, Zenodo policy page, Google spam policies via research note); site-search internal-linking section added 2026-10-30 from an Oct 2026 reel
 source_type: social
 confidence: medium
 date: 2026-10-30
@@ -93,6 +93,13 @@ Rule: earn mentions on trusted sites as yourself (LinkedIn articles, genuine ans
 | Programmatic SEO | Many pages from one template plus a dataset ("dentist in {city}") | Only with real, unique data per page; city-name swaps are doorway pages |
 | Citation share | How often AI answers cite you versus competitors for a fixed prompt set | Track the same prompts weekly; useful but no standard tool or definition yet |
 The reel itself only lists the terms and asks viewers to comment for definitions (engagement hook); the definitions above are from its on-screen cards, checked against our seo-geo-audit skill.
+
+## Point existing authority at one target page (added 2026-10-30 from an Oct 2026 reel)
+1. Search Google for `site:yourdomain.com "keyword"` to list your pages that already mention the term. (The reel typed `yourdomain.com "keyword"` without `site:`; that is an ordinary text search and also returns other sites.) Search Console > Performance filtered by the query is the more reliable list: it shows which of your pages actually get impressions for it.
+2. Pick one target page for the keyword. If none fits, create it with the keyword in the title, URL slug, H1 and first sentence.
+3. From each of the other relevant pages, add a contextual internal link to the target with descriptive anchor text.
+4. If two pages compete for the same query, that is cannibalization (row 10 above): merge them or make their intents distinct; links alone will not fix it.
+Verdict: sound, standard internal-linking practice (link equity in the terms table below); "nobody knows this about Google" is the hook, and the closing course plug is omitted.
 
 ## Related
 - skills/seo-geo-audit
