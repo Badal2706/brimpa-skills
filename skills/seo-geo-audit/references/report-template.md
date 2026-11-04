@@ -25,7 +25,7 @@ Checks per category (count passed over applicable, so "share passed" is the same
 - AI readiness: indexable and snippet-eligible; search crawlers allowed by purpose; Search generative AI on Include; named authors; citable answer blocks; a measurement baseline.
 - Images: alt on meaningful images; width and height set; modern formats; weight within budget; LCP image eager with `fetchpriority`.
 
-**Show the arithmetic** under the scorecard, every measured term written out (zeros included) and the divisor equal to the sum of the measured weights only. Example for the scorecard rendering at the end of this file, CWV not measured: `(22x78 + 23x61 + 20x72 + 10x40 + 10x80 + 5x55) / 90 = 6034 / 90 = 67.0 -> 67`. Re-add the products before publishing; a total that does not follow from the printed terms discredits the whole report.
+**Show the arithmetic** under the scorecard, every measured term written out (zeros included) and the divisor equal to the sum of the measured weights only. Example for the scorecard rendering at the end of this file, CWV not measured: `(22x78 + 23x61 + 20x72 + 10x40 + 10x80 + 5x55) / 90 = 6034 / 90 = 67.0 -> 67`. Compute it with code, never by hand (`node -e "console.log(22*82+23*70+20*86+10*90+10*72+5*85)"`), and paste the result. Then check every category score against the caps in the previous paragraph using the open findings of that category: a category with an open High prints at most 70 even if its checks look better. A total that does not follow from the printed terms, or a score above its cap, discredits the whole report.
 
 ## Report rules (keep these; they are what makes the report trustworthy)
 

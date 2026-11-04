@@ -53,6 +53,7 @@ Thresholds and dated facts are stated as of Oct 2026. Numbers labelled "heuristi
 - RFC 9309 group selection: a crawler obeys **only the most specific `User-agent` group** that names it. Rules under `User-agent: *` do not apply to `GPTBot` if a `GPTBot` group exists. Repeat `Disallow` lines in every group.
 - Never `Disallow: /` on production. After a rebuild, diff robots.txt against the previous version before go-live.
 - robots.txt controls crawling, not indexing. To keep a URL out of the index, use `noindex` (and let it be crawled) or authentication.
+- `Disallow` plus `noindex` on the same URL is a conflict, not belt and braces: the crawler never fetches the page, so it never reads the `noindex`, and the URL can still be indexed from links. Remove the `Disallow` line and keep the `noindex`. Low when nothing links to the URL, Medium when it is linked or already indexed. Failed if: the path is under a `Disallow` in the group that applies to Googlebot while the page carries `noindex`.
 - AI crawler groups: see `references/ai-search.md` for the table and a template. Decide per purpose (search vs training vs user-triggered), not per vendor.
 - Check Search Console's robots.txt report for parse errors after any change.
 - Discovery-file probes: request `/llms.txt`, `/llms-full.txt` and `/.well-known/security.txt` (plus any other `/.well-known/*` the stack uses) and report each status code as **optional, Info**; absent is not a defect. The only finding here is a probe that returns `200` with the HTML homepage, which means unknown paths are not real 404s (raise it under section 2, not here).
@@ -89,6 +90,9 @@ Thresholds and dated facts are stated as of Oct 2026. Numbers labelled "heuristi
 
 - Assessed at the **75th percentile** of real-user (field) loads, mobile and desktop separately. INP replaced FID on 12 March 2024; never report FID. No new Core Web Vital has been added as of Oct 2026.
 - Field data (CrUX via PageSpeed Insights or the CrUX API) is what ranking uses; Lighthouse lab scores are for debugging. A site with too little traffic has no CrUX data ("insufficient data"): say so, run lab tests, do not invent a field score.
+- **Lab method.** Run Lighthouse (mobile, simulated throttling) three times and report the median, labelled "lab". Before naming a cause, read the `largest-contentful-paint-element` phases (TTFB, load delay, load time, render delay) and the `network-requests` row of the LCP resource. When the LCP element is an `<img>` inside `<picture>`, Lighthouse prints the fallback `src`, which is usually a JPEG even when the browser downloaded the AVIF or WebP `<source>`; name the format from the downloaded request, never from the `<img src>`. A lab-only LCP between 2.5 and 4 s is Medium; High needs field data over the threshold or a lab median over 4 s.
+- **HTTP/2.** Lighthouse `uses-http2` failing means every request on a new connection pays its own TLS setup on mobile. On nginx before 1.25.1 the fix is `listen 443 ssl http2;`, and from 1.25.1 `http2 on;`. The setting belongs to the address and port, so on a shared server it switches HTTP/2 on for every site on that port: say so, and get the owner's sign-off for the other sites. Failed if: `echo | openssl s_client -connect <host>:443 -servername <host> -alpn h2 2>/dev/null | grep ALPN` prints "No ALPN negotiated".
+- **Accessibility claims from Lighthouse** name the audit id and the failing selector. Re-run before reporting: a failure that does not reproduce on the same Lighthouse version is "not reproduced", not a finding.
 - Supporting metrics: TTFB "good" < 800 ms; long tasks > 50 ms hurt INP; a DOM above ~1,500 elements is a warning sign (heuristics from web.dev).
 - CWV is one lightweight signal among many. Do not promise ranking gains from passing; do fix it because conversions and bounce depend on it, and because "good page experience" is one of the fundamentals Google lists for AI features.
 - Priority of fixes: LCP > CLS > INP for most small-business sites.
@@ -195,7 +199,10 @@ Capture a baseline per key URL (title, meta description, canonical, meta robots,
 | Missing or duplicate titles on key pages, missing H1, JSON-LD errors | High |
 | Redirect chains, broken internal links on key pages, sitemap listing non-200 URLs | High |
 | Hreflang missing self-reference or return tags | Critical (international sites) |
-| Poor CWV on mobile for key pages | High |
+| Poor CWV on mobile for key pages (field data, or a lab median over 4 s) | High |
+| Lab-only LCP 2.5-4 s, no field data | Medium |
+| `Disallow` and `noindex` on the same URL | Low (Medium if linked or indexed) |
+| HTML comments with internal notes shipped in production pages | Low |
 | Templated meta descriptions, thin alt text, oversized images | Medium |
 | Identical `lastmod`, `priority`/`changefreq` present, `meta keywords` present | Low / Info |
 | Retired structured-data types present | Info |
