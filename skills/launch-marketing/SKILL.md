@@ -4,8 +4,8 @@ description: Positioning, messaging and launch copy for products and client webs
 license: MIT
 metadata:
   author: Brimpa
-  version: "1.3"
-  updated: "2026-10-30"
+  version: "1.4"
+  updated: "2026-11-04"
 ---
 
 # Launch marketing: positioning, messaging and launch copy
@@ -18,6 +18,7 @@ Reference files (open only the one you need):
 - `references/landing-and-pricing-copy.md`: read when writing or reviewing a homepage, landing page, service page or pricing page; PAS, LIFT, section-by-section copy, readability check, the five awareness levels, the 12 pricing-psychology principles plus anchoring, price endings and discount rules.
 - `references/launch-channels.md`: read when preparing Product Hunt, Show HN, Reddit, LinkedIn, X, a carousel, a changelog or an app-store listing; limits, timelines and benchmarks per channel.
 - `references/email-and-outreach.md`: read when writing a newsletter, launch email, onboarding sequence or cold outreach; subject-line formulas, HTML email rendering rules, the 7 outreach signals, cadence and breakup.
+- `references/article-templates.md`: read when a blog post or article is needed (how-to guide, list article, case study, comparison, problem-solution); each template has a details block the author fills first, an outline step that stops for approval, writing rules that forbid invented prices, rankings or results, and a pre-finish check; plus which template fits which search intent.
 - `references/sources.md`: attribution for everything above.
 
 ## How to run this

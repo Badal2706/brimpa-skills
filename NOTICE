@@ -58,3 +58,36 @@ Apache License 2.0: inhouseseo/superseo-skills  https://github.com/inhouseseo/su
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
     implied. See the License for the specific language governing
     permissions and limitations under the License.
+
+Added 2026-11-04
+
+MIT License (methods adapted and rewritten; tools run from the pinned upstream copies)
+  - Auriti-Labs/geo-optimizer-skill  https://github.com/Auriti-Labs/geo-optimizer-skill
+    Copyright (c) 2026 Juan Camilo Auriti. Its TRADEMARKS.md reserves the GeoReady and
+    GEO Optimizer names and logo; they are not used here.
+  - AminForou/mcp-gsc  https://github.com/AminForou/mcp-gsc
+    Copyright (c) 2025 Amin Foroutan
+  - kaankiziltug/logo-design-skill  https://github.com/kaankiziltug/logo-design-skill
+    Copyright (c) 2026 kaankiziltug. The SVG logo library bundled in that repository is
+    third-party trademark material outside its MIT licence and is not included here.
+  - every-app/open-seo  https://github.com/every-app/open-seo
+    Copyright (c) 2026 Ben Senescu (methods only; its deslop skill (c) 2026 Stephen D. Turner, MIT)
+  - blixvip/NullMotion  https://github.com/blixvip/NullMotion
+    Copyright (c) 2026 blixvip and Null Motion contributors (method only; no code or footage)
+
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+  - heydamir/unslop  https://github.com/heydamir/unslop
+    "unslop" by Damir Sokolovsky (@heydamir), https://creativecommons.org/licenses/by/4.0/
+    Changes: rewritten and merged with Brimpa house rules in web-design, ui-ux, launch-video and
+    brand-identity; contrast, type, body-size and imagery rules changed. Passages are adaptations,
+    not verbatim copies; the credit above applies to the merged sections named in each skill's
+    references/sources.md.
+
+Apache License 2.0 (ideas only, no code)
+  - thedotmack/claude-mem  https://github.com/thedotmack/claude-mem
+    Retrieval patterns described in knowledge-base and knowledge/dev-tools/claude-code-memory.md.
+
+GNU Affero General Public License v3.0 (referenced, nothing copied)
+  - calesthio/OpenMontage  https://github.com/calesthio/OpenMontage
+    Described and linked in TOOLBOX.md; facts and method written in our own words in launch-video.
+    No text, code or assets from it are included in this repository.

@@ -2,7 +2,7 @@
 
 The projects this collection was distilled from live under `upstream/` as **git submodules pinned to the commit we last read**. They are the originals, untouched, so we can diff them against newer versions and fold changes into our skills, and so anyone cloning this repo can read the full source of a rule.
 
-- A plain `git clone` leaves `upstream/*` empty (fast, small). To fetch them: `git submodule update --init --depth 1` (about 280 MB).
+- A plain `git clone` leaves `upstream/*` empty (fast, small). To fetch them: `git submodule update --init --depth 1` (about 350 MB).
 - Claude Code, Claude Desktop and `npx skills add` ignore `upstream/`; only `skills/` is installable from this repo. Several upstream repos are also listed as plugins in our marketplace (see below) so they can be installed straight from their own GitHub.
 - Update: `scripts/update-upstream.ps1` pulls the latest commit of each, prints what changed inside each project's skill folders since our pin, and leaves the review to you. After folding changes into our skills, commit the new pins.
 
@@ -27,6 +27,10 @@ The projects this collection was distilled from live under `upstream/` as **git 
 | (not pinned) | DavidHDev/react-bits | MIT + Commons Clause (no selling the library) | ideas only for animated components; 373 MB, so referenced, not pinned | browse https://github.com/DavidHDev/react-bits |
 | upstream/superseo-skills | inhouseseo/superseo-skills | Apache-2.0 (NOTICE) | seo-geo-audit content audit, semantic gaps, keyword deep-dive, link building, snippets; launch-marketing anti-slop tiers (verified; stale FAQ/HowTo/char-cap advice not merged) | `/plugin install superseo@brimpa` (content skills; its FAQ-for-AI and HowTo advice is outdated) |
 | upstream/mattpocock-skills | mattpocock/skills | MIT | grill-plan (the grilling method) | do not install the whole plugin alongside ours: some skill names clash with built-ins |
+| upstream/geo-optimizer-skill | Auriti-Labs/geo-optimizer-skill | MIT (TRADEMARKS.md: do not reuse the GeoReady / GEO Optimizer names or logo) | seo-geo-audit (snippet, canonical, date, JS and crawler-access checks; the CDN probe and injection scan). Its score, FAQPage/HowTo generation, robots fixer and llms.txt weighting were rejected; see the skill's sources.md | `/plugin marketplace add Auriti-Labs/geo-optimizer-skill` then `/plugin install geo-optimizer@geo-optimizer-skill`; CLI: `uvx --from geo-optimizer-skill geo audit --url <site> --no-plugins` (never `geo fix --apply`) |
+| upstream/mcp-gsc | AminForou/mcp-gsc | MIT | seo-geo-audit `search-console-and-tools.md` (API facts; cannibalisation, opportunity, indexing-triage and period-alert procedures, rewritten with corrected thresholds) | `uvx mcp-search-console` as an MCP server (needs a Google Cloud project with the Search Console API and OAuth or a service account); its four skills are thin, use ours; leave `GSC_ALLOW_DESTRUCTIVE` unset |
+| upstream/logo-design-skill | kaankiziltug/logo-design-skill | MIT for text and tools; the 1,432 bundled SVG logos are third-party trademarks, **not** MIT, and are never copied into this repo or the dist zips | brand-identity `logo-construction.md` (method) and its Python tools, run from the pinned copy. The logo library is tech-only (one health logo) and of little use for clinic or trade work | `/plugin install logo-design@brimpa`, or `/plugin marketplace add kaankiziltug/logo-design-skill` then `/plugin install logo-design@logo-design-skill` |
+| upstream/unslop | heydamir/unslop | CC BY 4.0 (credit line in web-design/references/sources.md) | web-design (triage gate, pass order, code greps, generated-image rules, snapshot method), ui-ux (quiet chrome, moments, nested radius, micro-copy), launch-video (redesign-reveal video), brand-identity (banned character words). Its tokens, type table and scene hero were rejected (contrast and body-size failures; template look) | no plugin manifest: copy `skills/unslop` into `~/.claude/skills/` per its README, or try `npx skills add heydamir/unslop` |
 | (linked) | vercel-labs/agent-browser | Apache-2.0 | browser automation CLI for web-scraping and QA screenshots; skills ship inside its binary, so not pinned | `/plugin install agent-browser@brimpa` or see its README |
 | (linked) | goodnight000/api-anything | MIT | web-scraping option behind the authorization gate, with public sharing turned off | see web-scraping skill |
 | (merged, not pinned) | Motionsites-AI/claude-skill | MIT for instructions/references/scripts; examples and media proprietary | web-design video recipes, first-paint check, scored review, builder prompts (MIT parts only; promo block and house-rule-breaking styles rejected) | not listed: its skill requires a paid-upsell block in every delivery |
@@ -45,6 +49,6 @@ The Brimpa website (Oct 2026) used seven of our skills plus gsap-skills, transit
 
 A merged skill must give output at least as good as the original on the same task. We check this with blind head-to-head runs recorded in `evals/parity/`. Where the original's strength is a tool (a CLI, MCP server, browser extension or validator script), our markdown carries the method and the judgement, and you install the original alongside for the automation; the marketplace lists those originals so both can be installed with one command each. If a run shows ours losing on any rubric line, the gap is folded into our skill and the pair is re-run.
 
-## Pinned commits (2026-10-26)
+## Pinned commits
 
-See `git submodule status` for the authoritative list; the table above was pinned on 2026-10-26.
+See `git submodule status` for the authoritative list; the table above was pinned on 2026-10-26, with geo-optimizer-skill, mcp-gsc, logo-design-skill and unslop added on 2026-11-04.

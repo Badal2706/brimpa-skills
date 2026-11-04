@@ -191,8 +191,8 @@ Find the CID: open Google Maps on desktop, search the exact business name + loca
 - Publish two new service, condition or area pages (real ones).
 - Earn 2-4 genuine local links or citations.
 - Post weekly on GBP; add new photos monthly; reply to every review within 48 hours.
-- Search Console: pages with impressions but no clicks -> rewrite title and description; queries ranking 5-15 -> improve those pages first; new "Not indexed" pages -> fix within weeks.
-- Re-check mapped keyword positions from an incognito search in the business's city and log movement; re-run the AI share-of-voice prompts.
+- Search Console: split the export into striking-distance pages (position 8-20, above-median impressions: add depth and internal links) and CTR under-performers (positions 1-7, CTR below the site's own band average: rewrite title and description); new "Not indexed" pages -> triage within weeks (`search-console-and-tools.md` sections 3-4).
+- Re-check mapped keyword positions from the business location (geolocation override or a phone on site), logged out, with the rank-check convention in `search-console-and-tools.md` section 7; quarterly, run the 3x3 rank grid (section 8) and the head-to-head against the top two map-pack rivals (categories, review count and recency, reply rate, hours, photos, claimed status, website link to the right location page); re-run the AI share-of-voice prompts.
 - Re-validate schema after any template change; compare against the baseline snapshot.
 - Quarterly: NAP matrix re-check, duplicate-listing check, hours/holiday update, prune pages that never got impressions or merge them.
 
@@ -201,6 +201,7 @@ Find the CID: open Google Maps on desktop, search the exact business name + loca
 | Metric | Where | Cadence |
 |---|---|---|
 | Local pack position for the 5 core queries (from the business's area) | incognito search / rank tool | monthly |
+| Rank grid average (3x3 around the storefront, not-found counted as 21, printed "20+") and the #1 rival per point | manual geolocation checks or a grid tool | quarterly |
 | Organic position and impressions for mapped queries | Search Console Performance | monthly |
 | Calls, direction requests, website clicks from GBP | GBP Performance tab | monthly |
 | Enquiries from organic (forms, calls, WhatsApp) | GA4 events, call tracking, WhatsApp tags | monthly |

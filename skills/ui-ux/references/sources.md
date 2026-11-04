@@ -34,3 +34,9 @@ This skill is released under MIT. It merges and adapts guidance from the sources
 | YouTube: Shaurya / Honest HVAC Marketing Agency, "The Psychology Of Premium HVAC Websites" | http://www.youtube.com/watch?v=lGHT8Lzs7ug | Video, summarised; rules adapted | Peak-end applied to flows: the final form or call button defines the memory; test it first on mobile and desktop; design the confirmation as a peak. |
 
 Numbers in this skill either come from these sources (study medians, WCAG thresholds, platform guidelines, CWV targets) or are well-known standards. Where a claim could change over time it is dated "as of Oct 2026".
+
+## Added 2026-11-04 (v1.3)
+
+| Source | Licence | What was taken |
+|---|---|---|
+| heydamir/unslop (commit a6f121e), pinned under `upstream/unslop` | CC BY 4.0 (c) Damir Sokolovsky. Credit: adapted from "unslop" by Damir Sokolovsky (@heydamir), https://github.com/heydamir/unslop, CC BY 4.0, rewritten and merged with Brimpa house rules (contrast and type rules changed) | Quiet chrome with one or two content "moments" and one signature detail for app screens; the nested-radius formula (inner = outer - padding, never below 4); app micro-copy rules (no trailing periods on labels, buttons or headings; "Search" not "Search anything..."; no glowing PRO / New / Beta badges; counts as quiet text; shortcuts as keycaps). Its token values and 14-15 px body text were not taken |

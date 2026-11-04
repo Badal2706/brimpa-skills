@@ -240,3 +240,15 @@ General: write the whole page as plain text before markup. Plain verbs, sentence
 - Tie any success animation to the real request's promise, never a fixed delay; on error, restore the label and say what to do.
 - The form or call button is where the visit ends and what the visitor remembers (peak-end): build and test it first, on a phone, and make the confirmation say what happens next and when.
 - Forms that collect personal data from people in India need the notice and consent pattern from the dpdp-legal-compliance skill; run the security-review skill before the form goes live.
+
+## 13. Generated imagery, when it is allowed
+
+Only for software products and Brimpa's own pages, and only where no real picture can exist (an abstract scene for a SaaS hero, an object that is not a photograph of the client's world). Never for a clinic's or a local business's people, rooms, shop front or products: a phone photo of the real place beats any generated image, and a generated doctor or showroom is a trust failure.
+
+1. Write the subject as one sentence first ("a single granite slab on a wooden stand, seen from the front").
+2. Prompt in this order: subject, setting, light and palette (name the page background hex so the image sits on it), style, composition with calm space where the text will go, exclusions (no text, no logos, no UI, no watermark), format at 2x the slot size.
+3. Show the prompt, the model and the size, and ask before any paid run. Run once; if it misses, edit the prompt rather than re-rolling the same one.
+4. Check the edges against the page ground in both themes (`preflight.md` §9), save the result into the project's assets with the prompt and model recorded, and list it in the report as generated.
+5. An empty slot is a plain surface with nothing on it, never a glossy blob or a stock-style scene.
+
+(Procedure adapted from unslop, CC BY 4.0, rewritten; its generated "scene hero" default is not adopted here.)

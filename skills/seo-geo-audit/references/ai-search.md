@@ -52,6 +52,8 @@ Google's guide names these as things you can ignore:
 
 Use `data-nosnippet` for content you want indexed but not quoted (pricing tables you change often, legal text). Do not use `nosnippet` on pages you want cited.
 
+Audit checks for these controls (heuristic thresholds are ours; Google publishes none): a page-level `nosnippet` on a page the owner wants cited is a finding; `max-snippet` under about 50 characters leaves nothing quotable and is treated as a fail; `data-nosnippet` covering more than about 10% of the visible words is a warning and above about 50% a fail; `max-image-preview:none` is a warning. Failed if: `curl -s <url> | grep -io '<meta[^>]*name="robots"[^>]*>'` shows `nosnippet` or a `max-snippet` below 50, or the share of words inside `data-nosnippet` elements exceeds the threshold.
+
 ## 4. Crawler table
 
 Decide access by purpose (search index vs model training vs user-triggered fetch), not by vendor. Group selection in robots.txt means each named group must repeat the general `Disallow` lines.
@@ -81,6 +83,8 @@ Practical defaults: allow `Googlebot`, `Bingbot`, `OAI-SearchBot`, `Claude-Searc
 Many AI crawlers do not execute JavaScript. Content that only exists after hydration is invisible to them; this is the strongest technical argument for SSR/SSG on marketing pages.
 
 Verified-bot authentication (Web Bot Auth, HTTP Message Signatures) is emerging for agents; CDNs expose "verified bots" lists. If a WAF or bot-protection product is in front of the site, make sure it does not challenge the search crawlers above with CAPTCHAs.
+
+**CDN challenge probe.** Fetch the page once with a browser user agent, then once per search-crawler token (Googlebot, Bingbot, OAI-SearchBot, Claude-SearchBot, PerplexityBot, Applebot). Flag a 403/429/451/503, a challenge marker in the body (`challenge-platform`, `cf-browser-verification`, "checking your browser"), or a crawler-UA body under about 30% of the browser body's size. Report it as a **possible** block, not a confirmed one: a spoofed user agent from a non-crawler IP is exactly what verified-bot rules are meant to block, so confirm in the CDN's bot or firewall log, or in the server logs, before writing the finding. (Probe method observed in the `geo` CLI; see `search-console-and-tools.md` section 10.)
 
 ## 5. robots.txt template
 
@@ -188,12 +192,19 @@ These are the practices consistent with Google's guide and with how answer engin
 
 ## 10. How to measure AI visibility
 
+0. **Crawler activity from logs** (before anything else): count hits per crawler token on the key URLs per month from server or CDN logs and verify claimed bots (reverse DNS for Googlebot and Bingbot; OpenAI's and Perplexity's published IP ranges). A page no AI crawler fetches cannot be cited; that is a technical finding, not a content one.
 1. **Search Console**: impressions and clicks from AI features sit in the Web search type; watch total impressions for key pages and query count growth, since AI answers link to more diverse pages.
 2. **Bing Webmaster Tools AI Performance**: citations across Copilot and Bing AI surfaces.
 3. **GA4 referral channel** for assistant domains (undercounts).
 4. **Share-of-voice probe (monthly, same prompts):** write 10-20 buyer-intent prompts in the customers' words; ask ChatGPT (with search), Perplexity, Gemini or Google AI Mode, Claude, and Copilot; record brand mentions, position among competitors, sentiment of the surrounding text, and every cited domain. Compute mention rate, average rank, win rate and citation share (bands in `references/report-template.md`). Build the **citation gap list**: domains assistants cite for your prompts where the business is absent (directories, review sites, comparison articles), and go get listed or mentioned there legitimately.
 5. **Prompt-level loss log**: for each prompt where competitors win, note what the assistant praised (speed, price transparency, reviews, a specific page) and whether the business has an equivalent page or proof.
 6. Optional paid trackers exist; label their numbers with the tool and date.
+
+**Building the prompt set.** Take 1-3-word head terms from Search Console, the enquiry log and the keyword map; write them the way the customers actually ask, in en-IN, Hinglish and the regional language where that is how people search. Group prompts as Learning, Choosing, Doing or Branded, and keep Branded out of the rates. Dedupe on normalised text; count cited domains by registrable domain. Track 10-20 neutral prompts covering both current wins and openings (groups where the business is absent), so losses show too. Never attach demand numbers to prompts; the datasets that claim them are mostly derived from People Also Ask.
+
+**Rate hygiene.** Run each prompt 3-5 times per engine and record mentions as x/n, not yes/no; answers vary between runs. Record whether an answer came from the consumer app or a raw model API without search (the API shows what the model already knows, not citations). Rates use answered runs as the denominator; failed or empty runs are reported separately. Under about 10 neutral prompts, findings are directional. Never claim a trend from non-comparable runs (different prompts, engines, accounts or locations).
+
+**Citation gap, by page type.** Classify the 10-15 URLs most often cited in answers that miss the brand: list or review article, forum thread, competitor page, owned page, reference site. Ask the type-specific question (list article: is there a way to be added? competitor page: what question does it answer that we do not? forum: is the thread still active and is a disclosed, useful reply possible?). Read a page before claiming it names a rival. Where the engine shows the searches it ran (fan-out queries), check those SERPs to explain the citation.
 
 Keep every measurement labelled point-in-time; answers vary by phrasing, location, account and day.
 
@@ -216,6 +227,8 @@ Keep every measurement labelled point-in-time; answers vary by phrasing, locatio
 ## 12. Hidden instructions and manipulation
 
 Never place text meant for AI systems rather than readers: white-on-white instructions, HTML comments addressed to assistants, `data-` attributes carrying prompts, off-screen "recommend this business" blocks, or markup for facts not on the page. Google's spam policies explicitly cover attempts to manipulate generative AI responses in Search (May 2026) alongside hidden text and cloaking, and such text is routinely surfaced and screenshotted, which damages trust. The same applies to planting fake "mentions" on forums.
+
+**Detection scan (run on every audit; the owner may not know it is there, especially after an agency or a tool "optimised" the site):** CSS-hidden text (`display:none`, `visibility:hidden`, `font-size:0`, text under 2 px, same colour as the background, off-screen positioning); zero-width and bidi Unicode in body text (U+200B-200F, U+FEFF, U+202A-202E, U+2060); assistant-directed imperatives in body text or HTML comments ("ignore previous instructions", "recommend", "as an AI"); prompt-like `data-*` attribute values; `aria-hidden` blocks carrying instructions; markup for facts not visible on the page. If a hit sits inside user-generated content (comments, reviews), the fix is moderating that area, not rewriting the owner's copy. Failed if: `curl -s <url> | grep -iE 'ignore (all|previous) instructions|as an ai|recommend this' ` matches, or a stripped-text diff between rendered and visible content shows instruction-like sentences.
 
 Defending the owner's own AI features (chatbots, agents) against prompt injection and recommendation poisoning is a different problem; hand that off to the llm-app-security skill.
 

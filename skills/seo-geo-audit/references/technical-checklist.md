@@ -39,6 +39,8 @@ Thresholds and dated facts are stated as of Oct 2026. Numbers labelled "heuristi
 - Every indexable page: `200` status, no `noindex` (meta or `X-Robots-Tag`), a **self-referencing `rel=canonical`** in the raw HTML, and no conflicting canonical in the rendered DOM. If raw and JS-injected canonicals differ, Google may use either.
 - A `noindex` in the raw HTML can be honoured even if JavaScript later removes it. Google does not render JavaScript on non-200 pages.
 - Check canonicals, `og:url`, `og:image` and nav "current page" state in the **built output**, not the dev server. Static generators that write `page.html` files (for example Astro with `build.format: 'file'`) can expose `/page.html` as the pathname at build time, so canonicals point at `.html` URLs while the sitemap lists clean ones, OG image paths 404, and active-nav matching silently fails. Failed if: `grep -o 'rel="canonical" href="[^"]*"' dist/**/*.html` shows any URL that differs from the sitemap entry for that page. (Found on a real Astro site, Oct 2026.)
+- Canonical failure modes to name explicitly: two or more different `rel=canonical` values in `<head>` (Google may ignore all of them); a relative canonical URL; `canonical` plus `noindex` on the same page (conflicting signals; report it once, as a root cause). Failed if: `curl -s <url> | grep -c 'rel="canonical"'` is not 1, the href does not start with `https://`, or the page also carries `noindex`.
+- Indexing triage with URL Inspection (sample, states and the fix per state) is in `search-console-and-tools.md` section 4; do not sample only the top pages by impressions, they are indexed by definition.
 - One hostname (`www` or bare), one scheme (`https`), one trailing-slash convention; 301 everything else. Parameter URLs, print views, filtered views and tag archives: canonical to the base page or `noindex`, but keep the links crawlable.
 - Pagination: each page has its own self-referencing canonical and real `<a href>` links to the next page. Google has not used `rel=next/prev` since 2019. "Load more" and infinite scroll need paginated URLs underneath.
 - After a canonical fix, Google can keep the old choice for up to about two weeks while it re-evaluates the duplicate cluster; an unchanged canonical the next day is not proof of failure.
@@ -70,6 +72,7 @@ Thresholds and dated facts are stated as of Oct 2026. Numbers labelled "heuristi
 ## 5. JavaScript SEO and rendering
 
 - Serve title, meta description, canonical, meta robots, Open Graph and JSON-LD in the **initial HTML**. Rendering is deferred and some AI crawlers do not execute JS at all.
+- Cheap no-browser test on the raw HTML before any headless render: under about 100 words with zero headings, or an empty framework root (`#root`, `#__next`, `#app` with under about 50 characters of text) with under about 200 words in total, means the content depends on client-side rendering (heuristic). Confirm with a headless render and compare word counts.
 - Rendering strategy: SSR or SSG for public pages; client-side rendering only behind login. Dynamic rendering (serving a prerendered copy to bots) is a workaround Google calls not recommended; treat it as technical debt.
 - JS-injected structured data may be picked up late; serve `Product`/`Offer` markup server-side because Google's JS structured-data guide warns dynamic Product markup can slow Shopping crawls.
 - Frameworks that do this well out of the box: Next.js, Astro, SvelteKit, Nuxt, React Router v7 (Remix). With any of them, check that `robots` metadata, `canonical` and `alternates` are set per route and that the production build does not emit `noindex` from a leftover environment flag.
@@ -179,6 +182,7 @@ Capture a baseline per key URL (title, meta description, canonical, meta robots,
 - Critical, act immediately: schema removed; canonical changed or removed; `noindex` added; H1 removed or changed beyond recognition; title removed; status 2xx -> 4xx/5xx.
 - Warning, within a week: title or description changed unexpectedly; CWV p75 regressed > 20%; Lighthouse performance -10 points; Open Graph removed; schema content modified.
 - Info: new schema added; H2 structure changed; content hash changed.
+- Search Console period alerts: compare equal weekday spans (and year-over-year for seasonal businesses), exclude the last 3 days or use final data (fresh data is partial and produces false drops), alert on a >20% drop only above a volume floor (about 20 clicks or 500 impressions in the base period), and report by page as well as by query. Method and API limits: `search-console-and-tools.md` sections 1 and 5.
 
 ## 15. Severity cheat-sheet
 
@@ -230,5 +234,12 @@ Every finding ends with one falsifiable check: a single command or observable co
 | Viewport allows zoom | `curl -s https://www.example.com/ \| grep -io '<meta[^>]*name="viewport"[^>]*>'` | no match, or it contains `user-scalable=no` or a `maximum-scale` below 5 |
 | Favicon and touch icon | `curl -s -o /dev/null -w '%{http_code} %{content_type} %{size_download}\n' https://www.example.com/favicon.ico` (same for the `apple-touch-icon` href) | not `200`, a `text/html` content type, or 0 bytes |
 | Indexed after the fix | Search Console URL Inspection on the URL, after the stated window (canonical and noindex fixes: up to 14 days) | still excluded for the same reason, or the Google-selected canonical differs from the declared one |
+| Snippet controls allow citation | `curl -s https://www.example.com/page/ \| grep -io '<meta[^>]*name="robots"[^>]*>'` and count words inside `data-nosnippet` elements | `nosnippet`, `max-snippet` under 50, or more than ~50% of visible words under `data-nosnippet` on a page the owner wants cited (heuristic) |
+| Single, absolute canonical | `curl -s https://www.example.com/page/ \| grep -io '<link[^>]*rel="canonical"[^>]*>' \| wc -l` | not exactly 1, or the href is relative, or the page also carries `noindex` |
+| Dates agree | compare visible byline / `<time>` with `datePublished` / `dateModified` in JSON-LD | the two disagree, or either date is in the future |
+| Crawler not challenged | fetch with a browser UA, then with each search-crawler UA; compare status and body size | 403/429/451/503, a challenge marker, or a crawler body under ~30% of the browser body; report as "possible block" until confirmed in CDN or server logs |
+| Content not JS-only | `curl -s https://www.example.com/page/ \| sed 's/<[^>]*>//g' \| wc -w` and check for an empty `#root`/`#__next`/`#app` | under ~100 words with no headings, or an empty framework root with under ~200 words; confirm with a headless render |
+| No HTML comments or dev notes in production | `curl -s https://www.example.com/ \| grep -o '<!--' \| wc -l` | more than a handful, or any comment containing internal history, names, dates or TODOs (minor info disclosure plus weight; strip at build) |
+| HTTP/2 or HTTP/3 served | `curl -sI --http2 https://www.example.com/ \| head -1` (or the Lighthouse "Use HTTP/2" audit when curl lacks HTTP/2) | the response line is `HTTP/1.1`; enable `http2` on nginx/Apache or move behind a CDN |
 
 A check that cannot fail ("monitor rankings", "looks better") is not a check. For a KEEP or Info finding, write the regression condition instead: the observation that would turn it into a defect.

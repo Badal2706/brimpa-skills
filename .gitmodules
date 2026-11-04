@@ -52,3 +52,19 @@
 [submodule "upstream/mattpocock-skills"]
 	path = upstream/mattpocock-skills
 	url = https://github.com/mattpocock/skills.git
+[submodule "upstream/geo-optimizer-skill"]
+	path = upstream/geo-optimizer-skill
+	url = https://github.com/Auriti-Labs/geo-optimizer-skill.git
+	shallow = true
+[submodule "upstream/mcp-gsc"]
+	path = upstream/mcp-gsc
+	url = https://github.com/AminForou/mcp-gsc.git
+	shallow = true
+[submodule "upstream/logo-design-skill"]
+	path = upstream/logo-design-skill
+	url = https://github.com/kaankiziltug/logo-design-skill.git
+	shallow = true
+[submodule "upstream/unslop"]
+	path = upstream/unslop
+	url = https://github.com/heydamir/unslop.git
+	shallow = true

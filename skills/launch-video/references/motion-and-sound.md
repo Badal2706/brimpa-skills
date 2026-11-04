@@ -63,6 +63,13 @@ justified in the film when it is the focal moment of that beat.
 - **One camera move per action.** When the cursor fills a form field or drags a card, push in
   about 2x on that spot, follow the cursor with a 0.1 s lag, then settle back out. Two push-ins in
   one beat feel like a search.
+- **Zoom by what is on screen** (the 2x is the default, not the law): terminal or code 1.5-2.2x;
+  a small button or icon 2-3x with padding around it; a modal 1.4-2x with the whole modal in
+  frame; a full-page result 1.0-1.3x.
+- **Callout restraint:** at most two attention cues at once (cursor, ring, zoom, highlight,
+  caption count as cues); show a cue just before the action and clear it soon after; a highlight
+  or a zoom, not both on the same target; speed up or cut install and wait stretches rather than
+  dressing them with transitions.
 - **Why:** the zoom tells the viewer where to look. Without it a 1080p UI is tiny text on a big
   screen, and nothing passes the phone test.
 - Camera scale is interpolated with inOutCubic from 1 to 2 over about 600 ms starting 300 ms before
@@ -98,6 +105,12 @@ justified in the film when it is the focal moment of that beat.
 
 Anything the voice names, and every caption, must be at least 26 px tall as rendered on the
 1920x1080 frame after the camera scale is applied.
+
+Caption cue limits (broadcast norms, cited to BBC and Netflix subtitle guidance): vertical cuts
+3-4 words per cue and 20 characters per line or fewer; horizontal 6-8 words and 42 characters per
+line; each cue on screen between 0.5 and 5 s at about 15 characters per second. Social reels burn
+captions in (most are watched muted) and keep them out of the bottom ~20% and right ~15% of the
+frame where platform UI sits.
 
 - Rendered size = font size in canvas units x camera scale. A 14 px field label is 28 px at a 2x
   push-in and passes; the same label in the wide shot does not, so the voice must not name it
@@ -221,6 +234,11 @@ Let the music set the clock. Scene changes that land on bar lines feel edited; t
 of a beat off feel like a slideshow with a song under it.
 
 - Beat = 60 / BPM, bar = 4 beats in 4/4. At 120 BPM a beat is 0.5 s and a bar 2 s.
+- A beat that holds two ideas switches at the cut nearest 55% of the beat, searching only between
+  30% and 80%; with no cut in that window, switch at 55%. When importing a client's reference film
+  to study its structure, split it into 3-8 sections of roughly 4.5 s each, snapping each boundary
+  to the nearest detected cut that is at least 1.2 s from either end and within 45% of a section's
+  length of the even split; otherwise keep the even split.
 - Use the measured BPM, not a rounded one, and anchor the grid at the drop:
   `barT(k) = DROP + k * BAR`. A 120.19 BPM track has a 1.997 s bar; rounding it to 2 s drifts about
   0.13 s over 40 bars, which is visible on a late hit. Snap every bar time to the nearest frame.
@@ -379,3 +397,10 @@ Not legal advice; when the licence is unclear, ask the user for it before using 
   event screen, a TV loop).
 - Keep `refs/music/licence.txt` (where the track came from, the licence text or link, the date) and
   put the credit line in `out/share-copy.txt` and the README.
+- Decide the music at plan time, in this order: the client's own library -> licensed search ->
+  a generated bed -> none; write the choice and its licence into `out/plan.md` so the music
+  question never surfaces at render time.
+- Generated beds: ACE-Step 1.5 takes a BPM (30-300) and outputs 48 kHz audio, so the bar grid is
+  known before the first note (about 2-3 s per clip on a GPU in turbo mode; its licence is
+  reported as MIT and its fit in 4 GB of VRAM is unverified, so check both before relying on it).
+  The synthesized Web Audio bed in §9 remains the zero-dependency option.

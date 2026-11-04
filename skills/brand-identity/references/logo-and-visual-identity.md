@@ -31,10 +31,16 @@ Contents
 | Abstract mark | non-representational shape | tech and products whose idea has no object | easy to make generic; must be ownable |
 | Combination mark | icon + wordmark that can separate | most new small brands: header, favicon, invoice and avatar all covered | keep the lockup rules strict |
 | Emblem / badge | symbol inside a shape | heritage, craft, food, clubs, institutions | detail disappears small; needs a simplified icon |
-| Mascot | a character | family, food, education, community, kids, playful indie tools | not for finance, legal, clinical trust surfaces |
+| Mascot | a character | family, food, education, community, kids, playful indie tools | not for finance, legal, clinical trust surfaces; needs a simplified flat head mark tested at 24 px |
+| Letterform mark | one initial drawn as a symbol | a distinctive, ownable initial; long names | a plain initial in a circle is generic; the letter must be drawn, not typed |
+| Negative-space mark | a second reading hidden in the counters or gaps | an idea that benefits from a "second look" | the hidden reading must survive 16 px or it is decoration |
 
 For a brand that will live mostly in a browser tab, an app icon and an invoice header, default to a
 combination mark whose icon stands alone at 16 px and whose wordmark can be set in the display face.
+Decide the type in order (first strong yes wins): name carries alone -> wordmark; ownable initial ->
+letterform; an object everyone reads at 16 px -> pictorial; a second reading -> negative space; the
+brand needs a face -> mascot; otherwise abstract plus wordmark. Design symbol and horizontal lockup
+as a pair. Drawing the mark here: `logo-construction.md`.
 
 ## 2. Aesthetic styles (vocabulary for the brief)
 
@@ -79,8 +85,21 @@ A logo is not approved until it passes all of these:
 - Sits on canvas, on dark, and on the accent without a special version (or has the reversed
   version ready).
 - Still reads in greyscale and in a colour-vision-deficiency simulation.
-- Does not resemble a known brand's mark, name or trade dress; search before approving.
+- Does not resemble a known brand's mark, name or trade dress; search before approving (IP India
+  public search in the right class plus a reverse image search; a look-alike check against tech
+  logos is not clearance).
 - Vector master exists (SVG with outlined text, no embedded raster).
+- Squint (2 px blur) and mirror: the silhouette survives. Rotated 90 and 180 degrees: no
+  unintended reading (offensive, political, religious, hazard sign).
+- Letter test: every modified letter still reads as itself. Junction check: no notches, slivers
+  or ink traps where strokes meet.
+- Shelf test beside the real local competitors (collected by hand). Minimum size found by
+  shrinking until identity is lost, and recorded.
+- Circle-crop avatar (WhatsApp, Instagram) and embroidery (gaps of at least 1 mm at the sewn size)
+  for brands that will live on a uniform or a shop bag.
+- Small-size floors: smallest gap at least 1/32 of the mark's width, no detail under 1/48 of the
+  canvas, monoline strokes at least 8% of width; otherwise ship a separate simplified favicon
+  drawing. Construction, optical corrections and the pass/fail sheet: `logo-construction.md`.
 
 ## 5. Logo direction brief template
 
@@ -102,7 +121,11 @@ Deliverables: SVG masters per variant and colour version; PNG exports; one-page 
 Reference images: {two or three, with what to take from each; never a competitor's logo}
 ```
 
-## 6. Getting artwork made (designer or image model)
+## 6. Getting artwork made (here, a designer, or an image model)
+
+Drawn here: follow `logo-construction.md` (SVG on a 256 grid, black first, test battery, greyscale
+checkpoint before any colour or kit). Never load third-party logo files into the drawing context
+"for inspiration"; compare against real competitors only after the concepts exist.
 
 With a designer: send the brief, the BRAND.md palette and faces, and the test list. Ask for two
 or three directions as flat mono sketches first; colour and lockups come after a direction is
@@ -180,10 +203,12 @@ host brand sits first (left or top). Partner logos never get recoloured into the
 | Web fallback, email, chat avatars | PNG with transparency, @1x and @2x |
 | Print | PDF (vector); EPS only if a printer insists |
 | Documents and slides | PNG at 300 dpi for the size used, or SVG where supported |
-| Favicon | `favicon.ico` (16 + 32), `favicon.svg`, `apple-touch-icon.png` 180, manifest icons 192/512 |
-| Social | avatar 512 PNG; Open Graph default image 1200x630 with logo and tagline |
+| Favicon | `favicon.ico` (16 + 32), `favicon.svg`, a 48 px PNG, `apple-touch-icon.png` 180, manifest icons 192/512 plus `maskable-512.png` with the mark inside the central 80% safe zone, `site.webmanifest` and the `<head>` snippet |
+| App icon | 1024 px master; the mark at about 62% of the tile (0.55-0.70) with a -2% optical lift |
+| Social | avatar 512 PNG (check the circle crop); Open Graph default image 1200x630 with logo and tagline, exported as JPEG under about 300 KB so WhatsApp shows the preview |
+| Print | colours as HEX/RGB plus whole-number CMYK and an approximate Pantone; Indian flex printers and letterhead presses work from these, not from OKLCH |
 
-Folder and naming: see `brand-md-template.md` section 5.
+Folder and naming: see `brand-md-template.md` section 5; deliver in `print/ digital/ social/ source/`.
 
 ## 11. Icon system
 

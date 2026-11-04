@@ -59,6 +59,11 @@ Cuts (all 1920x1080 @ 30 fps unless noted)
 | [vertical]| [30] s | [Reels / Shorts], 1080x1920            | [hook in 2 s, two proofs]                               |
 [One line on the lengths you rejected and why, e.g. "15 s leaves room for one proof; 2 min is too long for a forwarded video".]
 
+Film type: [A SaaS launch | B physical product | C social reel | D motion-graphics ad] (see references/film-types.md)
+Promise: [e.g. "motion-led UI film: real screens in motion, no stills, no slides"; if a render path fails we stop and ask]
+Audio decided: [client library | licensed track: name, BPM, licence file | generated bed at [BPM] | none] (source order tried: library -> licensed -> generated -> none)
+Reference films: [which ones, what works in each (pacing, structure, one device), which are excluded and why; analysed for structure only, nothing shipped]
+
 What it is: [one line]
 Angle: [one sentence - how the story is told, e.g. "a week of follow-ups, done before lunch"]
 Hook (0-[2-4] s): [the number or moment] -> [the question or pain line], landing on bar [n]
@@ -376,6 +381,10 @@ Write it before any code. One row per beat; a 60 s film has roughly 12-16 rows.
 
 Below the table: the one-sentence promise the viewer must get at the first second of beat 5, the
 list of fictional names/amounts to use, and any screen that is designed rather than rebuilt.
+
+Add a **Draft** column: one or two beat kinds from a small set (text, logo, window, phone, input, chat, list, chart, notify, cards, end card) plus the line of text. It is the spec for the greyscale draft pass (SKILL step 2b) and for the breakdown cut (`render-pipeline.md` §11). When a beat holds two ideas, switch at the cut nearest 55% of the beat, searching only between 30% and 80%; with no cut there, switch at 55%.
+
+Beat-sheet lint before approval (a warning each, not an error): more than 70% of beats use one technique; fewer than 60% of the "On screen" cells are distinct; more than 60% of beats are text or stat cards; a camera move has no stated reason. Two or more warnings and the film will read as a slideshow.
 
 One beat sheet per cut (`out/beat-sheet-[cut].md`). Times sit on the bar grid (at [BPM] a bar is
 240/BPM s; at 120 BPM, 2 s); mark a half-bar boundary and say why (reading time). The long cut adds

@@ -72,5 +72,14 @@ Check each API's own terms, rate limits and whether it is still alive before bui
 - "Haikei is free to sign up": basic use needs no signup at all (per its site).
 - public-apis "4,60,000 stars": about 4.93 lakh now; "everything free" is not true of every listed API.
 
+## Video, motion and AI media (added 2026-11-04; checked on GitHub and the projects' own pages)
+| Tool | Good for | Licence / catch |
+|---|---|---|
+| Open Generative AI (Anil-matcha/Open-Generative-AI; the viral "Open-Higgsfield-AI" is the Autom8AI fork of it) | A self-hosted web UI for AI image and video generation across many models (Flux, Kling, Veo, Sora, Seedance) in one studio | MIT, about 32k stars, active (Nov 2026). **Not free to run:** it is a front end for the MuAPI paid API (the README sells a $49/month white-label plan); the reel's "unlimited videos absolutely free" is false. Useful only if you already pay for generation |
+| NullMotion (blixvip/NullMotion) | Studying how a motion-graphics ad is built: the finished film on top, one greyscale draft per section underneath, exported as one MP4 | MIT for the code; its showcase clips are other people's ads. Node 22, no npm install. The method is merged into launch-video |
+| OpenMontage (calesthio/OpenMontage) | Agent-run video pipelines (explainer, screen demo, documentary montage) over Piper TTS, Remotion or HyperFrames, FFmpeg and many paid generation APIs | **AGPL-3.0**: read, never copy into an MIT repo; running a modified copy as a service for clients triggers the source-offer clause. Many of its skills are vendored copies of gsap-skills, threejs-skills and HyperFrames |
+| claude-mem (thedotmack/claude-mem) | Persistent memory for Claude Code: every tool call summarised into local SQLite/Chroma and injected next session | Apache-2.0 open core; telemetry on by default; the observer model sees tool output, so exclude client repos. See dev-tools/claude-code-memory.md; not installed here yet |
+| treg.to | One token in front of 124 data providers (people search, email find and verify) for agents; pay per success, misses free | Prepaid balance, $1 free; see marketing/lead-enrichment-tools.md for the DPDP and spam limits before using it from India |
+
 ## Infra and AI
 See knowledge/infra/cloudflare-free-tier.md and knowledge/ai/free-inference-endpoints.md.

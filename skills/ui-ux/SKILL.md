@@ -4,8 +4,8 @@ description: Usability and interaction design for any screen - web apps, dashboa
 license: MIT
 metadata:
   author: Brimpa
-  version: "1.2"
-  updated: "2026-10-30"
+  version: "1.3"
+  updated: "2026-11-04"
 ---
 
 # UI/UX: usability, interaction and states for apps and pages
@@ -70,7 +70,7 @@ Drawn from measured product screens (a 2026 study of 23 real desktop product scr
 9. **States are honest:** a real zero prints as "0" / "$0"; missing is a grey dash at caption size; counts recompute per filter; an empty section keeps its frame and header plus one sentence and the first action; loading is the final layout with grey bars at each value's real size, no layout shift when data lands; errors stay inside the block that failed with what failed, when the data was last good and Retry.
 10. **Density is three settings moved together:** row pitch, padding and type size. Sparse (homes, settings): rows 56-92px, body 14-16px. Medium (analytics, lists): rows 44-56px. Dense (monitoring, long sessions): 13px body, 28-42px rows, with generous outer air. Never shrink the type and keep the padding.
 11. **The grid's arithmetic closes:** one gutter value, one left edge from title to last row, cards in a row share a bottom edge, column count chosen from the item count (four KPIs get four columns; a lone card spans). A card stretched over a blank band and an orphan cell beside 800px of nothing are the commonest failures.
-12. **The product has a face:** its mark and name at the top of the shell, the scope (workspace, clinic, project) as a switcher or breadcrumb, words of the trade in labels and empty states ("Waiting on the patient", "Due on the 28th"), one element only this product has. A screen whose product cannot be named from the screenshot is a template.
+12. **The product has a face, on quiet chrome:** its mark and name at the top of the shell, the scope (workspace, clinic, project) as a switcher or breadcrumb, words of the trade in labels and empty states ("Waiting on the patient", "Due on the 28th"). Backgrounds, surfaces, borders and body text stay neutral; the product's world shows only in the accent, the charts and one or two content **moments** (for a hospital system: the OPD token slip, the prescription, the bed board), plus **one signature detail** that appears where it belongs and nowhere else (a live bed-status dot, a stamp-shaped "Paid" mark). A screen whose product cannot be named from the screenshot is a template; a screen where every surface carries the brand is a brochure.
 
 ## Eight rules for pages (Persuade / Read)
 
@@ -139,7 +139,7 @@ Mobile-first with `min-width` queries; content-driven breakpoints (three usually
 
 ## UX copy rules
 
-Specific verb plus object on every control ("Save changes", "Delete 3 photos"); the same noun and verb for the same concept everywhere ("Publish" then "Published"). Errors answer what failed, why when known, how to recover; no internal codes as the primary message; no apology theatre; no jokes near loss, money, privacy or blocked work. Empty states invite the first action. Helper text answers an implicit question rather than restating the label. Sentence case, active voice, plain words the audience knows, complete translatable strings (no concatenated fragments, real plural rules). Name things by what users understand, not how the system is built ("notifications", not "webhook config"). Full guidance and banned patterns in `references/ux-copy.md`.
+Specific verb plus object on every control ("Save changes", "Delete 3 photos"); the same noun and verb for the same concept everywhere ("Publish" then "Published"). Errors answer what failed, why when known, how to recover; no internal codes as the primary message; no apology theatre; no jokes near loss, money, privacy or blocked work. Empty states invite the first action. Helper text answers an implicit question rather than restating the label. Sentence case, active voice, plain words the audience knows, complete translatable strings (no concatenated fragments, real plural rules). Name things by what users understand, not how the system is built ("notifications", not "webhook config"). Chrome micro-copy: no trailing period on labels, buttons or headings; the search box says "Search", not "Search anything..."; no glowing PRO / "New" / "Beta" pills with emoji (one quiet text badge at most); counts are quiet text, not coloured pills; keyboard shortcuts are drawn as keycaps. Full guidance and banned patterns in `references/ux-copy.md`.
 
 ## Design tokens (summary)
 

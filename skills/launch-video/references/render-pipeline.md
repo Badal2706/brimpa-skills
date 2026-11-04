@@ -345,7 +345,9 @@ Notes:
 ## 5. Stills and contact sheet (`tools/preview.py`)
 
 Review stills, not the whole film. Default review seconds for a 60 s cut: 1.5, 12, 25, 38, 50, 58
-(opening, reveal, two showcase beats, payoff, end card).
+(opening, reveal, two showcase beats, payoff, end card). For a per-section review (and for the
+breakdown cut in §11), take two frames per section at 30% and 80% of its length and tile them 2 x N
+at 320 px wide: one image per film shows every section settling and ending.
 
 ```python
 #!/usr/bin/env python3
@@ -563,6 +565,36 @@ for c in web share; do python tools/render.py dist/film.html --cut $c --out work
 - Name the outputs by product, cut and length (`acme-web-30s.mp4`, `acme-share-80s.mp4`) so
   nobody uploads the wrong one.
 
+### The breakdown cut (`CUT=breakdown`): drafts under the final
+
+For a client who wants to see how the film was built (film type D, or any film with an approved
+draft pass), render a third cut from the same timeline:
+
+1. **Drafts** come from `src/drafts.html` (or a `STYLE=draft` switch in `film.html`) that reads the
+   same `SCENES`/`EVENTS`/`CUTS` and draws each beat as a greyscale card: Arial, flat boxes, one
+   entrance and a slow drift. These are the cards the client approved at step 2b.
+2. **Layout**: the final film scaled across the top; below it a strip of N draft cards, each as
+   wide as its section is long, with an outline on the active card and a playhead. Output about
+   1920x1500, captured by the existing `render.py`.
+3. **Card time**: the active card shows `t - sectionStart`; the inactive cards loop their own
+   section offset by 55% of its length, so no card sits on a blank first frame.
+4. **Audio**: the final mix, re-measured with `loudnorm`.
+5. **Cheaper alternative**: render the strip alone and join it under the final with
+   `ffmpeg -filter_complex vstack`.
+6. **QA**: `check.py` on the breakdown too (same privacy and forbidden-text rules), and `cut_drift`
+   clean on the final (§13).
+7. **Deliver** `out/<product>-breakdown.mp4` plus the two-frames-per-section contact sheet showing
+   draft and final side by side, with the delivery-note line "Breakdown: how the film was built
+   (drafts are working sketches, not deliverables)".
+
+A "redesign reveal" variant for a website (the screen unslopping itself, about 10 s, square): one
+`story.html` holding the original styles as step 0 and 3-5 cumulative CSS layers that change
+values, never structure (gradients and glows on their own layer that fades by opacity; pill radii
+written as half the height in px so they tween; at most 8 text swaps with space reserved), with
+optional redlines for gaps and radii; render with the same Playwright tick loop at 60 fps and
+`ffmpeg -c:v libx264 -pix_fmt yuv420p -crf 18 -preset slow`. Blur any patient data. (Recipe
+adapted from unslop, CC BY 4.0; method from NullMotion, MIT; see `sources.md`.)
+
 ## 12. Poster frames
 
 Every cut gets a poster JPG beside the MP4, named the same (`acme-web-30s.jpg`): the frame that
@@ -608,6 +640,10 @@ any error. Fix every error; fix or explain every warning in the delivery note.
 | `loudness`, `true_peak` | error (warning for TP between -1.5 and -1.0) | Integrated -14 LUFS +/-0.5; true peak target -1.5 dBTP, never above -1.0 after the AAC encode |
 | `first_frame_empty` | warning | Frame 0 is not bare ground (skipped with `--loop`) |
 | `forbidden_text` | error | None of the `--forbid` strings (real names, domains) appear in the film source |
+| `cut_drift` | warning | Scene detection on the encoded MP4 (frames scaled to 320 px wide, scene score above about 0.18) finds a cut within one frame of every planned scene start; a cut that is right in the source but off in the encode shows here |
+| `vo_action_drift` | warning | Every voice phrase that names an on-screen action has that event within +/-0.5 s, by frame maths from the placed phrase times, not by eye |
+| `beat_sheet_lint` | warning (plan stage) | The four slideshow-risk rules from `prompts.md` §6: technique share over 70%, distinct "on screen" cells under 60%, text or stat cards over 60%, a camera move without a reason |
+| `caption_cues` | warning | Vertical cuts: 3-4 words per cue and 20 characters per line or fewer; horizontal: 6-8 words and 42 characters per line; each cue on screen 0.5-5 s at about 15 characters per second (common broadcast norms, e.g. BBC and Netflix subtitle guidance) |
 
 Frames saved to `work/check-<cut>/`: frame 0, the middle of every scene, two frames either side of
 every seam, and a banding view (a corner of the ground, contrast-stretched) at the reveal. Look at

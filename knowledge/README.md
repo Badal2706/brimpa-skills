@@ -15,6 +15,8 @@ source: Instagram comment on a property-pricing reel (2026-08), rewritten
 source_type: social        # social | video | pdf | paper | docs | own
 confidence: medium         # high = verified against a primary source; medium = plausible, single source; low = unverified
 date: 2026-10-26
+kind: discovery            # optional: decision | bugfix | discovery | change (lets a local model filter "all decisions on project X")
+private: false             # optional: true keeps the whole note out of any embedding or model call; <private>...</private> marks a passage
 ---
 
 # Title

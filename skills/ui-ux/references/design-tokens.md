@@ -45,7 +45,7 @@ Use the project's existing scale when one exists. For a new web palette prefer O
 - Line height: 1, 1.25, 1.375, 1.5, 1.625, 2; body 1.5-1.7; 20px for 14px text and 24px for 16px in dense UI.
 - Weight: 400, 500, 600, 700; a product screen uses about three and rarely exceeds 600.
 - Tracking: -0.05em, -0.025em, 0, 0.025em, 0.05em; negative only on large type; wide only on short uppercase labels.
-- Radius: 0, 2, 4, 6, 8, 12, 16, 24, 9999. Choose one family (tight 4-8 or soft 16-24) and step nested radii down.
+- Radius: 0, 2, 4, 6, 8, 12, 16, 24, 9999. Choose one family (tight 4-8 or soft 16-24) and step nested radii down by the formula inner radius = outer radius - padding, never below 4 (a 16 px card with 12 px padding holds 4 px inner corners). For pills that will be animated, write the radius as half the element height in px rather than 9999, so it tweens.
 - Shadow: `sm 0 1px 2px rgb(0 0 0 / .05)`, `default 0 1px 3px rgb(0 0 0 / .1)`, `md 0 4px 6px -1px rgb(0 0 0 / .1)`, `lg 0 10px 15px -3px rgb(0 0 0 / .1)`, `xl 0 20px 25px -5px rgb(0 0 0 / .1)`; shadows carry an offset and soft blur; a zero-offset coloured halo is decoration. On app screens, shadows for what floats; resting cards get a border or a tone step.
 - Duration: 75, 100, 150, 200, 300, 500, 700ms with semantic `--duration-fast: 150ms`, `--duration-normal: 200ms`, `--duration-slow: 300ms`; `--ease-out: cubic-bezier(0.16, 1, 0.3, 1)`.
 - Z-index: 0-50 for in-flow layering; dropdown 1000, sticky 1100, modal 1200, popover 1300, tooltip 1400.

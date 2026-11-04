@@ -4,8 +4,8 @@ description: Produce a product launch film, feature demo or social clip entirely
 license: MIT
 metadata:
   author: Brimpa
-  version: "1.2"
-  updated: "2026-10-26"
+  version: "1.3"
+  updated: "2026-11-04"
 ---
 
 # Launch video: a product film built entirely in code
@@ -25,13 +25,30 @@ from the same source by a `CUT` switch, so a scene fixed once is fixed in every 
 ## How to run this
 
 1. **Collect the brief and references** (see Inputs). Put them in `refs/`. Do not start the build
-   without screens to work from and one call to action; a film with no CTA has no job.
-2. **Write the plan** (`out/plan.md`, template in `references/prompts.md`): the angle in one
-   sentence, the hook for the first 2-4 s, 3-5 key moments, the user flow worth showing, the tone
-   preset, the visual identity (token roles), the privacy stand-ins, the music and SFX posture, and
-   a **cuts table** (channel, length, why that length). Then a **beat sheet per cut**: time range
-   on the bar grid, picture, motion technique, on-screen text, source screen, sound cue. Stop for
-   approval. Fixing a table costs one message; fixing a rendered film costs twenty.
+   without screens to work from and one call to action; a film with no CTA has no job. **Decide the
+   film type first** (`references/film-types.md`): SaaS/software launch film, physical product
+   film, social reel, or motion-graphics ad with a breakdown; each has its own length, hook, source
+   material and QA. If the client sent films they like, analyse them for structure and pacing,
+   record which are excluded and why, and offer two or three distinct angles; never a shot-for-shot
+   copy and never a frame of the reference in the deliverable.
+2. **Write the plan** (`out/plan.md`, template in `references/prompts.md`): the film type, the
+   angle in one sentence, the hook for the first 2-4 s, 3-5 key moments, the user flow worth
+   showing, the tone preset, the visual identity (token roles), the privacy stand-ins, the music
+   decided now (client library -> licensed search -> generated bed -> none, with the licence
+   written down) and the SFX posture, the **promise** the film makes (for example "motion-led UI
+   film": if a render path later fails, stop and ask; never fall back quietly to stills or slides),
+   and a **cuts table** (channel, length, why that length). Then a **beat sheet per cut**: time
+   range on the bar grid, picture, motion technique, on-screen text, source screen, sound cue, and
+   a **Draft** column naming the beat kind (text, logo, window, phone, input, chat, list, chart,
+   notify, cards, end card). Lint the sheet before approval: more than 70% of beats on one
+   technique, fewer than 60% distinct "on screen" cells, more than 60% text or stat cards, or a
+   camera move with no stated reason means it will read as a slideshow. Stop for approval. Fixing
+   a table costs one message; fixing a rendered film costs twenty.
+2b. **Draft pass** (always for type D, recommended for A and B over 30 s): render every beat as a
+   rough greyscale card from the same `SCENES`/`EVENTS`/`CUTS` (Arial, flat boxes, one entrance
+   and a slow drift, every colour collapsed to black, white or grey) at 640x360, and show the
+   client stills of it with the beat sheet. They judge timing and order, not looks. Get the drafts
+   approved, then build v1; it is far cheaper than fixing a polished render.
 3. **Build v1**: one self-contained HTML file with `render(t)` and a player (play/pause, scrubber,
    scene chips, arrow-key frame step, F fullscreen, M mute, a cut switch). Skeleton in
    `references/render-pipeline.md`. Open it in a browser and scrub; produce 6 stills at key seconds
@@ -332,6 +349,12 @@ To change: story -> out/plan.md; timing -> EVENTS/SCENES in src/film.html; theme
   tracks do not fit a launch film.
 - A sound on every card, harsh hits, effects louder than the bed's peaks.
 - Cloning a real person's voice without their documented consent; use a stock or synthetic voice.
+- Quietly changing what the film is when something fails: a motion-led UI film that becomes a
+  slideshow of stills, or a different render engine, because a step broke. Stop and ask.
+- Shipping frames, music or structure copied from the client's reference films; analyse them,
+  then make something of the client's own.
+- Treating a 90-second launch film as a social reel by resizing it; a reel is a re-cut with its
+  own hook, captions and safe zones (`references/film-types.md`).
 
 ## When the user pushes back
 
@@ -365,4 +388,7 @@ To change: story -> out/plan.md; timing -> EVENTS/SCENES in src/film.html; theme
 - `references/prompts.md` - read when writing the brief and plan (angle, hook, key moments, user
   flow, tone presets, cuts table, privacy stand-ins, share copy), the beat sheet, the step prompts,
   the voiceover script, or diagnosing a film that looks off ("you see / you say").
+- `references/film-types.md` - read first: the four film types (SaaS launch, physical product,
+  social reel, motion-graphics ad with breakdown) with length, hook, sources, captions, music and QA
+  per type; reference-film intake; when a type deserves its own skill.
 - `references/sources.md` - attribution for the method and numbers used here.

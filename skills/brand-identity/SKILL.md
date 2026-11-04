@@ -4,8 +4,8 @@ description: Create or document a brand kit, brand guidelines, style guide or vi
 license: MIT
 metadata:
   author: Brimpa
-  version: "1.2"
-  updated: "2026-10-26"
+  version: "1.3"
+  updated: "2026-11-04"
 ---
 
 # Brand identity
@@ -36,14 +36,23 @@ repetition possible.
 1. **Find what already exists.** Search the project for `BRAND.md`, `DESIGN.md`, `PRODUCT.md`,
    `tokens.*`, `tailwind.config.*`, a `:root {` block with custom properties, logo files
    (`logo*.svg`, `favicon*`), and a fonts folder or Google Fonts link. If a brand exists, the job is
-   to document and tighten it, not replace it. Say so before changing a colour.
+   to document and tighten it, not replace it. Say so before changing a colour. For a redesign,
+   run the equity audit first: rank what the public recognises (colour, shape, letter, mascot),
+   write down what must survive, and choose evolution or revolution explicitly
+   (`references/logo-construction.md` §11). A sparkle in a gradient tile, an emoji or a glossy orb
+   that came out of a vibe-coding tool is a placeholder, not equity; ask the owner before keeping it.
 2. **Discover (one short round of questions, two at most).** Ask or infer: who the audience is and
    in what situation they meet the brand; three to five personality adjectives, each with its
    opposite ("confident, not loud"); two or three competitors or neighbours and what their visual
    territory looks like (so you can step out of it); the surfaces the brand must live on in the
    next six months (website, app, invoices, signage, social, print); any fixed facts (an existing
-   logo, a legal name, a colour the owner will not give up). Never ask for hex codes or font names
-   in this round; ask for meaning and let the system follow. Record undecided facts as undecided.
+   logo, a legal name, a colour the owner will not give up); **who signs off**; and the production
+   surfaces a logo must survive (flex hoarding, embroidery, sandblasting, one-colour print). Never
+   ask for hex codes or font names in this round; ask for meaning and let the system follow.
+   "Clean, modern, sleek, minimal, premium" are not personality words (they describe every
+   template); push for adjectives with an opposite. Treat "total creative freedom", "show
+   everything we do", "make it pop" and "no decision-maker" as warnings to resolve before
+   designing. Record undecided facts as undecided.
 3. **Define the direction.** Write one sentence of physical scene ("a receptionist at a bright
    dental clinic at 9 am" / "a developer at night in a terminal") and let it decide light vs dark,
    warm vs cool, dense vs airy. Pick a colour strategy (Restrained, Committed, Full palette or
@@ -58,8 +67,12 @@ repetition possible.
    sizes, weights, line heights. Same reference file.
 6. **Write the logo direction brief and usage rules** (type of mark, what it must do at 16 px and
    in one colour, clear space, minimum sizes, misuse list, file set). Open
-   `references/logo-and-visual-identity.md`. If no logo exists yet, the brief is the deliverable;
-   artwork comes from a designer or an image model and is then checked against the brief.
+   `references/logo-and-visual-identity.md`. If no logo exists yet, either the brief is the
+   deliverable (artwork from a designer, checked against the brief) or draw the mark here with
+   `references/logo-construction.md`: word map, 8-12 one-line concepts, three built in SVG in
+   black, the test battery, then the **greyscale checkpoint**: one sheet with the three concepts
+   at true 64/32/16 px, one idea and one honest risk each, a recommendation, and stop. The colour
+   kit, lockups, mockup board and export set come only after the owner picks one.
 7. **Summarise voice and messaging.** Three to five traits as "we are / we are not", tone by
    context, prohibited terms, the one-line value proposition and three key messages with proof
    points. Open `references/voice-and-messaging.md`. Reuse `launch-marketing` output if it exists.
@@ -300,6 +313,11 @@ produces the integration plan with the trigger map and reduced-motion fallback.
   table (what colour and type families signal before a word is read, with the clarinet-shop case).
 - `references/logo-and-visual-identity.md`: read when writing a logo brief, choosing a mark type,
   setting usage rules, icon style or imagery direction (including the real-photos-over-stock rule).
+- `references/logo-construction.md`: read when the mark is to be drawn here: fast brief and
+  warning signs, word map, concept funnel, ordered mark-type decision, SVG construction rules,
+  optical corrections with starting values, small-size floors, the pass/fail test battery, lockup
+  and type-study rules, the checkpoint, delivery set (maskable icon, manifest, CMYK), critique and
+  redesign modes, India-specific clearance checks, and which upstream Python tools to run.
 - `references/voice-and-messaging.md`: read when writing the voice chart, tone-by-context table,
   prohibited terms, the ego test for storytelling sections, or the messaging summary.
 - `references/consistency-checklist.md`: read at the QA step and before any brand asset ships.

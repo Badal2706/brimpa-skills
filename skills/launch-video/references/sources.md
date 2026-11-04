@@ -27,3 +27,11 @@ skill, not measurements from any source; tune by ear. The music-edit values in s
 from the internal reference job above and are starting points too. `tools/strong.py`,
 `tools/check.py` and the demo-capture script were written for this skill and tested against that
 job's rendered files.
+
+## Added 2026-11-04 (v1.3)
+
+| Source | Licence | What was taken |
+|---|---|---|
+| blixvip/NullMotion (commit 357bacb, 30 Oct 2026); linked in TOOLBOX, not pinned (its showcase clips are third-party ads) | MIT (c) 2026 blixvip and contributors; bundled GSAP under its own licence | Method, rewritten: the greyscale draft pass before v1, the Draft column in the beat sheet, measuring cuts in the encoded file (`cut_drift`), the section-split rule for imported films, the two-beat switch at 55%, the two-frames-per-section contact sheet, the loop offset for inactive draft cards, the reference-policy record, and the drafts-under-final breakdown cut as a client deliverable. Its viewer app, custom draft engine (not HyperFrames, despite the label) and footage were not used |
+| calesthio/OpenMontage (commit d21f5d4, 3 Nov 2026); linked in TOOLBOX only | AGPL-3.0: **nothing copied**; facts and method observed and written in our words | Reference-film intake (analyse, then offer distinct angles), locking the delivery promise (no silent fallback to stills), the slideshow-risk lint, zoom by UI element, callout restraint, caption cue limits (these are common broadcast norms, cited to BBC/Netflix guidance rather than to OpenMontage), voice-to-action drift check, music decided at plan time, ACE-Step facts (BPM input, 48 kHz, turbo speed; licence and 4 GB VRAM fit unverified). Its vendored copies of gsap-skills, threejs-skills and HyperFrames skills are taken from their originals instead |
+| heydamir/unslop (commit a6f121e) | CC BY 4.0 (c) Damir Sokolovsky; credit as in web-design/references/sources.md | The "redesign reveal" story-video recipe (CSS-step morph plus redline overlay, Playwright 60 fps ticks, ffmpeg libx264 crf 18) described as film type D option in `film-types.md` and `render-pipeline.md` §11 |

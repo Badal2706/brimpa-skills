@@ -6,14 +6,14 @@
     "url": "https://github.com/Badal2706"
   },
   "metadata": {
-    "version": "1.8.0"
+    "version": "1.9.0"
   },
   "plugins": [
     {
       "name": "brimpa-skills",
       "source": "./",
       "description": "All sixteen Brimpa skills in one plugin. Install this unless you want to cherry-pick with `npx skills add`.",
-      "version": "1.8.0",
+      "version": "1.9.0",
       "category": "productivity",
       "tags": [
         "security",
@@ -193,6 +193,21 @@
       "tags": [
         "browser",
         "automation",
+        "upstream"
+      ]
+    },
+    {
+      "name": "logo-design",
+      "source": {
+        "source": "github",
+        "repo": "kaankiziltug/logo-design-skill"
+      },
+      "description": "Upstream, installed as-is: the logo-design skill with its SVG audit, test-sheet, board and icon-export tools (MIT; its bundled logo library is third-party trademark material, study only). Our brand-identity skill carries the method; install this for the tools.",
+      "category": "design",
+      "tags": [
+        "logo",
+        "brand",
+        "svg",
         "upstream"
       ]
     }

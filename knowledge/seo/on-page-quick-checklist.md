@@ -101,6 +101,11 @@ The reel itself only lists the terms and asks viewers to comment for definitions
 4. If two pages compete for the same query, that is cannibalization (row 10 above): merge them or make their intents distinct; links alone will not fix it.
 Verdict: sound, standard internal-linking practice (link equity in the terms table below); "nobody knows this about Google" is the hook, and the closing course plug is omitted.
 
+## High-impression, low-click pages (added 2026-11-04 from a Hindi reel, Nov 2026)
+The reel's method: Search Console > Performance > Pages, last 28 days, sort by impressions, pick pages with many impressions and almost no clicks, export their queries to Excel, then paste the export into an LLM with a "single-page Search Console gap analysis" prompt (the creator sells the prompt on his site; omitted) to get the sections the page is missing (a quick answer, "start with what you will record", a microphone-type section, in his example). The method is sound and needs no paid prompt: the two-bucket version (striking distance vs CTR under-performers, with the site's own CTR per position band) is in skills/seo-geo-audit references/search-console-and-tools.md section 3, and the gap questions come from the top-3 read in content-eeat.md section 14. His "20,000 users in 28 days on a new site" screenshots are unverifiable; the claim that the result is "next-level ranking" is the hook.
+
+The "parasite SEO" reel came in a second time (Oct 2026); the verdicts above stand. The tool it names for finding Reddit threads is a plug and is omitted.
+
 ## Related
 - skills/seo-geo-audit
 - research/2026-10-seo-dpdp-facts.md (A3: AI features, Search generative AI control, preferred sources; A8: Bing)
