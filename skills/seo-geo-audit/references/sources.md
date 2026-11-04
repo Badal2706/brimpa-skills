@@ -69,3 +69,5 @@ This skill is MIT licensed. It merges and adapts material from the sources below
 ## Cross-references
 
 Sibling skills in this collection: security-review, llm-app-security, dpdp-legal-compliance, ui-ux, web-design, launch-marketing, web-scraping.
+| "The Backlink Engine, full setup guide" (vibha-ramprakash.github.io/seo-geo-tracker, read 4 Nov 2026) | personal guide, no licence stated; promotes paid sessions | One bullet in `content-eeat.md` 11.4 on free backlink data sources (Search Console Links, Bing Webmaster backlinks, Ahrefs Webmaster Tools, Moz free tier, Common Crawl graphs) and the weekly check; its workflow uses tools we already pin (claude-seo seo-backlinks, mcp-gsc). Not taken: Domain Authority described as Google trust, directories and guest posts as "foundation links", unverified free-tier figures |
+| inhouseseo/superseo-skills re-check (4 Nov 2026) | Apache-2.0 | pinned commit 9cf22cc is still the latest; nothing new to fold in |
